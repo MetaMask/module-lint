@@ -942,9 +942,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@metamask/module-template@workspace:.":
+"@metamask/module-lint@workspace:.":
   version: 0.0.0-use.local
-  resolution: "@metamask/module-template@workspace:."
+  resolution: "@metamask/module-lint@workspace:."
   dependencies:
     "@lavamoat/allow-scripts": ^2.3.1
     "@lavamoat/preinstall-always-fail": ^1.0.0
