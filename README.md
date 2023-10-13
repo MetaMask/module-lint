@@ -1,47 +1,24 @@
-# MetaMask Module Template
+# @metamask/module-lint
 
-This TypeScript module is maintained in the style of the MetaMask team.
+This repo provides a tool which can be used to analyze one or more repos, running defined checks that measure divergence from a template repo, and outputs a report of the results.
 
-## Template Instructions
-
-Follow these instructions when using this template.
-
-- Update the package name, referenced in the following places:
-  - The `name` field of `package.json`
-  - The README title
-  - The README "Usage" section
-- Update the package description
-  - The package description is referenced at the beginning of the README, and in the `description` field of `package.json`.
-- Update the repository URL, referenced in the following places:
-  - `repository` field of `package.json`
-  - The links in the API section of the README
-- If your project has side effects, update the `sideEffects` field of
-  `package.json` to `true`, or an array of file globs that match the files that
-  have side effects.
-- Update the pull request template (`.github/pull_request_template.md`) to remove the `Examples` section that is specific to this template.
-- Update the README "Usage" section, or remove it if it's not needed.
-- Update the CODEOWNERS file to set the appropriate code owners for the repository (typically one or more engineering teams)
-  - Ensure each referenced team has write permission, and that the engineering team still has write permission.
-- Delete these instructions.
+At the moment, this tool only processes MetaMask repositories using the [MetaMask module template](https://github.com/MetaMask/metamask-module-template) as a basis, and all of the checks are predefined and cannot be customized.
 
 ## Installation
 
-`yarn add @metamask/this-module`
-
-or
-
-`npm install @metamask/this-module`
+This tool is designed to be used globally and does not need to be installed within an individual project.
 
 ## Usage
 
-_Add examples here_
+To use the tool, run:
 
-## API
+```
+# Yarn
+yarn dlx @metamask/module-lint
 
-See our documentation:
-
-- [Latest published API documentation](https://metamask.github.io/metamask-module-template/latest/)
-- [Latest development API documentation](https://metamask.github.io/metamask-module-template/staging/)
+# NPM
+npx @metamask/module-lint
+```
 
 ## Contributing
 

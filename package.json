@@ -1,14 +1,14 @@
 {
-  "name": "@metamask/module-template",
+  "name": "@metamask/module-lint",
   "version": "0.0.0",
-  "description": "The MetaMask Node module template",
-  "homepage": "https://github.com/MetaMask/metamask-module-template#readme",
+  "description": "Analyzes one or more repos for divergence from a template repo",
+  "homepage": "https://github.com/MetaMask/module-lint#readme",
   "bugs": {
-    "url": "https://github.com/MetaMask/metamask-module-template/issues"
+    "url": "https://github.com/MetaMask/module-lint/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/MetaMask/metamask-module-template.git"
+    "url": "https://github.com/MetaMask/module-lint.git"
   },
   "sideEffects": false,
   "exports": {
