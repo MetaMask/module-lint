@@ -6,7 +6,20 @@ module.exports = {
   overrides: [
     {
       files: ['*.ts'],
-      extends: ['@metamask/eslint-config-typescript'],
+      extends: [
+        '@metamask/eslint-config-typescript',
+        '@metamask/eslint-config-nodejs',
+      ],
+    },
+
+    {
+      files: ['src/cli.ts'],
+      parserOptions: {
+        sourceType: 'script',
+      },
+      rules: {
+        'n/shebang': 'off',
+      },
     },
 
     {
@@ -32,5 +45,6 @@ module.exports = {
     'dist/',
     'docs/',
     '.yarn/',
+    'tmp/',
   ],
 };

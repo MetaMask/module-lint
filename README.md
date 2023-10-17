@@ -29,6 +29,14 @@ npx @metamask/module-lint
 - Install [Yarn v3](https://yarnpkg.com/getting-started/install)
 - Run `yarn install` to install dependencies and run any required post-install scripts
 
+### Running Locally
+
+To run the tool locally, say:
+
+```
+yarn run-tool [OPTIONS] [ARGUMENTS...]
+```
+
 ### Testing and Linting
 
 Run `yarn test` to run the tests once. To run tests on file changes, run `yarn test:watch`.

@@ -5,12 +5,12 @@
     "forceConsistentCasingInFileNames": true,
     "lib": ["ES2020"],
     "module": "CommonJS",
-    "moduleResolution": "node",
+    "moduleResolution": "nodenext",
     "noEmit": true,
     "noErrorTruncation": true,
     "noUncheckedIndexedAccess": true,
     "strict": true,
     "target": "es2020"
   },
-  "exclude": ["./dist/**/*"]
+  "exclude": ["./dist/**/*", "./tmp/**/*"]
 }
