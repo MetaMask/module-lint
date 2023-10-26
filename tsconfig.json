@@ -9,6 +9,9 @@
     "noEmit": true,
     "noErrorTruncation": true,
     "noUncheckedIndexedAccess": true,
+    "paths": {
+      "@metamask/utils/node": ["./node_modules/@metamask/utils/dist/types/node"]
+    },
     "strict": true,
     "target": "es2020"
   },
