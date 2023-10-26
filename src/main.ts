@@ -3,6 +3,7 @@ import createYargs from 'yargs/yargs';
 
 import {
   DEFAULT_TEMPLATE_REPOSITORY_NAME,
+  USAGE_TEXT,
   WORKING_DIRECTORY_PATH,
 } from './constants';
 import type { MetaMaskRepository } from './establish-metamask-repository';
@@ -142,14 +143,6 @@ async function parseCommandLineArguments({
   argv: string[];
   outputLogger: OutputLogger;
 }) {
-  const usageText = `
-Analyzes one or more repos for divergence from a template repo.
-
-@metamask/module-lint OPTIONS [ARGUMENTS...]
-
-Pass the names of one or more MetaMask repositories to lint them, or pass
-nothing to lint all MetaMask repositories.
-`.trim();
   let yargsFailure: { message: string; error: Error } | null = null;
   /* istanbul ignore next: At the moment, there is no real way that Yargs could fail */
   const onFail = (message: string, error: Error) => {
@@ -160,7 +153,7 @@ nothing to lint all MetaMask repositories.
   };
 
   const yargs = createYargs(hideBin(argv))
-    .usage(usageText)
+    .usage(USAGE_TEXT)
     .help(false)
     .string('_')
     .wrap(null)

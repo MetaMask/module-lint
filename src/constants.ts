@@ -16,6 +16,18 @@ export const THIS_PROJECT_DIRECTORY_PATH = path.resolve(__dirname, '..');
 export const WORKING_DIRECTORY_PATH = process.cwd();
 
 /**
+ * The usage text printed when the user requests help or provides invalid input.
+ */
+export const USAGE_TEXT = `
+Analyzes one or more repos for divergence from a template repo.
+
+${THIS_PROJECT_NAME} OPTIONS [ARGUMENTS...]
+
+Pass the names of one or more MetaMask repositories to lint them, or pass
+nothing to lint all MetaMask repositories.
+`.trim();
+
+/**
  * In order to lint a remote repository, that repository must be cloned first.
  * This is the temporary directory where the clone lives.
  */
