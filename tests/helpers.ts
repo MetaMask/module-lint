@@ -15,7 +15,11 @@ import nock from 'nock';
 import path from 'path';
 import { inspect, isDeepStrictEqual } from 'util';
 
+import { createModuleLogger, projectLogger } from '../src/logging-utils';
+
 const { withinSandbox } = createSandbox('module-lint-tests');
+
+export const log = createModuleLogger(projectLogger, 'tests');
 
 export { withinSandbox };
 

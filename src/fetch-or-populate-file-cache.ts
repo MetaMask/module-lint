@@ -2,7 +2,9 @@ import type { Json } from '@metamask/utils/node';
 import { fileExists, readJsonFile, writeJsonFile } from '@metamask/utils/node';
 
 import { ONE_HOUR } from './constants';
-import { logger } from './logging-utils';
+import { createModuleLogger, projectLogger } from './logging-utils';
+
+const log = createModuleLogger(projectLogger, 'fetch-or-populate-file-cache');
 
 /**
  * The data stored in the cache file.
@@ -58,12 +60,12 @@ export async function fetchOrPopulateFileCache<Data extends Json>({
     const createdDate = new Date(cache.ctime);
 
     if (now.getTime() - createdDate.getTime() <= maxAge) {
-      logger.debug(`Reusing fresh cached data under ${filePath}`);
+      log(`Reusing fresh cached data under ${filePath}`);
       return cache.data;
     }
   }
 
-  logger.debug(
+  log(
     `Cache does not exist or is stale; preparing data to write to ${filePath}`,
   );
   const dataToCache = await getDataToCache();

@@ -2,9 +2,11 @@ import chalk from 'chalk';
 
 import type { RuleExecutionResultNode } from './execute-rules';
 import type { ProjectLintResult } from './lint-project';
-import { logger } from './logging-utils';
+import { createModuleLogger, projectLogger } from './logging-utils';
 import { repeat, indent } from './misc-utils';
 import type { OutputLogger } from './output-logger';
+
+const log = createModuleLogger(projectLogger, 'fetch-or-populate-file-cache');
 
 /**
  * Prints a report following linting of a project, including all of the rules
@@ -21,7 +23,7 @@ export function reportProjectLintResult({
   projectLintResult: ProjectLintResult;
   outputLogger: OutputLogger;
 }) {
-  logger.debug(
+  log(
     'elapsedTimeIncludingLinting',
     projectLintResult.elapsedTimeIncludingLinting,
     'elapsedTimeExcludingLinting',

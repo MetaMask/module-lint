@@ -8,10 +8,12 @@ import path from 'path';
 
 import { ONE_HOUR } from './constants';
 import { ensureMetaMaskRepositoriesLoaded } from './ensure-metamask-repositories-loaded';
-import { logger } from './logging-utils';
+import { createModuleLogger, projectLogger } from './logging-utils';
 import { getEntryStats } from './misc-utils';
 import type { OutputLogger } from './output-logger';
 import { RepositoryFilesystem } from './repository-filesystem';
+
+const log = createModuleLogger(projectLogger, 'establish-metamask-repository');
 
 /**
  * Information about a Git branch.
@@ -82,7 +84,7 @@ export async function establishMetaMaskRepository({
     cachedRepositoriesDirectoryPath,
     outputLogger,
   });
-  logger.debug('Repository is', existingRepository.shortname);
+  log('Repository is', existingRepository.shortname);
 
   const repositoryFilesystem = new RepositoryFilesystem(
     existingRepository.directoryPath,
@@ -191,10 +193,7 @@ async function getBranchInfo({
 }: {
   repositoryDirectoryPath: string;
 }): Promise<BranchInfo> {
-  logger.debug(
-    'Repository has been cloned already to',
-    repositoryDirectoryPath,
-  );
+  log('Repository has been cloned already to', repositoryDirectoryPath);
   const currentBranchName = await getCurrentBranchName({
     repositoryDirectoryPath,
   });
@@ -245,19 +244,15 @@ async function cloneRepository({
     );
   }
 
-  logger.debug(
-    'Assuming',
-    repositoryShortname,
-    'is the name of a MetaMask repo',
-  );
+  log('Assuming', repositoryShortname, 'is the name of a MetaMask repo');
 
-  logger.debug('Removing existing', repositoryDirectoryPath);
+  log('Removing existing', repositoryDirectoryPath);
   await fs.promises.rm(repositoryDirectoryPath, {
     recursive: true,
     force: true,
   });
 
-  logger.debug('Cloning', repositoryShortname, 'to', repositoryDirectoryPath);
+  log('Cloning', repositoryShortname, 'to', repositoryDirectoryPath);
   outputLogger.logToStderr(
     `Cloning repository MetaMask/${repositoryShortname}, please wait...`,
   );
@@ -377,7 +372,7 @@ async function resolveRepositoryReference({
     };
   }
 
-  logger.debug(
+  log(
     'possibleRealDirectoryPath',
     possibleRealDirectoryPath,
     'cachedRepositoryDirectoryPath',
@@ -407,29 +402,23 @@ async function getDefaultBranchName({
   repositoryDirectoryPath: string;
 }): Promise<string> {
   try {
-    logger.debug('Running: git rev-parse --verify --quiet main');
+    log('Running: git rev-parse --verify --quiet main');
     await execa('git', ['rev-parse', '--verify', '--quiet', 'main'], {
       cwd: repositoryDirectoryPath,
     });
     return 'main';
   } catch (error) {
-    logger.debug(
-      'Command `git rev-parse --verify --quiet main` failed:',
-      error,
-    );
+    log('Command `git rev-parse --verify --quiet main` failed:', error);
   }
 
   try {
-    logger.debug('Running: git rev-parse --verify --quiet master');
+    log('Running: git rev-parse --verify --quiet master');
     await execa('git', ['rev-parse', '--verify', '--quiet', 'master'], {
       cwd: repositoryDirectoryPath,
     });
     return 'master';
   } catch (error) {
-    logger.debug(
-      'Command `git rev-parse --verify --quiet master` failed:',
-      error,
-    );
+    log('Command `git rev-parse --verify --quiet master` failed:', error);
   }
 
   throw new Error(
@@ -470,7 +459,7 @@ async function getCurrentBranchName({
 }: {
   repositoryDirectoryPath: string;
 }): Promise<string> {
-  logger.debug('Running: git symbolic-ref --quiet HEAD');
+  log('Running: git symbolic-ref --quiet HEAD');
   const { stdout } = await execa('git', ['symbolic-ref', '--quiet', 'HEAD'], {
     cwd: repositoryDirectoryPath,
   });
@@ -528,7 +517,7 @@ async function ensureDefaultBranchIsUpToDate({
     return lastFetchedDate;
   }
 
-  logger.debug('Running: git pull');
+  log('Running: git pull');
   await execa('git', ['pull'], {
     cwd: directoryPath,
   });

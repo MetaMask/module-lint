@@ -11,13 +11,15 @@ import execa from 'execa';
 import path from 'path';
 
 import FakePackage from './fake-package';
-import { logger } from '../../src/logging-utils';
+import { createModuleLogger, projectLogger } from '../../src/logging-utils';
 
 const ROOT_DIR = path.resolve(__dirname, '../..');
 const TOOL_EXECUTABLE_PATH = path.join(ROOT_DIR, 'src', 'cli.ts');
 const TS_NODE_PATH = path.join(ROOT_DIR, 'node_modules', '.bin', 'ts-node');
 
 const { withinSandbox } = createSandbox('module-lint-tests');
+
+const log = createModuleLogger(projectLogger, 'module-utils:tests');
 
 /**
  * Creates a fake package for use in functional tests along with its directory.
@@ -51,7 +53,7 @@ async function runCommand(
   const { env, ...remainingOptions } =
     options === undefined ? { env: {} } : options;
 
-  logger.debug(
+  log(
     'Running command `%s %s`...',
     executableName,
     args?.map((arg) => (arg.includes(' ') ? `"${arg}"` : arg)).join(' '),
@@ -66,7 +68,7 @@ async function runCommand(
     ...remainingOptions,
   });
 
-  logger.debug(
+  log(
     'Completed command `%s %s`',
     executableName,
     args?.map((arg) => (arg.includes(' ') ? `"${arg}"` : arg)).join(' '),
@@ -119,7 +121,7 @@ export async function runTool({
     template,
   ]);
 
-  logger.debug(
+  log(
     ['---- START OUTPUT -----', result.all, '---- END OUTPUT -----'].join('\n'),
   );
 

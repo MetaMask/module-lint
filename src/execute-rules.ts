@@ -3,7 +3,9 @@ import { inspect } from 'util';
 import type { RuleNode } from './build-rule-tree';
 import { buildRuleTree } from './build-rule-tree';
 import type { MetaMaskRepository } from './establish-metamask-repository';
-import { logger } from './logging-utils';
+import { createModuleLogger, projectLogger } from './logging-utils';
+
+const log = createModuleLogger(projectLogger, 'establish-metamask-repository');
 
 /**
  * Represents a successfully executed rule. ("Partial" because a full result
@@ -171,7 +173,7 @@ async function executeRule({
   project: MetaMaskRepository;
   template: MetaMaskRepository;
 }): Promise<RuleExecutionResultNode> {
-  logger.debug('Running rule', ruleNode.rule.name);
+  log('Running rule', ruleNode.rule.name);
   const startDate = new Date();
 
   const partialRuleExecutionResult = await ruleNode.rule.execute({
@@ -185,7 +187,7 @@ async function executeRule({
     ruleDescription: ruleNode.rule.description,
     ...partialRuleExecutionResult,
   };
-  logger.debug(
+  log(
     'Result for',
     ruleNode.rule.name,
     inspect(ruleExecutionResult, { depth: null }),

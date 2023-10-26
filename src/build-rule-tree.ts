@@ -2,8 +2,10 @@ import { getErrorMessage } from '@metamask/utils/node';
 import { DepGraph } from 'dependency-graph';
 
 import type { Rule } from './execute-rules';
-import { logger } from './logging-utils';
+import { createModuleLogger, projectLogger } from './logging-utils';
 import { indent } from './misc-utils';
+
+const log = createModuleLogger(projectLogger, 'build-rule-tree');
 
 /**
  * A rule in the rule tree.
@@ -38,16 +40,14 @@ export function buildRuleTree(rules: readonly Rule[]): RootRuleNode {
 
   // Add all of the rules to the graph first so that they are available
   rules.forEach((rule) => {
-    logger.debug(`Adding to graph: ${rule.name}`);
+    log(`Adding to graph: ${rule.name}`);
     graph.addNode(rule.name, rule);
   });
 
   // Now we specify the connections between nodes
   rules.forEach((rule) => {
     rule.dependencies.forEach((dependencyName) => {
-      logger.debug(
-        `Adding connection to graph: ${rule.name} -> ${dependencyName}`,
-      );
+      log(`Adding connection to graph: ${rule.name} -> ${dependencyName}`);
       graph.addDependency(rule.name, dependencyName);
     });
   });

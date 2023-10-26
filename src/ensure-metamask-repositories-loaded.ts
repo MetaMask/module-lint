@@ -1,8 +1,13 @@
 import axios from 'axios';
 
 import { fetchOrPopulateFileCache } from './fetch-or-populate-file-cache';
-import { logger } from './logging-utils';
+import { createModuleLogger, projectLogger } from './logging-utils';
 import { parseGithubApiLinkHeader } from './misc-utils';
+
+const log = createModuleLogger(
+  projectLogger,
+  'ensure-metamask-repositories-loaded',
+);
 
 /**
  * The information about a GitHub repository that we care about. Primarily,
@@ -85,7 +90,7 @@ export async function fetchAllResourcesFromGitHubApi<Resource>({
   while (url) {
     i += 1;
 
-    logger.debug(`Retrieving repository names from GitHub (${url})...`);
+    log(`Retrieving repository names from GitHub (${url})...`);
     const response = await axios.get<Resource[]>(url, {
       headers: {
         Accept: 'application/vnd.github+json',
