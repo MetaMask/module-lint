@@ -8,6 +8,7 @@
     "noEmit": false,
     "outDir": "dist/types",
     "rootDir": "src",
+    "skipLibCheck": true,
     "sourceMap": true
   },
   "include": ["./src/**/*.ts"],
