@@ -49,6 +49,9 @@
     "test": "jest && jest-it-up",
     "test:watch": "jest --watch"
   },
+  "resolutions": {
+    "@jridgewell/gen-mapping": "0.3.3"
+  },
   "dependencies": {
     "@metamask/utils": "^8.2.0",
     "axios": "^1.5.1",
