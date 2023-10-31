@@ -2,7 +2,7 @@ import { buildRule } from './helpers';
 import { RuleName } from './types';
 
 export default buildRule({
-  name: RuleName.RequireSourceDirectory,
+  name: RuleName.RequireREADME,
   description: 'Does the `README.md` file exist?',
   dependencies: [],
   execute: async ({ project, pass, fail }) => {
