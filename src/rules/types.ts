@@ -3,4 +3,5 @@
  */
 export enum RuleName {
   RequireSourceDirectory = 'require-source-directory',
+  RequirePackageJson = 'require-package-json',
 }

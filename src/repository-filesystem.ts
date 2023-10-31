@@ -44,6 +44,18 @@ export class RepositoryFilesystem {
   }
 
   /**
+   * Reads a file within the repository.
+   *
+   * @param filePath - The path to the file within the context of the repository
+   * (so, minus its directory).
+   * @returns The JSON object of the file.
+   */
+  async readJsonFile(filePath: string): Promise<any> {
+    const content = await this.readFile(filePath);
+    return JSON.parse(content);
+  }
+
+  /**
    * Retrieves stats for the given file or directory.
    *
    * @param entryPath - The path to the file or directory within the context of

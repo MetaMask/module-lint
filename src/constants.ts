@@ -3,7 +3,7 @@ import path from 'path';
 /**
  * The name of this project. Used to exclude this repo as a lintable project.
  */
-export const THIS_PROJECT_NAME = 'module-lint';
+export const THIS_PROJECT_NAME = '@metamask/module-lint';
 
 /**
  * The root directory of this project.
