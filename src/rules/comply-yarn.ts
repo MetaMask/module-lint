@@ -13,6 +13,7 @@ export default buildRule({
     await complyYarnPluginAllowScripts(project, template, failures);
     await complyYarnPluginConstraints(project, template, failures);
     await complyReleasesYarnCjs(project, template, failures);
+    await complyYarnRC(project, template, failures);
 
     return failures.length === 0 ? pass() : fail(failures);
   },
@@ -132,6 +133,33 @@ async function complyReleasesYarnCjs(
     }
   } else {
     failures.push({ message: `yarn-${yarnVersion}.cjs doesn not exist` });
+  }
+}
+
+/**
+ * Verifies whether .yarnrc.yml file exist and matches the same in module template.
+ *
+ * @param project - The project repository to execute the rules against.
+ * @param template - The template repository to compare the project to.
+ * @param failures - The array of failures from executing the rule.
+ */
+async function complyYarnRC(
+  project: MetaMaskRepository,
+  template: MetaMaskRepository,
+  failures: RuleExecutionFailure[],
+) {
+  const entryPath = '.yarnrc.yml';
+  const projectFile = await project.fs.readFile(entryPath);
+  const templateFile = await template.fs.readFile(entryPath);
+
+  if (projectFile) {
+    if (projectFile !== templateFile) {
+      failures.push({
+        message: '.yarnrc.yml does not match the same in module template',
+      });
+    }
+  } else {
+    failures.push({ message: '.yarnrc.yml doesn not exist' });
   }
 }
 
