@@ -12,6 +12,7 @@ export default buildRule({
     await complyYarnPackageManager(project, template, failures);
     await complyYarnPluginAllowScripts(project, template, failures);
     await complyYarnPluginConstraints(project, template, failures);
+    await complyReleasesYarnCjs(project, template, failures);
 
     return failures.length === 0 ? pass() : fail(failures);
   },
@@ -104,4 +105,44 @@ async function complyYarnPluginConstraints(
   } else {
     failures.push({ message: 'plugin-constraints.cjs doesn not exist' });
   }
+}
+
+/**
+ * Verifies whether yarn-<version>.cjs file exist and matches the same in module template.
+ *
+ * @param project - The project repository to execute the rules against.
+ * @param template - The template repository to compare the project to.
+ * @param failures - The array of failures from executing the rule.
+ */
+async function complyReleasesYarnCjs(
+  project: MetaMaskRepository,
+  template: MetaMaskRepository,
+  failures: RuleExecutionFailure[],
+) {
+  const yarnVersion = (await getYarnVersion(template)) as string;
+  const entryPath = `.yarn/releases/yarn-${yarnVersion}.cjs`;
+  const projectFile = await project.fs.readFile(entryPath);
+  const templateFile = await template.fs.readFile(entryPath);
+
+  if (projectFile) {
+    if (projectFile !== templateFile) {
+      failures.push({
+        message: `yarn-${yarnVersion}.cjs does not match the same in module template`,
+      });
+    }
+  } else {
+    failures.push({ message: `yarn-${yarnVersion}.cjs doesn not exist` });
+  }
+}
+
+/**
+ * Returns yarn version from template module.
+ *
+ * @param template - The template repository to compare the project to.
+ */
+async function getYarnVersion(template: MetaMaskRepository) {
+  const entryPath = 'package.json';
+  const templatePackageJson = await template.fs.readJsonFile(entryPath);
+  const templatePackageManager: string = templatePackageJson?.packageManager;
+  return templatePackageManager?.split('@')[1];
 }
