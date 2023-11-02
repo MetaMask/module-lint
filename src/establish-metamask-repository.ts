@@ -253,7 +253,7 @@ async function cloneRepository({
   });
 
   log('Cloning', repositoryShortname, 'to', repositoryDirectoryPath);
-  outputLogger.logToStderr(
+  outputLogger.logToStdout(
     `Cloning repository MetaMask/${repositoryShortname}, please wait...`,
   );
   await ensureDirectoryStructureExists(cachedRepositoriesDirectoryPath);

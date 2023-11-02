@@ -116,7 +116,6 @@ export const DEFAULT_PROJECT_NAMES = [
   'swappable-obj-proxy',
   'template-sync',
   'test-dapp',
-  'test-snaps',
   'types',
   'utils',
   'vault-decryptor',

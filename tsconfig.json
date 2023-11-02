@@ -4,7 +4,7 @@
     "exactOptionalPropertyTypes": true,
     "forceConsistentCasingInFileNames": true,
     "lib": ["ES2020"],
-    "module": "nodenext",
+    "module": "CommonJS",
     "moduleResolution": "nodenext",
     "noEmit": true,
     "noErrorTruncation": true,
