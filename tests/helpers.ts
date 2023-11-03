@@ -1,4 +1,3 @@
-import { createSandbox } from '@metamask/utils/node';
 import type {
   ExecaChildProcess,
   Options as ExecaOptions,
@@ -6,14 +5,6 @@ import type {
 } from 'execa';
 import { mock } from 'jest-mock-extended';
 import { inspect, isDeepStrictEqual } from 'util';
-
-import { createModuleLogger, projectLogger } from '../src/logging-utils';
-
-const { withinSandbox } = createSandbox('module-lint-tests');
-
-export const log = createModuleLogger(projectLogger, 'tests');
-
-export { withinSandbox };
 
 /**
  * `execa` can be called multiple ways. This is the way that we use it.
@@ -23,30 +14,6 @@ export type PrimaryExecaFunction = (
   args?: readonly string[] | undefined,
   options?: ExecaOptions | undefined,
 ) => ExecaChildProcess;
-
-/**
- * Uses Jest's fake timers to fake Date only.
- */
-export function fakeDateOnly() {
-  jest.useFakeTimers({
-    doNotFake: [
-      'hrtime',
-      'nextTick',
-      'performance',
-      'queueMicrotask',
-      'requestAnimationFrame',
-      'cancelAnimationFrame',
-      'requestIdleCallback',
-      'cancelIdleCallback',
-      'setImmediate',
-      'clearImmediate',
-      'setInterval',
-      'clearInterval',
-      'setTimeout',
-      'clearTimeout',
-    ],
-  });
-}
 
 /**
  * Builds an object that represents a successful result returned by `execa`.
