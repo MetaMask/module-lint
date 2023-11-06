@@ -31,8 +31,7 @@ export class RepositoryFilesystem {
   /**
    * Reads a file within the repository.
    *
-   * @param filePath - The path to the file within the context of the repository
-   * (so, minus its directory).
+   * @param filePath - The path to the file relative to the repository root.
    * @returns The contents of the file.
    */
   async readFile(filePath: string): Promise<string> {
@@ -46,8 +45,7 @@ export class RepositoryFilesystem {
   /**
    * Retrieves stats for the given file or directory.
    *
-   * @param entryPath - The path to the file or directory within the context of
-   * the repository (so, minus its directory).
+   * @param entryPath - The path to the file relative to the repository root.
    * @returns The `fs.Stats` object with information about the entry.
    */
   async getEntryStats(entryPath: string): Promise<fs.Stats | null> {
@@ -60,10 +58,9 @@ export class RepositoryFilesystem {
 
   /**
    * Builds the full path to a file or directory within the repository from a
-   * partial path.
+   * path relative to the root directory of the repository.
    *
-   * @param entryPath - The path to the file or directory within the context of
-   * the repository (so, minus its directory).
+   * @param entryPath - The path to the file relative to the repository root.
    * @returns The full path.
    */
   #getFullPath(entryPath: string): string {
