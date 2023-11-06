@@ -969,8 +969,10 @@ __metadata:
     eslint-plugin-n: ^15.7.0
     eslint-plugin-prettier: ^4.2.1
     eslint-plugin-promise: ^6.1.1
+    execa: ^5.1.1
     jest: ^28.1.3
     jest-it-up: ^2.0.2
+    jest-mock-extended: ^3.0.5
     prettier: ^2.7.1
     prettier-plugin-packagejson: ^2.3.0
     rimraf: ^3.0.2
@@ -2342,6 +2344,17 @@ __metadata:
     strip-ansi: ^6.0.0
     wrap-ansi: ^7.0.0
   checksum: ce2e8f578a4813806788ac399b9e866297740eecd4ad1823c27fd344d78b22c5f8597d548adbcc46f0573e43e21e751f39446c5a5e804a12aace402b7a315d7f
+  languageName: node
+  linkType: hard
+
+"cliui@npm:^8.0.1":
+  version: 8.0.1
+  resolution: "cliui@npm:8.0.1"
+  dependencies:
+    string-width: ^4.2.0
+    strip-ansi: ^6.0.1
+    wrap-ansi: ^7.0.0
+  checksum: 79648b3b0045f2e285b76fb2e24e207c6db44323581e421c3acbd0e86454cba1b37aea976ab50195a49e7384b871e6dfb2247ad7dec53c02454ac6497394cb56
   languageName: node
   linkType: hard
 
@@ -4486,6 +4499,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jest-mock-extended@npm:^3.0.5":
+  version: 3.0.5
+  resolution: "jest-mock-extended@npm:3.0.5"
+  dependencies:
+    ts-essentials: ^7.0.3
+  peerDependencies:
+    jest: ^24.0.0 || ^25.0.0 || ^26.0.0 || ^27.0.0 || ^28.0.0 || ^29.0.0
+    typescript: ^3.0.0 || ^4.0.0 || ^5.0.0
+  checksum: 440c52f743af588493c2cd02fa7e4e42177748ac3f7ae720f414bd58a4a72fad4271878457bf8796b62abcf9cf32cde4dc5151caad0805037bd965cc9ef07ca8
+  languageName: node
+  linkType: hard
+
 "jest-mock@npm:^28.1.3":
   version: 28.1.3
   resolution: "jest-mock@npm:28.1.3"
@@ -6557,6 +6582,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ts-essentials@npm:^7.0.3":
+  version: 7.0.3
+  resolution: "ts-essentials@npm:7.0.3"
+  peerDependencies:
+    typescript: ">=3.7.0"
+  checksum: 74d75868acf7f8b95e447d8b3b7442ca21738c6894e576df9917a352423fde5eb43c5651da5f78997da6061458160ae1f6b279150b42f47ccc58b73e55acaa2f
+  languageName: node
+  linkType: hard
+
 "ts-jest@npm:^28.0.7":
   version: 28.0.8
   resolution: "ts-jest@npm:28.0.8"
@@ -6985,7 +7019,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs-parser@npm:^21.0.0, yargs-parser@npm:^21.0.1":
+"yargs-parser@npm:^21.0.1, yargs-parser@npm:^21.1.1":
   version: 21.1.1
   resolution: "yargs-parser@npm:21.1.1"
   checksum: ed2d96a616a9e3e1cc7d204c62ecc61f7aaab633dcbfab2c6df50f7f87b393993fe6640d017759fe112d0cb1e0119f2b4150a87305cc873fd90831c6a58ccf1c
@@ -7008,17 +7042,17 @@ __metadata:
   linkType: hard
 
 "yargs@npm:^17.0.1, yargs@npm:^17.3.1":
-  version: 17.5.1
-  resolution: "yargs@npm:17.5.1"
+  version: 17.7.2
+  resolution: "yargs@npm:17.7.2"
   dependencies:
-    cliui: ^7.0.2
+    cliui: ^8.0.1
     escalade: ^3.1.1
     get-caller-file: ^2.0.5
     require-directory: ^2.1.1
     string-width: ^4.2.3
     y18n: ^5.0.5
-    yargs-parser: ^21.0.0
-  checksum: 00d58a2c052937fa044834313f07910fd0a115dec5ee35919e857eeee3736b21a4eafa8264535800ba8bac312991ce785ecb8a51f4d2cc8c4676d865af1cfbde
+    yargs-parser: ^21.1.1
+  checksum: 73b572e863aa4a8cbef323dd911d79d193b772defd5a51aab0aca2d446655216f5002c42c5306033968193bdbf892a7a4c110b0d77954a7fdf563e653967b56a
   languageName: node
   linkType: hard
 
