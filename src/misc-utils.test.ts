@@ -39,7 +39,7 @@ describe('getEntryStats', () => {
         const filePath = path.join(sandbox.directoryPath, 'nonexistent.file');
         await writeFile(filePath, '');
         try {
-          // Make sandbox root directory non-executable
+          // Make sandbox root directory non-executable.
           await fs.promises.chmod(sandbox.directoryPath, 0o600);
 
           await expect(getEntryStats(filePath)).rejects.toThrow(
@@ -54,7 +54,8 @@ describe('getEntryStats', () => {
             }),
           );
         } finally {
-          // Make sandbox root directory executable again
+          // Make sandbox root directory executable again.
+          // Ideally, this should be handled by @metamask/utils.
           await fs.promises.chmod(sandbox.directoryPath, 0o700);
         }
       });
