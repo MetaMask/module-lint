@@ -1,3 +1,4 @@
+import { createSandbox } from '@metamask/utils/node';
 import type {
   ExecaChildProcess,
   Options as ExecaOptions,
@@ -5,6 +6,10 @@ import type {
 } from 'execa';
 import { mock } from 'jest-mock-extended';
 import { inspect, isDeepStrictEqual } from 'util';
+
+const { withinSandbox } = createSandbox('module-lint-tests');
+
+export { withinSandbox };
 
 /**
  * `execa` can be called multiple ways. This is the way that we use it.
