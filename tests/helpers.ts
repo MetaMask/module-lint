@@ -1,8 +1,8 @@
 import { createSandbox } from '@metamask/utils/node';
 import type {
   ExecaChildProcess,
-  Options as ExecaOptions,
   ExecaReturnValue,
+  Options as ExecaOptions,
 } from 'execa';
 import { mock } from 'jest-mock-extended';
 import { inspect, isDeepStrictEqual } from 'util';
@@ -19,6 +19,25 @@ export type PrimaryExecaFunction = (
   args?: readonly string[] | undefined,
   options?: ExecaOptions | undefined,
 ) => ExecaChildProcess;
+
+/**
+ * Represents the result of either a successful or failed invocation of `execa`.
+ *
+ * @property result - The desired properties of the resulting object in the case
+ * of success.
+ * @property error - The desired error in the case of failure.
+ */
+export type ExecaMockInvocationResult =
+  | { result?: Partial<ExecaReturnValue> }
+  | { error?: Error };
+
+/**
+ * An element in the array of mocks that you can pass to `mockExeca` in order to
+ * mock a particular invocation of `execa`.
+ */
+export type ExecaInvocationMock = {
+  args: Parameters<PrimaryExecaFunction>;
+} & ExecaMockInvocationResult;
 
 /**
  * Builds an object that represents a successful result returned by `execa`.
@@ -47,16 +66,7 @@ export function buildExecaResult(
  */
 export function mockExeca(
   execaMock: jest.MockedFn<PrimaryExecaFunction>,
-  invocationMocks: ({
-    args: Parameters<PrimaryExecaFunction>;
-  } & (
-    | {
-        result?: Partial<ExecaReturnValue>;
-      }
-    | {
-        error?: Error;
-      }
-  ))[],
+  invocationMocks: ExecaInvocationMock[],
 ) {
   execaMock.mockImplementation((...args): ExecaChildProcess => {
     for (const invocationMock of invocationMocks) {
@@ -76,5 +86,29 @@ export function mockExeca(
     }
 
     throw new Error(`Unmocked invocation of execa() with ${inspect(args)}`);
+  });
+}
+
+/**
+ * Uses Jest's fake timers to fake Date only.
+ */
+export function fakeDateOnly() {
+  jest.useFakeTimers({
+    doNotFake: [
+      'hrtime',
+      'nextTick',
+      'performance',
+      'queueMicrotask',
+      'requestAnimationFrame',
+      'cancelAnimationFrame',
+      'requestIdleCallback',
+      'cancelIdleCallback',
+      'setImmediate',
+      'clearImmediate',
+      'setInterval',
+      'clearInterval',
+      'setTimeout',
+      'clearTimeout',
+    ],
   });
 }
