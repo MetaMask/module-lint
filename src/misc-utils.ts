@@ -25,3 +25,18 @@ export async function getEntryStats(
     );
   }
 }
+
+/**
+ * Applies indentation to the given text.
+ *
+ * @param text - The text to indent.
+ * @param level - The indentation level to apply (one level is two spaces).
+ * @returns The indented string.
+ */
+export function indent(text: string, level: number) {
+  let indentation = '';
+  for (let i = 0; i < level * 2; i++) {
+    indentation += ' ';
+  }
+  return `${indentation}${text}`;
+}
