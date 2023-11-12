@@ -27,6 +27,18 @@ module.exports = {
         '@metamask/eslint-config-nodejs',
       ],
     },
+
+    {
+      files: ['src/cli.ts'],
+      parserOptions: {
+        sourceType: 'script',
+      },
+      rules: {
+        // It's okay if this file has a shebang; it's meant to be executed
+        // directly.
+        'n/shebang': 'off',
+      },
+    },
   ],
 
   ignorePatterns: [
