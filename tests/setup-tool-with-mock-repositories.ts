@@ -106,23 +106,17 @@ type GitHubRepository = {
 };
 
 /**
- * This tool features two kinds of interactions with the "outside world": it
- * shells out in order to perform operations on a Git repository, and it makes
- * HTTP requests in order to validate a given repository name matches one of the
- * available MetaMask repositories. Since interacting with a MetaMask repository
- * may involve an SSH key, and since the list of MetaMask repositories can
- * change at any time, in order to write deterministic and maintainable tests we
- * must mock these interactions.
+ * This tool uses the shell to make two kinds of interactions: perform
+ * operations on a Git repository and validate that a given repository name
+ * matches one of the available MetaMask repositories. Since interacting with a
+ * MetaMask repository may involve an SSH key, and since the list of MetaMask
+ * repositories can change at any time, in order to write deterministic and
+ * maintainable tests we must mock these interactions.
  *
  * To make testing easier, then, this function provides an option to create a
- * fake repository in a sandbox, then mocks execution of commands via `execa` as
- * well as the HTTP request responsible for pulling MetaMask repositories in
- * order to satisfy various requirements in tests that exercise the
- * aforementioned interactions. The exact commands executed, the return data for
- * the HTTP request, and whether or not the repository is even created is
- * customizable. This function also sets a default value for
- * `validRepositoriesCachePath` and `cachedRepositoriesDirectoryPath`, as that
- * is a basic requirement for higher level operations.
+ * fake repository in a sandbox, then mocks execution of commands via `execa`.
+ * The exact commands executed, the nature of the repository, and whether or not
+ * the repository is even created is customizable.
  *
  * @param args - The arguments to this function.
  * @param args.execaMock - The mock version of `execa`.
@@ -130,49 +124,111 @@ type GitHubRepository = {
  * can create the repository.
  * @param args.repository - Configuration options for the repository involved in
  * the test.
- * @param args.validRepositories - The list of valid repositories which will be
- * used to populate the valid repositories cache.
+ * @param args.validRepositories - The list of existing MetaMask repositories
+ * that the GitHub API is expected to return.
+ * @returns Values for `validRepositoriesCachePath` as well as information about
+ * the fake repository.
  */
 export async function setupToolWithMockRepository({
   execaMock,
   sandboxDirectoryPath,
   repository: repositoryConfigurationOptions = {},
-  validRepositories: configuredValidRepositories,
+  validRepositories,
 }: {
   execaMock: jest.MockedFn<PrimaryExecaFunction>;
   sandboxDirectoryPath: string;
   repository?: RepositoryConfigurationOptions;
-  validRepositories?: { name: string; fork: boolean; archived: boolean }[];
+  validRepositories?: GitHubRepository[];
+}) {
+  const { cachedRepositoriesDirectoryPath, repositories } =
+    await setupToolWithMockRepositories({
+      execaMock,
+      sandboxDirectoryPath,
+      repositories: [repositoryConfigurationOptions],
+      ...(validRepositories ? { validRepositories } : {}),
+    });
+  return {
+    cachedRepositoriesDirectoryPath,
+    // We are always passing a repository, so we can assume we get one back.
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    repository: repositories[0]!,
+  };
+}
+
+/**
+ * This tool uses the shell to make two kinds of interactions: perform
+ * operations on a Git repository and validate that a given repository name
+ * matches one of the available MetaMask repositories. Since interacting with a
+ * MetaMask repository may involve an SSH key, and since the list of MetaMask
+ * repositories can change at any time, in order to write deterministic and
+ * maintainable tests we must mock these interactions.
+ *
+ * In addition, since this tool has the potential to interact with multiple
+ * repositories, these interactions must be mocked for all repositories that a
+ * test cares about.
+ *
+ * To make testing easier, then, this function provides an option to create one
+ * or fake repositories in a sandbox, then mocks execution of commands via
+ * `execa`. The exact commands executed, the nature of the repositories, and
+ * whether or not repositories in question are even created are customizable.
+ *
+ * @param args - The arguments to this function.
+ * @param args.execaMock - The mock version of `execa`.
+ * @param args.sandboxDirectoryPath - The path to the sandbox directory where we
+ * can create the repository.
+ * @param args.repositories - Configuration options for the repositories
+ * involved in the test.
+ * @param args.validRepositories - The list of existing MetaMask repositories
+ * that the GitHub API is expected to return.
+ * @returns Values for `validRepositoriesCachePath` as well as information about
+ * the fake repositories.
+ */
+export async function setupToolWithMockRepositories({
+  execaMock,
+  sandboxDirectoryPath,
+  repositories: setOfRepositoryConfigurationOptions = [],
+  validRepositories: configuredValidRepositories,
+}: {
+  execaMock: jest.MockedFn<PrimaryExecaFunction>;
+  sandboxDirectoryPath: string;
+  repositories?: RepositoryConfigurationOptions[];
+  validRepositories?: GitHubRepository[];
 }) {
   const cachedRepositoriesDirectoryPath = path.join(
     sandboxDirectoryPath,
     'repositories',
   );
-  const repositoryConfiguration = fillOutRepositoryConfiguration(
-    repositoryConfigurationOptions,
-    cachedRepositoriesDirectoryPath,
+  const repositoryConfigurations = setOfRepositoryConfigurationOptions.map(
+    (repositoryConfigurationOptions) =>
+      fillOutRepositoryConfiguration(
+        repositoryConfigurationOptions,
+        cachedRepositoriesDirectoryPath,
+      ),
   );
 
-  if (repositoryConfiguration.create) {
-    await createMockRepository(repositoryConfiguration);
+  for (const repositoryConfiguration of repositoryConfigurations) {
+    if (repositoryConfiguration.create) {
+      await createMockRepository(repositoryConfiguration);
+    }
   }
 
-  const validRepositories = configuredValidRepositories ?? [
-    {
+  const validRepositories =
+    configuredValidRepositories ??
+    repositoryConfigurations.map((repositoryConfiguration) => ({
       name: repositoryConfiguration.name,
       fork: repositoryConfiguration.isFork,
       archived: repositoryConfiguration.isArchived,
-    },
-  ];
+    }));
 
-  const execaInvocationMocks = buildExecaInvocationMocks(validRepositories, [
-    repositoryConfiguration,
-  ]);
+  const execaInvocationMocks = buildExecaInvocationMocks(
+    validRepositories,
+    repositoryConfigurations,
+  );
   mockExeca(execaMock, execaInvocationMocks);
 
   return {
     cachedRepositoriesDirectoryPath,
-    repository: repositoryConfiguration,
+    repositories: repositoryConfigurations,
   };
 }
 

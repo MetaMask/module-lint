@@ -27,6 +27,21 @@ export async function getEntryStats(
 }
 
 /**
+ * Builds a string by repeating the same character some number of times.
+ *
+ * @param character - The character.
+ * @param length - The number of times to repeat the character.
+ * @returns The resulting string.
+ */
+export function repeat(character: string, length: number): string {
+  let string = '';
+  for (let i = 0; i < length; i++) {
+    string += character;
+  }
+  return string;
+}
+
+/**
  * Applies indentation to the given text.
  *
  * @param text - The text to indent.
@@ -34,9 +49,6 @@ export async function getEntryStats(
  * @returns The indented string.
  */
 export function indent(text: string, level: number) {
-  let indentation = '';
-  for (let i = 0; i < level * 2; i++) {
-    indentation += ' ';
-  }
+  const indentation = repeat(' ', level * 2);
   return `${indentation}${text}`;
 }
