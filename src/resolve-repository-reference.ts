@@ -16,13 +16,26 @@ type ResolvedRepositoryReference = {
 /**
  * A "repository reference" may be:
  *
- * 1. The path of an existing directory relative to this tool's working
+ * A. The path of an existing directory relative to this tool's working
  * directory.
- * 2. The absolute path of an existing directory.
- * 3. The path to a previously cloned MetaMask repository.
- * 4. The name of a MetaMask repository.
+ * B. The absolute path of an existing directory.
+ * C. The "short name" of a MetaMask repository (that is, without "MetaMask/" or
+ * any other qualifiers), which has either already been cloned or should be
+ * cloned.
  *
- * This function determines which one it is.
+ * This function first establishes the location of the repository in question.
+ * Its parent directory is either the working directory, the cached repositories
+ * directory, or some other location, and the name of the directory itself is
+ * the "short name".
+ *
+ * Once the directory path is determined, this function merely returns metadata
+ * about that directory:
+ *
+ * - Whether the directory exists yet.
+ * - The path to the directory.
+ * - The "short name" of the repository.
+ * - Whether the repository is or will represent a non-fork, non-archived
+ * MetaMask repository.
  *
  * @param args - The arguments to this function.
  * @param args.repositoryReference - Either the name of a MetaMask repository,
