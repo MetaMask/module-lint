@@ -137,22 +137,10 @@ async function ensureRepositoryExists({
     workingDirectoryPath,
     cachedRepositoriesDirectoryPath,
   });
-  const isGitRepository = await directoryExists(
-    path.join(resolvedRepository.directoryPath, '.git'),
-  );
-
-  if (resolvedRepository.exists && !isGitRepository) {
-    throw new Error(
-      `"${resolvedRepository.directoryPath}" is not a Git repository, cannot proceed.`,
-    );
-  }
 
   let branchInfo: BranchInfo;
-  if (isGitRepository) {
-    log(
-      'Repository has been cloned already to',
-      resolvedRepository.directoryPath,
-    );
+  if (resolvedRepository.exists) {
+    log('Repository already exists at', resolvedRepository.directoryPath);
     branchInfo = await getBranchInfo(resolvedRepository.directoryPath);
   } else {
     branchInfo = await cloneRepository({

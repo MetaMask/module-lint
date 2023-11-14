@@ -16,20 +16,15 @@ type ResolvedRepository = {
 /**
  * A "repository reference" may be:
  *
- * A. The path of an existing directory relative to this tool's working
+ * A. The path of an existing repository relative to this tool's working
  * directory.
- * B. The absolute path of an existing directory.
+ * B. The absolute path of an existing repository.
  * C. The "short name" of a MetaMask repository (that is, without "MetaMask/" or
  * any other qualifiers), which has either already been cloned or should be
  * cloned.
  *
- * This function first establishes the location of the repository in question.
- * Its parent directory is either the working directory, the cached repositories
- * directory, or some other location, and the name of the directory itself is
- * the "short name".
- *
- * Once the directory path is determined, this function merely returns metadata
- * about that directory:
+ * This function determines the nature of the reference, verifies that the
+ * directory is a Git repository, and then returns what it knows:
  *
  * - The "short name" of the repository.
  * - The path to the directory.
@@ -43,8 +38,8 @@ type ResolvedRepository = {
  * @param args.cachedRepositoriesDirectoryPath - The directory where MetaMask
  * repositories will be (or have been) cloned.
  * @returns Information about the repository being referred to.
- * @throws If given a repository reference that cannot be resolved to the name
- * of a MetaMask repository or a local directory.
+ * @throws If given something that is not the name of a MetaMask repository or
+ * the path of an existing repository.
  */
 export async function resolveRepositoryReference({
   repositoryReference,
@@ -55,12 +50,15 @@ export async function resolveRepositoryReference({
   workingDirectoryPath: string;
   cachedRepositoriesDirectoryPath: string;
 }): Promise<ResolvedRepository> {
+  let resolvedRepositoryFromExistingPath: ResolvedRepository | undefined;
+  let resolvedRepositoryFromName: ResolvedRepository | undefined;
+
   const possibleRealDirectoryPath = path.resolve(
     workingDirectoryPath,
     repositoryReference,
   );
   if (await directoryExists(possibleRealDirectoryPath)) {
-    return {
+    resolvedRepositoryFromExistingPath = {
       shortname: path.basename(possibleRealDirectoryPath),
       directoryPath: possibleRealDirectoryPath,
       exists: true,
@@ -68,29 +66,48 @@ export async function resolveRepositoryReference({
     };
   }
 
-  const cachedRepositoryDirectoryPath = path.join(
-    cachedRepositoriesDirectoryPath,
-    repositoryReference,
-  );
-  const cachedRepositoryExists = await directoryExists(
-    cachedRepositoryDirectoryPath,
-  );
-  const isKnownMetaMaskRepository = await isValidMetaMaskRepositoryName(
-    repositoryReference,
-  );
+  if (!resolvedRepositoryFromExistingPath) {
+    const cachedRepositoryDirectoryPath = path.join(
+      cachedRepositoriesDirectoryPath,
+      repositoryReference,
+    );
+    const cachedRepositoryExists = await directoryExists(
+      cachedRepositoryDirectoryPath,
+    );
+    const isKnownMetaMaskRepository = await isValidMetaMaskRepositoryName(
+      repositoryReference,
+    );
 
-  if (cachedRepositoryExists || isKnownMetaMaskRepository) {
-    return {
-      shortname: repositoryReference,
-      directoryPath: cachedRepositoryDirectoryPath,
-      exists: cachedRepositoryExists,
-      createdAutomatically: isKnownMetaMaskRepository,
-    };
+    if (cachedRepositoryExists || isKnownMetaMaskRepository) {
+      resolvedRepositoryFromName = {
+        shortname: repositoryReference,
+        directoryPath: cachedRepositoryDirectoryPath,
+        exists: cachedRepositoryExists,
+        createdAutomatically: isKnownMetaMaskRepository,
+      };
+    }
   }
 
-  throw new Error(
-    `Could not resolve '${repositoryReference}' as it is neither a reference to a directory nor the name of a known MetaMask repository.`,
+  const resolvedRepository =
+    resolvedRepositoryFromExistingPath ?? resolvedRepositoryFromName;
+
+  if (!resolvedRepository) {
+    throw new Error(
+      `Could not resolve '${repositoryReference}' as it is neither a reference to a directory nor the name of a known MetaMask repository.`,
+    );
+  }
+
+  const isGitRepository = await directoryExists(
+    path.join(resolvedRepository.directoryPath, '.git'),
   );
+
+  if (resolvedRepository.exists && !isGitRepository) {
+    throw new Error(
+      `"${resolvedRepository.directoryPath}" is not a Git repository, cannot proceed.`,
+    );
+  }
+
+  return resolvedRepository;
 }
 
 /**

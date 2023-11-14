@@ -12,7 +12,7 @@ const execaMock = jest.mocked<PrimaryExecaFunction>(execa);
 
 describe('resolveRepositoryReference', () => {
   describe('given the path of a directory relative to the working directory', () => {
-    it('returns information about that directory', async () => {
+    it('throws if the directory does not look like a Git repository', async () => {
       await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
         const workingDirectoryPath = path.join(sandboxDirectoryPath, 'working');
         const directoryPath = path.join(
@@ -21,6 +21,33 @@ describe('resolveRepositoryReference', () => {
           'some-repo',
         );
         await ensureDirectoryStructureExists(directoryPath);
+
+        await expect(
+          resolveRepositoryReference({
+            repositoryReference: 'subdir/some-repo',
+            workingDirectoryPath,
+            cachedRepositoriesDirectoryPath: sandboxDirectoryPath,
+          }),
+        ).rejects.toThrow(
+          new Error(
+            `"${path.join(
+              workingDirectoryPath,
+              'subdir/some-repo',
+            )}" is not a Git repository, cannot proceed.`,
+          ),
+        );
+      });
+    });
+
+    it('returns information about that directory', async () => {
+      await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
+        const workingDirectoryPath = path.join(sandboxDirectoryPath, 'working');
+        const directoryPath = path.join(
+          workingDirectoryPath,
+          'subdir',
+          'some-repo',
+        );
+        await ensureDirectoryStructureExists(path.join(directoryPath, '.git'));
 
         const resolvedRepository = await resolveRepositoryReference({
           repositoryReference: 'subdir/some-repo',
@@ -39,13 +66,35 @@ describe('resolveRepositoryReference', () => {
   });
 
   describe('given an absolute path to a directory somewhere in the filesystem', () => {
-    it('returns information about that directory', async () => {
+    it('throws if the directory does not look like a Git repository', async () => {
       await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
         const directoryPath = path.join(
           sandboxDirectoryPath,
           'subdir/some-repo',
         );
         await ensureDirectoryStructureExists(directoryPath);
+
+        await expect(
+          resolveRepositoryReference({
+            repositoryReference: directoryPath,
+            workingDirectoryPath: sandboxDirectoryPath,
+            cachedRepositoriesDirectoryPath: sandboxDirectoryPath,
+          }),
+        ).rejects.toThrow(
+          new Error(
+            `"${directoryPath}" is not a Git repository, cannot proceed.`,
+          ),
+        );
+      });
+    });
+
+    it('returns information about that directory', async () => {
+      await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
+        const directoryPath = path.join(
+          sandboxDirectoryPath,
+          'subdir/some-repo',
+        );
+        await ensureDirectoryStructureExists(path.join(directoryPath, '.git'));
 
         const resolvedRepository = await resolveRepositoryReference({
           repositoryReference: directoryPath,
@@ -63,8 +112,8 @@ describe('resolveRepositoryReference', () => {
     });
   });
 
-  describe('given the path to a previously cached MetaMask repository', () => {
-    it('returns information about that directory', async () => {
+  describe('given the name of a known MetaMask repository that is located in the cache directory', () => {
+    it('throws if the directory somehow does not look like a Git repository', async () => {
       await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
         const cachedRepositoriesDirectoryPath = path.join(
           sandboxDirectoryPath,
@@ -75,6 +124,45 @@ describe('resolveRepositoryReference', () => {
           'some-repo',
         );
         await ensureDirectoryStructureExists(directoryPath);
+        mockExeca(execaMock, [
+          {
+            args: [
+              'gh',
+              ['api', 'orgs/MetaMask/repos', '--cache', '1h', '--paginate'],
+            ],
+            result: {
+              stdout: JSON.stringify([
+                { name: 'some-repo', fork: false, archived: false },
+              ]),
+            },
+          },
+        ]);
+
+        await expect(
+          resolveRepositoryReference({
+            repositoryReference: 'some-repo',
+            workingDirectoryPath: sandboxDirectoryPath,
+            cachedRepositoriesDirectoryPath,
+          }),
+        ).rejects.toThrow(
+          new Error(
+            `"${directoryPath}" is not a Git repository, cannot proceed.`,
+          ),
+        );
+      });
+    });
+
+    it('returns information about that directory', async () => {
+      await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
+        const cachedRepositoriesDirectoryPath = path.join(
+          sandboxDirectoryPath,
+          'cache',
+        );
+        const directoryPath = path.join(
+          cachedRepositoriesDirectoryPath,
+          'some-repo',
+        );
+        await ensureDirectoryStructureExists(path.join(directoryPath, '.git'));
         mockExeca(execaMock, [
           {
             args: [
@@ -105,8 +193,8 @@ describe('resolveRepositoryReference', () => {
     });
   });
 
-  describe('given the path to a repository that is in the cache directory but was created manually', () => {
-    it('returns information about that directory', async () => {
+  describe('given the name of a repository located in the cache directory that is no longer a known MetaMask repository', () => {
+    it('throws if the directory somehow does not look like a Git repository', async () => {
       await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
         const cachedRepositoriesDirectoryPath = path.join(
           sandboxDirectoryPath,
@@ -117,6 +205,43 @@ describe('resolveRepositoryReference', () => {
           'some-repo',
         );
         await ensureDirectoryStructureExists(directoryPath);
+        mockExeca(execaMock, [
+          {
+            args: [
+              'gh',
+              ['api', 'orgs/MetaMask/repos', '--cache', '1h', '--paginate'],
+            ],
+            result: {
+              stdout: JSON.stringify([]),
+            },
+          },
+        ]);
+
+        await expect(
+          resolveRepositoryReference({
+            repositoryReference: 'some-repo',
+            workingDirectoryPath: sandboxDirectoryPath,
+            cachedRepositoriesDirectoryPath,
+          }),
+        ).rejects.toThrow(
+          new Error(
+            `"${directoryPath}" is not a Git repository, cannot proceed.`,
+          ),
+        );
+      });
+    });
+
+    it('returns information about that directory', async () => {
+      await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
+        const cachedRepositoriesDirectoryPath = path.join(
+          sandboxDirectoryPath,
+          'cache',
+        );
+        const directoryPath = path.join(
+          cachedRepositoriesDirectoryPath,
+          'some-repo',
+        );
+        await ensureDirectoryStructureExists(path.join(directoryPath, '.git'));
         mockExeca(execaMock, [
           {
             args: [
@@ -145,7 +270,7 @@ describe('resolveRepositoryReference', () => {
     });
   });
 
-  describe('given the name of a known MetaMask repository that has not been cloned yet', () => {
+  describe('given the name of a known MetaMask repository that has not been cached yet', () => {
     it('returns information about that directory', async () => {
       await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
         const cachedRepositoriesDirectoryPath = path.join(
