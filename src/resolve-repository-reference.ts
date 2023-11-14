@@ -2,15 +2,15 @@ import { directoryExists } from '@metamask/utils/node';
 import path from 'path';
 
 import { ensureMetaMaskRepositoriesLoaded } from './ensure-metamask-repositories-loaded';
-import { createModuleLogger, projectLogger } from './logging-utils';
 
-const log = createModuleLogger(projectLogger, 'resolve-repository-reference');
-
-type ResolvedRepositoryReference = {
-  repositoryShortname: string;
-  repositoryDirectoryPath: string;
-  repositoryDirectoryExists: boolean;
-  isKnownMetaMaskRepository: boolean;
+/**
+ * What we know about the target of a repository reference.
+ */
+type ResolvedRepository = {
+  shortname: string;
+  directoryPath: string;
+  exists: boolean;
+  createdAutomatically: boolean;
 };
 
 /**
@@ -31,11 +31,10 @@ type ResolvedRepositoryReference = {
  * Once the directory path is determined, this function merely returns metadata
  * about that directory:
  *
- * - Whether the directory exists yet.
- * - The path to the directory.
  * - The "short name" of the repository.
- * - Whether the repository is or will represent a non-fork, non-archived
- * MetaMask repository.
+ * - The path to the directory.
+ * - Whether that path exists.
+ * - Whether the directory was or will be created automatically by this tool.
  *
  * @param args - The arguments to this function.
  * @param args.repositoryReference - Either the name of a MetaMask repository,
@@ -55,17 +54,17 @@ export async function resolveRepositoryReference({
   repositoryReference: string;
   workingDirectoryPath: string;
   cachedRepositoriesDirectoryPath: string;
-}): Promise<ResolvedRepositoryReference> {
+}): Promise<ResolvedRepository> {
   const possibleRealDirectoryPath = path.resolve(
     workingDirectoryPath,
     repositoryReference,
   );
   if (await directoryExists(possibleRealDirectoryPath)) {
     return {
-      repositoryShortname: path.basename(possibleRealDirectoryPath),
-      repositoryDirectoryPath: possibleRealDirectoryPath,
-      repositoryDirectoryExists: true,
-      isKnownMetaMaskRepository: false,
+      shortname: path.basename(possibleRealDirectoryPath),
+      directoryPath: possibleRealDirectoryPath,
+      exists: true,
+      createdAutomatically: false,
     };
   }
 
@@ -82,21 +81,12 @@ export async function resolveRepositoryReference({
 
   if (cachedRepositoryExists || isKnownMetaMaskRepository) {
     return {
-      repositoryShortname: repositoryReference,
-      repositoryDirectoryPath: cachedRepositoryDirectoryPath,
-      repositoryDirectoryExists: cachedRepositoryExists,
-      isKnownMetaMaskRepository,
+      shortname: repositoryReference,
+      directoryPath: cachedRepositoryDirectoryPath,
+      exists: cachedRepositoryExists,
+      createdAutomatically: isKnownMetaMaskRepository,
     };
   }
-
-  log(
-    'possibleRealDirectoryPath',
-    possibleRealDirectoryPath,
-    'cachedRepositoryDirectoryPath',
-    cachedRepositoryDirectoryPath,
-    'cachedRepositoryExists',
-    cachedRepositoryExists,
-  );
 
   throw new Error(
     `Could not resolve '${repositoryReference}' as it is neither a reference to a directory nor the name of a known MetaMask repository.`,

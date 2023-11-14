@@ -12,69 +12,69 @@ const execaMock = jest.mocked<PrimaryExecaFunction>(execa);
 
 describe('resolveRepositoryReference', () => {
   describe('given the path of a directory relative to the working directory', () => {
-    it('derives the shortname from the basename and assumes that the directory is not a clone of a known MetaMask repository', async () => {
+    it('returns information about that directory', async () => {
       await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
         const workingDirectoryPath = path.join(sandboxDirectoryPath, 'working');
-        const repositoryDirectoryPath = path.join(
+        const directoryPath = path.join(
           workingDirectoryPath,
           'subdir',
           'some-repo',
         );
-        await ensureDirectoryStructureExists(repositoryDirectoryPath);
+        await ensureDirectoryStructureExists(directoryPath);
 
-        const resolvedRepositoryReference = await resolveRepositoryReference({
+        const resolvedRepository = await resolveRepositoryReference({
           repositoryReference: 'subdir/some-repo',
           workingDirectoryPath,
           cachedRepositoriesDirectoryPath: sandboxDirectoryPath,
         });
 
-        expect(resolvedRepositoryReference).toStrictEqual({
-          repositoryShortname: 'some-repo',
-          repositoryDirectoryPath,
-          repositoryDirectoryExists: true,
-          isKnownMetaMaskRepository: false,
+        expect(resolvedRepository).toStrictEqual({
+          shortname: 'some-repo',
+          directoryPath,
+          exists: true,
+          createdAutomatically: false,
         });
       });
     });
   });
 
   describe('given an absolute path to a directory somewhere in the filesystem', () => {
-    it('derives the shortname from the basename and assumes that the directory is not a clone of a known MetaMask repository', async () => {
+    it('returns information about that directory', async () => {
       await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
-        const repositoryDirectoryPath = path.join(
+        const directoryPath = path.join(
           sandboxDirectoryPath,
-          'some-repo',
+          'subdir/some-repo',
         );
-        await ensureDirectoryStructureExists(repositoryDirectoryPath);
+        await ensureDirectoryStructureExists(directoryPath);
 
-        const resolvedRepositoryReference = await resolveRepositoryReference({
-          repositoryReference: repositoryDirectoryPath,
+        const resolvedRepository = await resolveRepositoryReference({
+          repositoryReference: directoryPath,
           workingDirectoryPath: sandboxDirectoryPath,
           cachedRepositoriesDirectoryPath: sandboxDirectoryPath,
         });
 
-        expect(resolvedRepositoryReference).toStrictEqual({
-          repositoryShortname: 'some-repo',
-          repositoryDirectoryPath,
-          repositoryDirectoryExists: true,
-          isKnownMetaMaskRepository: false,
+        expect(resolvedRepository).toStrictEqual({
+          shortname: 'some-repo',
+          directoryPath,
+          exists: true,
+          createdAutomatically: false,
         });
       });
     });
   });
 
   describe('given the path to a previously cached MetaMask repository', () => {
-    it('indicates that the repository is known', async () => {
+    it('returns information about that directory', async () => {
       await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
         const cachedRepositoriesDirectoryPath = path.join(
           sandboxDirectoryPath,
           'cache',
         );
-        const repositoryDirectoryPath = path.join(
+        const directoryPath = path.join(
           cachedRepositoriesDirectoryPath,
           'some-repo',
         );
-        await ensureDirectoryStructureExists(repositoryDirectoryPath);
+        await ensureDirectoryStructureExists(directoryPath);
         mockExeca(execaMock, [
           {
             args: [
@@ -89,34 +89,34 @@ describe('resolveRepositoryReference', () => {
           },
         ]);
 
-        const resolvedRepositoryReference = await resolveRepositoryReference({
+        const resolvedRepository = await resolveRepositoryReference({
           repositoryReference: 'some-repo',
           workingDirectoryPath: sandboxDirectoryPath,
           cachedRepositoriesDirectoryPath,
         });
 
-        expect(resolvedRepositoryReference).toStrictEqual({
-          repositoryShortname: 'some-repo',
-          repositoryDirectoryPath,
-          repositoryDirectoryExists: true,
-          isKnownMetaMaskRepository: true,
+        expect(resolvedRepository).toStrictEqual({
+          shortname: 'some-repo',
+          directoryPath,
+          exists: true,
+          createdAutomatically: true,
         });
       });
     });
   });
 
-  describe('given the path to a repository that was cached but is somehow not a known MetaMask repository', () => {
-    it('indicates that the repository is unknown', async () => {
+  describe('given the path to a repository that is in the cache directory but was created manually', () => {
+    it('returns information about that directory', async () => {
       await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
         const cachedRepositoriesDirectoryPath = path.join(
           sandboxDirectoryPath,
           'cache',
         );
-        const repositoryDirectoryPath = path.join(
+        const directoryPath = path.join(
           cachedRepositoriesDirectoryPath,
           'some-repo',
         );
-        await ensureDirectoryStructureExists(repositoryDirectoryPath);
+        await ensureDirectoryStructureExists(directoryPath);
         mockExeca(execaMock, [
           {
             args: [
@@ -129,30 +129,30 @@ describe('resolveRepositoryReference', () => {
           },
         ]);
 
-        const resolvedRepositoryReference = await resolveRepositoryReference({
+        const resolvedRepository = await resolveRepositoryReference({
           repositoryReference: 'some-repo',
           workingDirectoryPath: sandboxDirectoryPath,
           cachedRepositoriesDirectoryPath,
         });
 
-        expect(resolvedRepositoryReference).toStrictEqual({
-          repositoryShortname: 'some-repo',
-          repositoryDirectoryPath,
-          repositoryDirectoryExists: true,
-          isKnownMetaMaskRepository: false,
+        expect(resolvedRepository).toStrictEqual({
+          shortname: 'some-repo',
+          directoryPath,
+          exists: true,
+          createdAutomatically: false,
         });
       });
     });
   });
 
-  describe('given the path to known MetaMask repository that has not been cached yet', () => {
-    it('indicates that the directory does not exist', async () => {
+  describe('given the name of a known MetaMask repository that has not been cloned yet', () => {
+    it('returns information about that directory', async () => {
       await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
         const cachedRepositoriesDirectoryPath = path.join(
           sandboxDirectoryPath,
           'cache',
         );
-        const repositoryDirectoryPath = path.join(
+        const directoryPath = path.join(
           cachedRepositoriesDirectoryPath,
           'some-repo',
         );
@@ -170,17 +170,17 @@ describe('resolveRepositoryReference', () => {
           },
         ]);
 
-        const resolvedRepositoryReference = await resolveRepositoryReference({
+        const resolvedRepository = await resolveRepositoryReference({
           repositoryReference: 'some-repo',
           workingDirectoryPath: sandboxDirectoryPath,
           cachedRepositoriesDirectoryPath,
         });
 
-        expect(resolvedRepositoryReference).toStrictEqual({
-          repositoryShortname: 'some-repo',
-          repositoryDirectoryPath,
-          repositoryDirectoryExists: false,
-          isKnownMetaMaskRepository: true,
+        expect(resolvedRepository).toStrictEqual({
+          shortname: 'some-repo',
+          directoryPath,
+          exists: false,
+          createdAutomatically: true,
         });
       });
     });

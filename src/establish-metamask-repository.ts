@@ -132,34 +132,32 @@ async function ensureRepositoryExists({
   cachedRepositoriesDirectoryPath: string;
   outputLogger: AbstractOutputLogger;
 }): Promise<ExistingRepository> {
-  const {
-    repositoryShortname,
-    repositoryDirectoryPath,
-    repositoryDirectoryExists,
-    isKnownMetaMaskRepository,
-  } = await resolveRepositoryReference({
+  const resolvedRepository = await resolveRepositoryReference({
     repositoryReference,
     workingDirectoryPath,
     cachedRepositoriesDirectoryPath,
   });
   const isGitRepository = await directoryExists(
-    path.join(repositoryDirectoryPath, '.git'),
+    path.join(resolvedRepository.directoryPath, '.git'),
   );
 
-  if (repositoryDirectoryExists && !isGitRepository) {
+  if (resolvedRepository.exists && !isGitRepository) {
     throw new Error(
-      `"${repositoryDirectoryPath}" is not a Git repository, cannot proceed.`,
+      `"${resolvedRepository.directoryPath}" is not a Git repository, cannot proceed.`,
     );
   }
 
   let branchInfo: BranchInfo;
   if (isGitRepository) {
-    log('Repository has been cloned already to', repositoryDirectoryPath);
-    branchInfo = await getBranchInfo(repositoryDirectoryPath);
+    log(
+      'Repository has been cloned already to',
+      resolvedRepository.directoryPath,
+    );
+    branchInfo = await getBranchInfo(resolvedRepository.directoryPath);
   } else {
     branchInfo = await cloneRepository({
-      repositoryShortname,
-      repositoryDirectoryPath,
+      repositoryShortname: resolvedRepository.shortname,
+      repositoryDirectoryPath: resolvedRepository.directoryPath,
       cachedRepositoriesDirectoryPath,
       outputLogger,
     });
@@ -167,9 +165,9 @@ async function ensureRepositoryExists({
 
   return {
     ...branchInfo,
-    shortname: repositoryShortname,
-    directoryPath: repositoryDirectoryPath,
-    createdAutomatically: isKnownMetaMaskRepository,
+    shortname: resolvedRepository.shortname,
+    directoryPath: resolvedRepository.directoryPath,
+    createdAutomatically: resolvedRepository.createdAutomatically,
   };
 }
 
