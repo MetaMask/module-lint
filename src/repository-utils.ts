@@ -58,40 +58,29 @@ export async function getCurrentBranchName(
 }
 
 /**
- * Retrieves the default branch of the given repository, that is, the branch
- * that represents the main line of development. Unfortunately there's no good
- * way to obtain this, so this function just tries "main" followed by "master".
+ * Retrieves the default branch of the given repository as reported by GitHub.
  *
  * @param repositoryDirectoryPath - The path to the repository.
  * @returns The default branch name.
- * @throws If neither "main" nor "master" exist.
  */
 export async function getDefaultBranchName(
   repositoryDirectoryPath: string,
 ): Promise<string> {
-  try {
-    log('Running: git rev-parse --verify --quiet main');
-    await execa('git', ['rev-parse', '--verify', '--quiet', 'main'], {
+  const { stdout } = await execa(
+    'gh',
+    [
+      'repo',
+      'view',
+      '--json',
+      'defaultBranchRef',
+      '--jq',
+      '.defaultBranchRef.name',
+    ],
+    {
       cwd: repositoryDirectoryPath,
-    });
-    return 'main';
-  } catch (error) {
-    log('Command `git rev-parse --verify --quiet main` failed:', error);
-  }
-
-  try {
-    log('Running: git rev-parse --verify --quiet master');
-    await execa('git', ['rev-parse', '--verify', '--quiet', 'master'], {
-      cwd: repositoryDirectoryPath,
-    });
-    return 'master';
-  } catch (error) {
-    log('Command `git rev-parse --verify --quiet master` failed:', error);
-  }
-
-  throw new Error(
-    `Could not detect default branch name for repository '${repositoryDirectoryPath}'.`,
+    },
   );
+  return stdout.trim();
 }
 
 /**

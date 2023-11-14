@@ -67,7 +67,7 @@ describe('establishMetaMaskRepository', () => {
       });
     });
 
-    it('returns information about the repository, even if the default branch is not selected', async () => {
+    it('returns information about the repository', async () => {
       const fetchHeadModifiedDate = new Date('2023-01-01T00:00:00Z');
 
       await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
@@ -88,15 +88,10 @@ describe('establishMetaMaskRepository', () => {
                     },
                   }),
                 },
-                'git rev-parse --verify main': {
-                  action: () => ({
-                    error: new Error('not found'),
-                  }),
-                },
-                'git rev-parse --verify master': {
+                'gh repo view defaultBranchRef': {
                   action: () => ({
                     result: {
-                      stdout: '',
+                      stdout: 'master',
                     },
                   }),
                 },
@@ -142,10 +137,10 @@ describe('establishMetaMaskRepository', () => {
                       },
                     }),
                   },
-                  'git rev-parse --verify main': {
+                  'gh repo view defaultBranchRef': {
                     action: () => ({
                       result: {
-                        stdout: '',
+                        stdout: 'main',
                       },
                     }),
                   },
@@ -195,10 +190,10 @@ describe('establishMetaMaskRepository', () => {
                       },
                     }),
                   },
-                  'git rev-parse --verify main': {
+                  'gh repo view defaultBranchRef': {
                     action: () => ({
                       result: {
-                        stdout: '',
+                        stdout: 'main',
                       },
                     }),
                   },
@@ -288,15 +283,10 @@ describe('establishMetaMaskRepository', () => {
                       },
                     }),
                   },
-                  'git rev-parse --verify main': {
-                    action: () => ({
-                      error: new Error('not found'),
-                    }),
-                  },
-                  'git rev-parse --verify master': {
+                  'gh repo view defaultBranchRef': {
                     action: () => ({
                       result: {
-                        stdout: '',
+                        stdout: 'master',
                       },
                     }),
                   },

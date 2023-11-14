@@ -17,8 +17,7 @@ import { mockExeca } from './helpers';
  */
 type CommandMocks = Record<
   | 'git symbolic-ref HEAD'
-  | 'git rev-parse --verify main'
-  | 'git rev-parse --verify master'
+  | 'gh repo view defaultBranchRef'
   | 'git fetch'
   | 'git clone',
   { action: () => ExecaMockInvocationResult }
@@ -245,22 +244,19 @@ function buildExecaInvocationMocks(
         },
         {
           args: [
-            'git',
-            ['rev-parse', '--verify', '--quiet', 'main'],
+            'gh',
+            [
+              'repo',
+              'view',
+              '--json',
+              'defaultBranchRef',
+              '--jq',
+              '.defaultBranchRef.name',
+            ],
             { cwd: repositoryConfiguration.directoryPath },
           ],
           ...repositoryConfiguration.commandMocks[
-            'git rev-parse --verify main'
-          ].action(),
-        },
-        {
-          args: [
-            'git',
-            ['rev-parse', '--verify', '--quiet', 'master'],
-            { cwd: repositoryConfiguration.directoryPath },
-          ],
-          ...repositoryConfiguration.commandMocks[
-            'git rev-parse --verify master'
+            'gh repo view defaultBranchRef'
           ].action(),
         },
         {
@@ -342,14 +338,9 @@ function fillOutRepositoryConfiguration(
     'git symbolic-ref HEAD': {
       action: () => ({ result: { stdout: 'refs/heads/main' } }),
     },
-    'git rev-parse --verify main': {
+    'gh repo view defaultBranchRef': {
       action: () => ({
-        result: { stdout: '' },
-      }),
-    },
-    'git rev-parse --verify master': {
-      action: () => ({
-        error: new Error('Failed to run: git rev-parse --verify master'),
+        result: { stdout: 'main' },
       }),
     },
     'git fetch': {

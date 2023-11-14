@@ -26,7 +26,7 @@ describe('getBranchInfo', () => {
     jest.useRealTimers();
   });
 
-  it('returns the current branch, default branch, and last fetched date for the given repository', async () => {
+  it('returns the default branch and last fetched date for the given repository', async () => {
     const now = new Date('2023-01-01T00:00:00.000Z');
     jest.setSystemTime(now);
 
@@ -34,19 +34,18 @@ describe('getBranchInfo', () => {
       mockExeca(execaMock, [
         {
           args: [
-            'git',
-            ['symbolic-ref', '--quiet', 'HEAD'],
+            'gh',
+            [
+              'repo',
+              'view',
+              '--json',
+              'defaultBranchRef',
+              '--jq',
+              '.defaultBranchRef.name',
+            ],
             { cwd: sandboxDirectoryPath },
           ],
-          result: { stdout: 'refs/heads/foo' },
-        },
-        {
-          args: [
-            'git',
-            ['rev-parse', '--verify', '--quiet', 'main'],
-            { cwd: sandboxDirectoryPath },
-          ],
-          result: { stdout: '' },
+          result: { stdout: 'main' },
         },
       ]);
       const fetchHeadPath = path.join(
@@ -112,84 +111,29 @@ describe('getCurrentBranchName', () => {
 });
 
 describe('getDefaultBranchName', () => {
-  it('returns "main" if the main branch exists', async () => {
+  it('returns the default branch of the repository that GitHub API returns', async () => {
     await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
       mockExeca(execaMock, [
         {
           args: [
-            'git',
-            ['rev-parse', '--verify', '--quiet', 'main'],
+            'gh',
+            [
+              'repo',
+              'view',
+              '--json',
+              'defaultBranchRef',
+              '--jq',
+              '.defaultBranchRef.name',
+            ],
             { cwd: sandboxDirectoryPath },
           ],
-          result: { stdout: '' },
-        },
-        {
-          args: [
-            'git',
-            ['rev-parse', '--verify', '--quiet', 'master'],
-            { cwd: sandboxDirectoryPath },
-          ],
-          result: { stdout: '' },
+          result: { stdout: 'develop' },
         },
       ]);
 
       const branchName = await getDefaultBranchName(sandboxDirectoryPath);
 
-      expect(branchName).toBe('main');
-    });
-  });
-
-  it('returns "master" if the main branch exists', async () => {
-    await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
-      mockExeca(execaMock, [
-        {
-          args: [
-            'git',
-            ['rev-parse', '--verify', '--quiet', 'main'],
-            { cwd: sandboxDirectoryPath },
-          ],
-          error: new Error('not found'),
-        },
-        {
-          args: [
-            'git',
-            ['rev-parse', '--verify', '--quiet', 'master'],
-            { cwd: sandboxDirectoryPath },
-          ],
-          result: { stdout: '' },
-        },
-      ]);
-
-      const branchName = await getDefaultBranchName(sandboxDirectoryPath);
-
-      expect(branchName).toBe('master');
-    });
-  });
-
-  it('throws if neither master nor main exists', async () => {
-    await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
-      mockExeca(execaMock, [
-        {
-          args: [
-            'git',
-            ['rev-parse', '--verify', '--quiet', 'main'],
-            { cwd: sandboxDirectoryPath },
-          ],
-          error: new Error('not found'),
-        },
-        {
-          args: [
-            'git',
-            ['rev-parse', '--verify', '--quiet', 'master'],
-            { cwd: sandboxDirectoryPath },
-          ],
-          error: new Error('not found'),
-        },
-      ]);
-
-      await expect(getDefaultBranchName(sandboxDirectoryPath)).rejects.toThrow(
-        `Could not detect default branch name for repository '${sandboxDirectoryPath}'.`,
-      );
+      expect(branchName).toBe('develop');
     });
   });
 });
