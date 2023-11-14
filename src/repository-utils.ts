@@ -8,31 +8,6 @@ import { getEntryStats } from './misc-utils';
 const log = createModuleLogger(projectLogger, 'existing-repository');
 
 /**
- * Information about a Git branch.
- */
-export type BranchInfo = {
-  defaultBranchName: string;
-  lastFetchedDate: Date | null;
-};
-
-/**
- * Collects the current and default branch name of the given repository as well
- * as the time when commits were last fetched.
- *
- * @param repositoryDirectoryPath - The path to the repository.
- */
-export async function getBranchInfo(
-  repositoryDirectoryPath: string,
-): Promise<BranchInfo> {
-  const defaultBranchName = await getDefaultBranchName(repositoryDirectoryPath);
-  const lastFetchedDate = await getLastFetchedDate(repositoryDirectoryPath);
-  return {
-    defaultBranchName,
-    lastFetchedDate,
-  };
-}
-
-/**
  * Retrieves the name of the branch that the given repository is currently
  * pointing to (i.e., HEAD).
  *

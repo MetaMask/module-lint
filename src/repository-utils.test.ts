@@ -4,7 +4,6 @@ import fs from 'fs';
 import path from 'path';
 
 import {
-  getBranchInfo,
   getCurrentBranchName,
   getDefaultBranchName,
   getLastFetchedDate,
@@ -16,59 +15,6 @@ import { fakeDateOnly, mockExeca, withinSandbox } from '../tests/helpers';
 jest.mock('execa');
 
 const execaMock = jest.mocked<PrimaryExecaFunction>(execa);
-
-describe('getBranchInfo', () => {
-  beforeEach(() => {
-    fakeDateOnly();
-  });
-
-  afterEach(() => {
-    jest.useRealTimers();
-  });
-
-  it('returns the default branch and last fetched date for the given repository', async () => {
-    const now = new Date('2023-01-01T00:00:00.000Z');
-    jest.setSystemTime(now);
-
-    await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
-      mockExeca(execaMock, [
-        {
-          args: [
-            'gh',
-            [
-              'repo',
-              'view',
-              '--json',
-              'defaultBranchRef',
-              '--jq',
-              '.defaultBranchRef.name',
-            ],
-            { cwd: sandboxDirectoryPath },
-          ],
-          result: { stdout: 'main' },
-        },
-      ]);
-      const fetchHeadPath = path.join(
-        sandboxDirectoryPath,
-        '.git',
-        'FETCH_HEAD',
-      );
-      await writeFile(fetchHeadPath, '');
-      await fs.promises.utimes(fetchHeadPath, now, now);
-
-      const branchInfo = await getBranchInfo(sandboxDirectoryPath);
-
-      expect(Object.keys(branchInfo)).toStrictEqual([
-        'defaultBranchName',
-        'lastFetchedDate',
-      ]);
-      expect(branchInfo).toMatchObject({
-        defaultBranchName: 'main',
-        lastFetchedDate: now,
-      });
-    });
-  });
-});
 
 describe('getCurrentBranchName', () => {
   it('returns the name of the branch that HEAD refers to', async () => {

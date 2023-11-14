@@ -8,32 +8,36 @@ import type { AbstractOutputLogger } from './output-logger';
 import { RepositoryFilesystem } from './repository-filesystem';
 import {
   ensureBranchUpToDateWithRemote,
-  getBranchInfo,
   getCurrentBranchName,
+  getDefaultBranchName,
+  getLastFetchedDate,
 } from './repository-utils';
-import type { BranchInfo } from './repository-utils';
 import { resolveRepositoryReference } from './resolve-repository-reference';
 
 const log = createModuleLogger(projectLogger, 'establish-metamask-repository');
 
-type ConfirmedRepository = BranchInfo & {
-  shortname: string;
-  directoryPath: string;
-};
-
 /**
  * A repository within the MetaMask organization on GitHub which has been cloned
  * to the local filesystem. More concretely, this could either be a template or
- * a project that requires linting.
+ * a project that requires linting. An object of this type will be available
+ * within a rule.
  */
-export type MetaMaskRepository = ConfirmedRepository & {
+export type MetaMaskRepository = {
+  shortname: string;
+  directoryPath: string;
+  defaultBranchName: string;
+  lastFetchedDate: Date | null;
   fs: RepositoryFilesystem;
 };
 
 /**
- * Information about a repository we know exists on the filesystem.
+ * A repository we know exists on the filesystem.
  */
-export type ExistingRepository = ConfirmedRepository & {
+export type ExistingRepository = {
+  shortname: string;
+  directoryPath: string;
+  defaultBranchName: string;
+  lastFetchedDate: Date | null;
   createdAutomatically: boolean;
 };
 
@@ -135,21 +139,28 @@ async function ensureRepositoryExists({
     cachedRepositoriesDirectoryPath,
   });
 
-  let branchInfo: BranchInfo;
+  let defaultBranchName: string;
+  let lastFetchedDate: Date | null;
   if (resolvedRepository.exists) {
     log('Repository already exists at', resolvedRepository.directoryPath);
-    branchInfo = await getBranchInfo(resolvedRepository.directoryPath);
+    defaultBranchName = await getDefaultBranchName(
+      resolvedRepository.directoryPath,
+    );
+    lastFetchedDate = await getLastFetchedDate(
+      resolvedRepository.directoryPath,
+    );
   } else {
-    branchInfo = await cloneRepository({
+    ({ defaultBranchName, lastFetchedDate } = await cloneRepository({
       repositoryShortname: resolvedRepository.shortname,
       repositoryDirectoryPath: resolvedRepository.directoryPath,
       cachedRepositoriesDirectoryPath,
       outputLogger,
-    });
+    }));
   }
 
   return {
-    ...branchInfo,
+    defaultBranchName,
+    lastFetchedDate,
     shortname: resolvedRepository.shortname,
     directoryPath: resolvedRepository.directoryPath,
     createdAutomatically: resolvedRepository.createdAutomatically,
@@ -167,6 +178,7 @@ async function ensureRepositoryExists({
  * @param args.cachedRepositoriesDirectoryPath - The parent directory in which
  * to keep the new repository.
  * @param args.outputLogger - Writable streams for output messages.
+ * @returns Information about the cloned repository.
  * @throws If `repositoryDirectoryPath` is not within
  * `cachedRepositoriesDirectoryPath`, or you do not have `gh` installed.
  */
