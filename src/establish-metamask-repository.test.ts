@@ -81,19 +81,25 @@ describe('establishMetaMaskRepository', () => {
               create: true,
               parentDirectoryPath: workingDirectoryPath,
               commandMocks: {
-                'git symbolic-ref HEAD': () => ({
-                  result: {
-                    stdout: 'refs/heads/some-branch',
-                  },
-                }),
-                'git rev-parse --verify main': () => ({
-                  error: new Error('not found'),
-                }),
-                'git rev-parse --verify master': () => ({
-                  result: {
-                    stdout: '',
-                  },
-                }),
+                'git symbolic-ref HEAD': {
+                  action: () => ({
+                    result: {
+                      stdout: 'refs/heads/some-branch',
+                    },
+                  }),
+                },
+                'git rev-parse --verify main': {
+                  action: () => ({
+                    error: new Error('not found'),
+                  }),
+                },
+                'git rev-parse --verify master': {
+                  action: () => ({
+                    result: {
+                      stdout: '',
+                    },
+                  }),
+                },
               },
               fetchHead: { modifiedDate: fetchHeadModifiedDate },
             },
@@ -130,16 +136,20 @@ describe('establishMetaMaskRepository', () => {
               repository: {
                 create: true,
                 commandMocks: {
-                  'git symbolic-ref HEAD': () => ({
-                    result: {
-                      stdout: 'refs/heads/NOT-main',
-                    },
-                  }),
-                  'git rev-parse --verify main': () => ({
-                    result: {
-                      stdout: '',
-                    },
-                  }),
+                  'git symbolic-ref HEAD': {
+                    action: () => ({
+                      result: {
+                        stdout: 'refs/heads/NOT-main',
+                      },
+                    }),
+                  },
+                  'git rev-parse --verify main': {
+                    action: () => ({
+                      result: {
+                        stdout: '',
+                      },
+                    }),
+                  },
                 },
               },
             });
@@ -158,7 +168,7 @@ describe('establishMetaMaskRepository', () => {
         });
       });
 
-      it('pulls the default branch', async () => {
+      it('updates the default branch', async () => {
         await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
           const { cachedRepositoriesDirectoryPath, repository } =
             await setupToolWithMockRepository({
@@ -166,6 +176,22 @@ describe('establishMetaMaskRepository', () => {
               sandboxDirectoryPath,
               repository: {
                 create: true,
+                commandMocks: {
+                  'git symbolic-ref HEAD': {
+                    action: () => ({
+                      result: {
+                        stdout: 'refs/heads/main',
+                      },
+                    }),
+                  },
+                  'git rev-parse --verify main': {
+                    action: () => ({
+                      result: {
+                        stdout: '',
+                      },
+                    }),
+                  },
+                },
               },
             });
           const outputLogger = new FakeOutputLogger();
@@ -177,9 +203,17 @@ describe('establishMetaMaskRepository', () => {
             outputLogger,
           });
 
-          expect(execaMock).toHaveBeenNthCalledWith(4, 'git', ['pull'], {
+          expect(execaMock).toHaveBeenNthCalledWith(4, 'git', ['fetch'], {
             cwd: repository.directoryPath,
           });
+          expect(execaMock).toHaveBeenNthCalledWith(
+            5,
+            'git',
+            ['reset', '--hard', 'origin/main'],
+            {
+              cwd: repository.directoryPath,
+            },
+          );
         });
       });
 
@@ -196,16 +230,20 @@ describe('establishMetaMaskRepository', () => {
                 name: 'some-repo',
                 create: true,
                 commandMocks: {
-                  'git symbolic-ref HEAD': () => ({
-                    result: {
-                      stdout: 'refs/heads/main',
-                    },
-                  }),
-                  'git rev-parse --verify main': () => ({
-                    result: {
-                      stdout: '',
-                    },
-                  }),
+                  'git symbolic-ref HEAD': {
+                    action: () => ({
+                      result: {
+                        stdout: 'refs/heads/main',
+                      },
+                    }),
+                  },
+                  'git rev-parse --verify main': {
+                    action: () => ({
+                      result: {
+                        stdout: '',
+                      },
+                    }),
+                  },
                 },
               },
             });
@@ -286,19 +324,25 @@ describe('establishMetaMaskRepository', () => {
                 name: 'some-repo',
                 create: false,
                 commandMocks: {
-                  'git symbolic-ref HEAD': () => ({
-                    result: {
-                      stdout: 'refs/heads/master',
-                    },
-                  }),
-                  'git rev-parse --verify main': () => ({
-                    error: new Error('not found'),
-                  }),
-                  'git rev-parse --verify master': () => ({
-                    result: {
-                      stdout: '',
-                    },
-                  }),
+                  'git symbolic-ref HEAD': {
+                    action: () => ({
+                      result: {
+                        stdout: 'refs/heads/master',
+                      },
+                    }),
+                  },
+                  'git rev-parse --verify main': {
+                    action: () => ({
+                      error: new Error('not found'),
+                    }),
+                  },
+                  'git rev-parse --verify master': {
+                    action: () => ({
+                      result: {
+                        stdout: '',
+                      },
+                    }),
+                  },
                 },
               },
             });

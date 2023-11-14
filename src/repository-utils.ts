@@ -114,18 +114,28 @@ export async function getLastFetchedDate(
 }
 
 /**
- * Ensures that the repository has fresh commits (where fresh means one hour or
- * younger).
+ * Ensures that the current branch of a given repository is closely in sync with
+ * a remote branch by resetting it to match if new commits have not been fetched
+ * for more than an hour.
  *
  * @param repositoryDirectoryPath - The path to the repository.
- * @param lastFetchedDate - The date/time when the repository
- * was last fetched.
+ * @param args - Remaining arguments.
+ * @param args.remoteBranchName - The name of the remote branch to use to reset
+ * the current branch.
+ * @param args.lastFetchedDate - The date/time when the repository was last
+ * fetched.
  * @returns The last fetched date if it has been an hour or less, or now
  * otherwise.
  */
-export async function ensureDefaultBranchIsUpToDate(
+export async function ensureBranchUpToDateWithRemote(
   repositoryDirectoryPath: string,
-  lastFetchedDate: Date | null,
+  {
+    remoteBranchName,
+    lastFetchedDate,
+  }: {
+    remoteBranchName: string;
+    lastFetchedDate: Date | null;
+  },
 ) {
   const now = new Date();
   if (
@@ -135,8 +145,12 @@ export async function ensureDefaultBranchIsUpToDate(
     return lastFetchedDate;
   }
 
-  log('Running: git pull');
-  await execa('git', ['pull'], {
+  log('Running: git fetch');
+  await execa('git', ['fetch'], {
+    cwd: repositoryDirectoryPath,
+  });
+  log(`Running: git reset --hard origin/${remoteBranchName}`);
+  await execa('git', ['reset', '--hard', `origin/${remoteBranchName}`], {
     cwd: repositoryDirectoryPath,
   });
   return now;

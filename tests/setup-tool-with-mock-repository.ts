@@ -13,16 +13,21 @@ import type {
 import { mockExeca } from './helpers';
 
 /**
- * Mock results for commands that this tool runs.
+ * Metadata for commands that this tool is expected to run.
  */
 type CommandMocks = Record<
   | 'git symbolic-ref HEAD'
   | 'git rev-parse --verify main'
   | 'git rev-parse --verify master'
-  | 'git pull'
+  | 'git fetch'
   | 'git clone',
-  () => ExecaMockInvocationResult
->;
+  { action: () => ExecaMockInvocationResult }
+> & {
+  'git reset --hard origin/%s': {
+    values: [string];
+    action: () => ExecaMockInvocationResult;
+  };
+};
 
 /**
  * Used by `setupToolWithMockRepository` to customize a repository depending on
@@ -234,7 +239,9 @@ function buildExecaInvocationMocks(
             ['symbolic-ref', '--quiet', 'HEAD'],
             { cwd: repositoryConfiguration.directoryPath },
           ],
-          ...repositoryConfiguration.commandMocks['git symbolic-ref HEAD'](),
+          ...repositoryConfiguration.commandMocks[
+            'git symbolic-ref HEAD'
+          ].action(),
         },
         {
           args: [
@@ -244,7 +251,7 @@ function buildExecaInvocationMocks(
           ],
           ...repositoryConfiguration.commandMocks[
             'git rev-parse --verify main'
-          ](),
+          ].action(),
         },
         {
           args: [
@@ -254,15 +261,15 @@ function buildExecaInvocationMocks(
           ],
           ...repositoryConfiguration.commandMocks[
             'git rev-parse --verify master'
-          ](),
+          ].action(),
         },
         {
           args: [
             'git',
-            ['pull'],
+            ['fetch'],
             { cwd: repositoryConfiguration.directoryPath },
           ],
-          ...repositoryConfiguration.commandMocks['git pull'](),
+          ...repositoryConfiguration.commandMocks['git fetch'].action(),
         },
         {
           args: [
@@ -274,9 +281,22 @@ function buildExecaInvocationMocks(
               repositoryConfiguration.directoryPath,
             ],
           ],
-          ...repositoryConfiguration.commandMocks['git clone'](),
+          ...repositoryConfiguration.commandMocks['git clone'].action(),
         },
       ];
+
+      const gitResetMock =
+        repositoryConfiguration.commandMocks['git reset --hard origin/%s'];
+      const [targetBranchName] = gitResetMock.values;
+      repositoryExecaInvocationMocks.push({
+        args: [
+          'git',
+          ['reset', '--hard', `origin/${targetBranchName}`],
+          { cwd: repositoryConfiguration.directoryPath },
+        ],
+        ...gitResetMock.action(),
+      });
+
       return repositoryExecaInvocationMocks;
     }),
   ];
@@ -319,19 +339,35 @@ function fillOutRepositoryConfiguration(
   const directoryPath = path.join(parentDirectoryPath, name);
 
   const commandMocks = {
-    'git symbolic-ref HEAD': () => ({ result: { stdout: 'refs/heads/main' } }),
-    'git rev-parse --verify main': () => ({
-      result: { stdout: '' },
-    }),
-    'git rev-parse --verify master': () => ({
-      error: new Error('Failed to run: git rev-parse --verify master'),
-    }),
-    'git pull': () => ({
-      result: { stdout: '' },
-    }),
-    'git clone': () => ({
-      result: { stdout: '' },
-    }),
+    'git symbolic-ref HEAD': {
+      action: () => ({ result: { stdout: 'refs/heads/main' } }),
+    },
+    'git rev-parse --verify main': {
+      action: () => ({
+        result: { stdout: '' },
+      }),
+    },
+    'git rev-parse --verify master': {
+      action: () => ({
+        error: new Error('Failed to run: git rev-parse --verify master'),
+      }),
+    },
+    'git fetch': {
+      action: () => ({
+        result: { stdout: '' },
+      }),
+    },
+    'git reset --hard origin/%s': {
+      values: ['main'] as [string],
+      action: () => ({
+        result: { stdout: '' },
+      }),
+    },
+    'git clone': {
+      action: () => ({
+        result: { stdout: '' },
+      }),
+    },
     ...givenCommandMocks,
   };
 

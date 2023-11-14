@@ -4,11 +4,11 @@ import fs from 'fs';
 import path from 'path';
 
 import {
-  ensureDefaultBranchIsUpToDate,
   getBranchInfo,
   getCurrentBranchName,
   getDefaultBranchName,
   getLastFetchedDate,
+  ensureBranchUpToDateWithRemote,
 } from './repository-utils';
 import type { PrimaryExecaFunction } from '../tests/helpers';
 import { fakeDateOnly, mockExeca, withinSandbox } from '../tests/helpers';
@@ -226,7 +226,7 @@ describe('getLastFetchedDate', () => {
   });
 });
 
-describe('ensureDefaultBranchIsUpToDate', () => {
+describe('ensureBranchUpToDateWithRemote', () => {
   beforeEach(() => {
     fakeDateOnly();
   });
@@ -235,60 +235,103 @@ describe('ensureDefaultBranchIsUpToDate', () => {
     jest.useRealTimers();
   });
 
-  it('pulls in the latest changes for the default branch if no last fetched date has been recorded', async () => {
+  it('resets the current branch to the latest version of the given branch if no last fetched date has been recorded', async () => {
     const repositoryDirectoryPath = '/some/directory';
     mockExeca(execaMock, [
       {
-        args: ['git', ['pull'], { cwd: repositoryDirectoryPath }],
+        args: ['git', ['fetch'], { cwd: repositoryDirectoryPath }],
+        result: { stdout: '' },
+      },
+      {
+        args: [
+          'git',
+          ['reset', '--hard', 'origin/main'],
+          { cwd: repositoryDirectoryPath },
+        ],
         result: { stdout: '' },
       },
     ]);
 
-    await ensureDefaultBranchIsUpToDate(repositoryDirectoryPath, null);
+    await ensureBranchUpToDateWithRemote(repositoryDirectoryPath, {
+      remoteBranchName: 'main',
+      lastFetchedDate: null,
+    });
 
-    expect(execaMock).toHaveBeenCalledWith('git', ['pull'], {
+    expect(execaMock).toHaveBeenNthCalledWith(1, 'git', ['fetch'], {
       cwd: repositoryDirectoryPath,
     });
+    expect(execaMock).toHaveBeenNthCalledWith(
+      2,
+      'git',
+      ['reset', '--hard', 'origin/main'],
+      {
+        cwd: repositoryDirectoryPath,
+      },
+    );
   });
 
-  it('pulls in the latest changes for the default branch if the last fetched date is more than an hour in the past', async () => {
+  it('resets the current branch to the latest version of the given branch if the last fetched date is more than an hour in the past', async () => {
     const repositoryDirectoryPath = '/some/directory';
     const lastFetchedDate = new Date('2023-01-01T00:00:00Z');
     const now = new Date('2023-01-01T01:00:01Z');
     jest.setSystemTime(now);
     mockExeca(execaMock, [
       {
-        args: ['git', ['pull'], { cwd: repositoryDirectoryPath }],
+        args: ['git', ['fetch'], { cwd: repositoryDirectoryPath }],
+        result: { stdout: '' },
+      },
+      {
+        args: [
+          'git',
+          ['reset', '--hard', 'origin/main'],
+          { cwd: repositoryDirectoryPath },
+        ],
         result: { stdout: '' },
       },
     ]);
 
-    await ensureDefaultBranchIsUpToDate(
-      repositoryDirectoryPath,
+    await ensureBranchUpToDateWithRemote(repositoryDirectoryPath, {
+      remoteBranchName: 'main',
       lastFetchedDate,
-    );
+    });
 
-    expect(execaMock).toHaveBeenCalledWith('git', ['pull'], {
+    expect(execaMock).toHaveBeenNthCalledWith(1, 'git', ['fetch'], {
       cwd: repositoryDirectoryPath,
     });
+    expect(execaMock).toHaveBeenNthCalledWith(
+      2,
+      'git',
+      ['reset', '--hard', 'origin/main'],
+      {
+        cwd: repositoryDirectoryPath,
+      },
+    );
   });
 
-  it('does not pull in the latest changes for the default branch if the last fetched date is less than an hour in the past', async () => {
+  it('does not reset the current branch to the latest version of the given branch if the last fetched date is less than an hour in the past', async () => {
     const repositoryDirectoryPath = '/some/directory';
     const lastFetchedDate = new Date('2023-01-01T00:00:00Z');
     const now = new Date('2023-01-01T00:00:59Z');
     jest.setSystemTime(now);
     mockExeca(execaMock, [
       {
-        args: ['git', ['pull'], { cwd: repositoryDirectoryPath }],
+        args: ['git', ['fetch'], { cwd: repositoryDirectoryPath }],
+        result: { stdout: '' },
+      },
+      {
+        args: [
+          'git',
+          ['reset', '--hard', 'origin/main'],
+          { cwd: repositoryDirectoryPath },
+        ],
         result: { stdout: '' },
       },
     ]);
 
-    await ensureDefaultBranchIsUpToDate(
-      repositoryDirectoryPath,
+    await ensureBranchUpToDateWithRemote(repositoryDirectoryPath, {
+      remoteBranchName: 'main',
       lastFetchedDate,
-    );
+    });
 
     expect(execaMock).not.toHaveBeenCalled();
   });

@@ -10,7 +10,7 @@ import { createModuleLogger, projectLogger } from './logging-utils';
 import type { AbstractOutputLogger } from './output-logger';
 import { RepositoryFilesystem } from './repository-filesystem';
 import {
-  ensureDefaultBranchIsUpToDate,
+  ensureBranchUpToDateWithRemote,
   getBranchInfo,
   getCurrentBranchName,
 } from './repository-utils';
@@ -84,9 +84,12 @@ export async function establishMetaMaskRepository({
   if (existingRepository.createdAutomatically) {
     await requireDefaultBranchSelected(existingRepository);
 
-    const updatedLastFetchedDate = await ensureDefaultBranchIsUpToDate(
+    const updatedLastFetchedDate = await ensureBranchUpToDateWithRemote(
       existingRepository.directoryPath,
-      existingRepository.lastFetchedDate,
+      {
+        remoteBranchName: existingRepository.currentBranchName,
+        lastFetchedDate: existingRepository.lastFetchedDate,
+      },
     );
     return {
       ...existingRepository,
