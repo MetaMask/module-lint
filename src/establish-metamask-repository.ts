@@ -1,7 +1,4 @@
-import {
-  directoryExists,
-  ensureDirectoryStructureExists,
-} from '@metamask/utils/node';
+import { ensureDirectoryStructureExists } from '@metamask/utils/node';
 import execa from 'execa';
 import fs from 'fs';
 import path from 'path';
