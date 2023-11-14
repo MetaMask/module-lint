@@ -37,7 +37,7 @@ export type MetaMaskRepository = ConfirmedRepository & {
  * Information about a repository we know exists on the filesystem.
  */
 export type ExistingRepository = ConfirmedRepository & {
-  isKnownMetaMaskRepository: boolean;
+  createdAutomatically: boolean;
 };
 
 /**
@@ -81,7 +81,7 @@ export async function establishMetaMaskRepository({
     existingRepository.directoryPath,
   );
 
-  if (existingRepository.isKnownMetaMaskRepository) {
+  if (existingRepository.createdAutomatically) {
     await requireDefaultBranchSelected(existingRepository);
 
     const updatedLastFetchedDate = await ensureDefaultBranchIsUpToDate(
@@ -168,7 +168,7 @@ async function ensureRepositoryExists({
     ...branchInfo,
     shortname: repositoryShortname,
     directoryPath: repositoryDirectoryPath,
-    isKnownMetaMaskRepository,
+    createdAutomatically: isKnownMetaMaskRepository,
   };
 }
 
