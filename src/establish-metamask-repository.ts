@@ -82,12 +82,10 @@ export async function establishMetaMaskRepository({
   );
 
   if (existingRepository.createdAutomatically) {
-    await requireDefaultBranchSelected(existingRepository);
-
     const updatedLastFetchedDate = await ensureBranchUpToDateWithRemote(
       existingRepository.directoryPath,
       {
-        remoteBranchName: existingRepository.currentBranchName,
+        remoteBranchName: existingRepository.defaultBranchName,
         lastFetchedDate: existingRepository.lastFetchedDate,
       },
     );
@@ -229,34 +227,10 @@ async function cloneRepository({
     `MetaMask/${repositoryShortname}`,
     repositoryDirectoryPath,
   ]);
-  const currentBranchName = await getCurrentBranchName(repositoryDirectoryPath);
-  const defaultBranchName = currentBranchName;
+  const defaultBranchName = await getCurrentBranchName(repositoryDirectoryPath);
 
   return {
-    currentBranchName,
     defaultBranchName,
     lastFetchedDate: new Date(),
   };
-}
-
-/**
- * In order to update a previously cloned MetaMask repository, the repository
- * must be on its default branch. This function checks that this is so.
- *
- * @param existingRepository - The arguments to this function.
- * @param existingRepository.directoryPath - The path to the repository.
- * @param existingRepository.currentBranchName - The name of the currently selected branch.
- * @param existingRepository.defaultBranchName - The name of the default branch.
- * @throws If the current branch and default branch are not the same.
- */
-export async function requireDefaultBranchSelected({
-  directoryPath,
-  currentBranchName,
-  defaultBranchName,
-}: ExistingRepository) {
-  if (currentBranchName !== defaultBranchName) {
-    throw new Error(
-      `Error establishing repository "${directoryPath}": The default branch "${defaultBranchName}" does not seem to be selected. You'll need to return it to this branch manually.`,
-    );
-  }
 }

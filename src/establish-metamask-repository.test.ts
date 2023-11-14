@@ -118,7 +118,6 @@ describe('establishMetaMaskRepository', () => {
           shortname: 'some-repo',
           directoryPath: repository.directoryPath,
           defaultBranchName: 'master',
-          currentBranchName: 'some-branch',
           lastFetchedDate: fetchHeadModifiedDate,
         });
       });
@@ -127,47 +126,6 @@ describe('establishMetaMaskRepository', () => {
 
   describe('given the name of a known MetaMask repository', () => {
     describe('if the repository has already been cloned', () => {
-      it('throws if the default branch is not selected', async () => {
-        await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
-          const { cachedRepositoriesDirectoryPath, repository } =
-            await setupToolWithMockRepository({
-              execaMock,
-              sandboxDirectoryPath,
-              repository: {
-                create: true,
-                commandMocks: {
-                  'git symbolic-ref HEAD': {
-                    action: () => ({
-                      result: {
-                        stdout: 'refs/heads/NOT-main',
-                      },
-                    }),
-                  },
-                  'git rev-parse --verify main': {
-                    action: () => ({
-                      result: {
-                        stdout: '',
-                      },
-                    }),
-                  },
-                },
-              },
-            });
-          const outputLogger = new FakeOutputLogger();
-
-          await expect(
-            establishMetaMaskRepository({
-              repositoryReference: repository.name,
-              workingDirectoryPath: sandboxDirectoryPath,
-              cachedRepositoriesDirectoryPath,
-              outputLogger,
-            }),
-          ).rejects.toThrow(
-            `Error establishing repository "${repository.directoryPath}": The default branch "main" does not seem to be selected. You'll need to return it to this branch manually.`,
-          );
-        });
-      });
-
       it('updates the default branch', async () => {
         await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
           const { cachedRepositoriesDirectoryPath, repository } =
@@ -203,11 +161,11 @@ describe('establishMetaMaskRepository', () => {
             outputLogger,
           });
 
-          expect(execaMock).toHaveBeenNthCalledWith(4, 'git', ['fetch'], {
+          expect(execaMock).toHaveBeenNthCalledWith(3, 'git', ['fetch'], {
             cwd: repository.directoryPath,
           });
           expect(execaMock).toHaveBeenNthCalledWith(
-            5,
+            4,
             'git',
             ['reset', '--hard', 'origin/main'],
             {
@@ -257,7 +215,6 @@ describe('establishMetaMaskRepository', () => {
           });
 
           expect(metaMaskRepository).toMatchObject({
-            currentBranchName: 'main',
             defaultBranchName: 'main',
             directoryPath: repository.directoryPath,
             shortname: 'some-repo',
@@ -356,7 +313,6 @@ describe('establishMetaMaskRepository', () => {
           });
 
           expect(metaMaskRepository).toMatchObject({
-            currentBranchName: 'master',
             defaultBranchName: 'master',
             directoryPath: repository.directoryPath,
             shortname: 'some-repo',

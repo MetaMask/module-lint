@@ -11,7 +11,6 @@ const log = createModuleLogger(projectLogger, 'existing-repository');
  * Information about a Git branch.
  */
 export type BranchInfo = {
-  currentBranchName: string;
   defaultBranchName: string;
   lastFetchedDate: Date | null;
 };
@@ -25,11 +24,9 @@ export type BranchInfo = {
 export async function getBranchInfo(
   repositoryDirectoryPath: string,
 ): Promise<BranchInfo> {
-  const currentBranchName = await getCurrentBranchName(repositoryDirectoryPath);
   const defaultBranchName = await getDefaultBranchName(repositoryDirectoryPath);
   const lastFetchedDate = await getLastFetchedDate(repositoryDirectoryPath);
   return {
-    currentBranchName,
     defaultBranchName,
     lastFetchedDate,
   };

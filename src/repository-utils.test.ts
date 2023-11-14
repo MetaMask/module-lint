@@ -60,12 +60,10 @@ describe('getBranchInfo', () => {
       const branchInfo = await getBranchInfo(sandboxDirectoryPath);
 
       expect(Object.keys(branchInfo)).toStrictEqual([
-        'currentBranchName',
         'defaultBranchName',
         'lastFetchedDate',
       ]);
       expect(branchInfo).toMatchObject({
-        currentBranchName: 'foo',
         defaultBranchName: 'main',
         lastFetchedDate: now,
       });
