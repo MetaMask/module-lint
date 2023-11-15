@@ -1019,6 +1019,7 @@ __metadata:
     prettier: ^2.7.1
     prettier-plugin-packagejson: ^2.3.0
     rimraf: ^3.0.2
+    stdio-mock: ^1.2.0
     ts-jest: ^28.0.7
     ts-node: ^10.7.0
     typedoc: ^0.23.15
@@ -6488,6 +6489,13 @@ __metadata:
   dependencies:
     escape-string-regexp: ^2.0.0
   checksum: 76b69da0f5b48a34a0f93c98ee2a96544d2c4ca2557f7eef5ddb961d3bdc33870b46f498a84a7c4f4ffb781df639840e7ebf6639164ed4da5e1aeb659615b9c7
+  languageName: node
+  linkType: hard
+
+"stdio-mock@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "stdio-mock@npm:1.2.0"
+  checksum: 5c8739e11fc5a18cd5ef0b2e8d900cd1cd4e851f69915d3a829ebdaefd5292ece17f29981516636f9b9acb3026d8c802de6f138280a293cc484160a6c67e65ef
   languageName: node
   linkType: hard
 
