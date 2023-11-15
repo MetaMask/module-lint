@@ -222,6 +222,9 @@ async function cloneRepository({
     `MetaMask/${repositoryShortname}`,
     repositoryDirectoryPath,
   ]);
+  // We don't need to get the default branch, as we can assume that the current
+  // branch is the default branch, and reusing the current branch prevents us
+  // from making an unnecessary request to the GitHub API.
   const defaultBranchName = await getCurrentBranchName(repositoryDirectoryPath);
 
   return {
