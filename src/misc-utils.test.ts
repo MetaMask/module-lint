@@ -2,7 +2,7 @@ import { writeFile } from '@metamask/utils/node';
 import fs from 'fs';
 import path from 'path';
 
-import { getEntryStats } from './misc-utils';
+import { getEntryStats, indent } from './misc-utils';
 import { withinSandbox } from '../tests/helpers';
 
 describe('getEntryStats', () => {
@@ -60,5 +60,11 @@ describe('getEntryStats', () => {
         }
       });
     });
+  });
+});
+
+describe('indent', () => {
+  it('returns the given string with the given number of spaces (times 2) before it', () => {
+    expect(indent('hello', 4)).toBe('        hello');
   });
 });
