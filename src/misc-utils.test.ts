@@ -2,7 +2,7 @@ import { writeFile } from '@metamask/utils/node';
 import fs from 'fs';
 import path from 'path';
 
-import { getEntryStats, indent } from './misc-utils';
+import { getEntryStats, indent, repeat } from './misc-utils';
 import { withinSandbox } from '../tests/helpers';
 
 describe('getEntryStats', () => {
@@ -60,6 +60,12 @@ describe('getEntryStats', () => {
         }
       });
     });
+  });
+});
+
+describe('repeat', () => {
+  it('returns a string of the given character that is of the given length', () => {
+    expect(repeat('-', 10)).toBe('----------');
   });
 });
 

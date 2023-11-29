@@ -5,7 +5,7 @@ import { establishMetaMaskRepository } from './establish-metamask-repository';
 import { FakeOutputLogger } from '../tests/fake-output-logger';
 import type { PrimaryExecaFunction } from '../tests/helpers';
 import { fakeDateOnly, withinSandbox } from '../tests/helpers';
-import { setupToolWithMockRepository } from '../tests/setup-tool-with-mock-repository';
+import { setupToolWithMockRepository } from '../tests/setup-tool-with-mock-repositories';
 
 jest.mock('execa');
 
