@@ -395,7 +395,43 @@ Pass the names of one or more MetaMask repositories to lint them, or pass
 nothing to lint all MetaMask repositories.
 
 Options:
-  --version  Show version number  [boolean]
+      --version  Show version number  [boolean]
+  -h, --help     Show help  [boolean]
+`,
+      );
+    });
+  });
+
+  describe('given an unknown option', () => {
+    it('prints an error, shows the usage message, and exits', async () => {
+      const stdout = new MockWritable();
+      const stderr = new MockWritable();
+
+      await main({
+        argv: ['node', 'module-lint', '--foo'],
+        stdout,
+        stderr,
+        config: {
+          cachedRepositoriesDirectoryPath: '',
+          defaultProjectNames: [],
+        },
+      });
+
+      const output = stderr.data().map(stripAnsi).join('');
+
+      expect(output).toBe(
+        `ERROR: Unknown argument: foo
+
+Analyzes one or more repos for divergence from a template repo.
+
+module-lint OPTIONS [ARGUMENTS...]
+
+Pass the names of one or more MetaMask repositories to lint them, or pass
+nothing to lint all MetaMask repositories.
+
+Options:
+      --version  Show version number  [boolean]
+  -h, --help     Show help  [boolean]
 `,
       );
     });

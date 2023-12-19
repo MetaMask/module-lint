@@ -144,9 +144,15 @@ async function parseCommandLineArguments({
   const yargs = createYargs(hideBin(argv))
     .usage(USAGE_TEXT)
     .help(false)
+    .option('help', {
+      alias: 'h',
+      describe: 'Show help',
+      type: 'boolean',
+    })
     .wrap(null)
     .exitProcess(false)
-    .fail(onFail);
+    .fail(onFail)
+    .strictOptions();
 
   const options = await yargs.parse();
 
@@ -157,7 +163,8 @@ async function parseCommandLineArguments({
 
   /* istanbul ignore next: At the moment, there is no real way that Yargs could fail */
   if (yargsFailure) {
-    outputLogger.logToStderr('%s\n\n%s', yargsFailure, await yargs.getHelp());
+    const { message } = yargsFailure;
+    outputLogger.logToStderr('ERROR: %s\n\n%s', message, await yargs.getHelp());
     return null;
   }
 
