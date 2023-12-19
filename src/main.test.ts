@@ -1,10 +1,14 @@
-import { ensureDirectoryStructureExists } from '@metamask/utils/node';
+import {
+  ensureDirectoryStructureExists,
+  writeFile,
+} from '@metamask/utils/node';
 import execa from 'execa';
 import path from 'path';
 import { MockWritable } from 'stdio-mock';
 import stripAnsi from 'strip-ansi';
 
 import { main } from './main';
+import { FakeOutputLogger } from '../tests/fake-output-logger';
 import type { PrimaryExecaFunction } from '../tests/helpers';
 import { fakeDateOnly, withinSandbox } from '../tests/helpers';
 import { setupToolWithMockRepositories } from '../tests/setup-tool-with-mock-repositories';
@@ -23,7 +27,7 @@ describe('main', () => {
   });
 
   describe('given a list of project references', () => {
-    it('lists the rules executed against the default repositories which pass', async () => {
+    it('lists the passing rules executed against the given repositories', async () => {
       await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
         const projectNames = ['repo-1', 'repo-2'];
         const { cachedRepositoriesDirectoryPath, repositories } =
@@ -38,46 +42,85 @@ describe('main', () => {
               })),
             ],
           });
-        const projects = repositories.filter(
-          (repository) => repository.name !== 'metamask-module-template',
-        );
-        for (const project of projects) {
+        for (const repository of repositories) {
           await ensureDirectoryStructureExists(
-            path.join(project.directoryPath, 'src'),
+            path.join(repository.directoryPath, 'src'),
+          );
+          await writeFile(
+            path.join(repository.directoryPath, '.yarnrc.yml'),
+            '',
+          );
+          await writeFile(
+            path.join(
+              repository.directoryPath,
+              '.yarn',
+              'plugins',
+              'some-plugin',
+            ),
+            'content for some-plugin',
+          );
+          await writeFile(
+            path.join(
+              repository.directoryPath,
+              '.yarn',
+              'releases',
+              'some-release',
+            ),
+            'content for some-release',
+          );
+          await writeFile(
+            path.join(repository.directoryPath, 'package.json'),
+            JSON.stringify({ packageManager: 'yarn' }),
+          );
+          await writeFile(
+            path.join(repository.directoryPath, 'README.md'),
+            'Install [Yarn whatever](...)',
           );
         }
-        const stdout = new MockWritable();
-        const stderr = new MockWritable();
+        const outputLogger = new FakeOutputLogger();
 
         await main({
           argv: ['node', 'module-lint', ...projectNames],
-          stdout,
-          stderr,
+          stdout: outputLogger.stdout,
+          stderr: outputLogger.stderr,
           config: {
             cachedRepositoriesDirectoryPath,
             defaultProjectNames: [],
           },
         });
 
-        const output = stdout.data().map(stripAnsi).join('');
-
-        expect(output).toBe(
+        expect(outputLogger.getStderr()).toBe('');
+        expect(outputLogger.getStdout()).toBe(
           `
 repo-1
 ------
 
+- Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
+- Does the package have a well-formed manifest (\`package.json\`)? ✅
+  - Does the \`packageManager\` field in \`package.json\` conform? ✅
+- Is \`README.md\` present? ✅
+  - Does the README conform by recommending the correct Yarn version to install? ✅
+- Are all of the files for Yarn Modern present, and do they conform? ✅
+  - Does the README conform by recommending the correct Yarn version to install? ✅
 - Does the \`src/\` directory exist? ✅
 
-Results:       1 passed, 0 failed, 1 total
+Results:       8 passed, 0 failed, 8 total
 Elapsed time:  0 ms
 
 
 repo-2
 ------
 
+- Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
+- Does the package have a well-formed manifest (\`package.json\`)? ✅
+  - Does the \`packageManager\` field in \`package.json\` conform? ✅
+- Is \`README.md\` present? ✅
+  - Does the README conform by recommending the correct Yarn version to install? ✅
+- Are all of the files for Yarn Modern present, and do they conform? ✅
+  - Does the README conform by recommending the correct Yarn version to install? ✅
 - Does the \`src/\` directory exist? ✅
 
-Results:       1 passed, 0 failed, 1 total
+Results:       8 passed, 0 failed, 8 total
 Elapsed time:  0 ms
 
 `,
@@ -85,7 +128,7 @@ Elapsed time:  0 ms
       });
     });
 
-    it('lists the rules executed against the default repositories which fail', async () => {
+    it('lists the failing rules executed against the given repositories', async () => {
       await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
         const projectNames = ['repo-1', 'repo-2'];
         const { cachedRepositoriesDirectoryPath } =
@@ -100,40 +143,56 @@ Elapsed time:  0 ms
               })),
             ],
           });
-        const stdout = new MockWritable();
-        const stderr = new MockWritable();
+        const outputLogger = new FakeOutputLogger();
 
         await main({
           argv: ['node', 'module-lint', ...projectNames],
-          stdout,
-          stderr,
+          stdout: outputLogger.stdout,
+          stderr: outputLogger.stderr,
           config: {
             cachedRepositoriesDirectoryPath,
             defaultProjectNames: [],
           },
         });
 
-        const output = stdout.data().map(stripAnsi).join('');
-
-        expect(output).toBe(
+        expect(outputLogger.getStderr()).toBe('');
+        expect(outputLogger.getStdout()).toBe(
           `
 repo-1
 ------
 
+- Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
+- Does the package have a well-formed manifest (\`package.json\`)? ❌
+  - \`package.json\` does not exist in this project.
+- Is \`README.md\` present? ❌
+  - \`README.md\` does not exist in this project.
+- Are all of the files for Yarn Modern present, and do they conform? ❌
+  - \`.yarnrc.yml\` does not exist in this project.
+  - \`.yarn/releases/\` does not exist in this project.
+  - \`.yarn/plugins/\` does not exist in this project.
 - Does the \`src/\` directory exist? ❌
   - \`src/\` does not exist in this project.
 
-Results:       0 passed, 1 failed, 1 total
+Results:       1 passed, 4 failed, 5 total
 Elapsed time:  0 ms
 
 
 repo-2
 ------
 
+- Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
+- Does the package have a well-formed manifest (\`package.json\`)? ❌
+  - \`package.json\` does not exist in this project.
+- Is \`README.md\` present? ❌
+  - \`README.md\` does not exist in this project.
+- Are all of the files for Yarn Modern present, and do they conform? ❌
+  - \`.yarnrc.yml\` does not exist in this project.
+  - \`.yarn/releases/\` does not exist in this project.
+  - \`.yarn/plugins/\` does not exist in this project.
 - Does the \`src/\` directory exist? ❌
   - \`src/\` does not exist in this project.
 
-Results:       0 passed, 1 failed, 1 total
+Results:       1 passed, 4 failed, 5 total
 Elapsed time:  0 ms
 
 `,
@@ -163,44 +222,51 @@ Elapsed time:  0 ms
               },
             ],
           });
-        const stdout = new MockWritable();
-        const stderr = new MockWritable();
+        const outputLogger = new FakeOutputLogger();
 
         await main({
           argv: ['node', 'module-lint', ...projectNames],
-          stdout,
-          stderr,
+          stdout: outputLogger.stdout,
+          stderr: outputLogger.stderr,
           config: {
             cachedRepositoriesDirectoryPath,
             defaultProjectNames: [],
           },
         });
 
-        expect(stdout.data().map(stripAnsi).join('')).toBe(
+        expect(outputLogger.getStderr()).toContain(
+          `Could not resolve 'repo-1' as it is neither a reference to a directory nor the name of a known MetaMask repository.`,
+        );
+        expect(outputLogger.getStdout()).toBe(
           `
 Cloning repository MetaMask/repo-2, please wait...
 
 repo-2
 ------
 
+- Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
+- Does the package have a well-formed manifest (\`package.json\`)? ❌
+  - \`package.json\` does not exist in this project.
+- Is \`README.md\` present? ❌
+  - \`README.md\` does not exist in this project.
+- Are all of the files for Yarn Modern present, and do they conform? ❌
+  - \`.yarnrc.yml\` does not exist in this project.
+  - \`.yarn/releases/\` does not exist in this project.
+  - \`.yarn/plugins/\` does not exist in this project.
 - Does the \`src/\` directory exist? ❌
   - \`src/\` does not exist in this project.
 
-Results:       0 passed, 1 failed, 1 total
+Results:       1 passed, 4 failed, 5 total
 Elapsed time:  0 ms
 
 `.trimStart(),
-        );
-
-        expect(stderr.data().map(stripAnsi).join('')).toContain(
-          `Could not resolve 'repo-1' as it is neither a reference to a directory nor the name of a known MetaMask repository.`,
         );
       });
     });
   });
 
   describe('given no project references', () => {
-    it('lists the rules executed against the default repositories which pass', async () => {
+    it('lists the passing rules executed against the default repositories', async () => {
       await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
         const projectNames = ['repo-1', 'repo-2'];
         const { cachedRepositoriesDirectoryPath, repositories } =
@@ -215,46 +281,85 @@ Elapsed time:  0 ms
               })),
             ],
           });
-        const projects = repositories.filter(
-          (repository) => repository.name !== 'metamask-module-template',
-        );
-        for (const project of projects) {
+        for (const repository of repositories) {
           await ensureDirectoryStructureExists(
-            path.join(project.directoryPath, 'src'),
+            path.join(repository.directoryPath, 'src'),
+          );
+          await writeFile(
+            path.join(repository.directoryPath, '.yarnrc.yml'),
+            '',
+          );
+          await writeFile(
+            path.join(
+              repository.directoryPath,
+              '.yarn',
+              'plugins',
+              'some-plugin',
+            ),
+            'content for some-plugin',
+          );
+          await writeFile(
+            path.join(
+              repository.directoryPath,
+              '.yarn',
+              'releases',
+              'some-release',
+            ),
+            'content for some-release',
+          );
+          await writeFile(
+            path.join(repository.directoryPath, 'package.json'),
+            JSON.stringify({ packageManager: 'yarn' }),
+          );
+          await writeFile(
+            path.join(repository.directoryPath, 'README.md'),
+            'Install [Yarn whatever](...)',
           );
         }
-        const stdout = new MockWritable();
-        const stderr = new MockWritable();
+        const outputLogger = new FakeOutputLogger();
 
         await main({
           argv: ['node', 'module-lint'],
-          stdout,
-          stderr,
+          stdout: outputLogger.stdout,
+          stderr: outputLogger.stderr,
           config: {
             cachedRepositoriesDirectoryPath,
             defaultProjectNames: projectNames,
           },
         });
 
-        const output = stdout.data().map(stripAnsi).join('');
-
-        expect(output).toBe(
+        expect(outputLogger.getStderr()).toBe('');
+        expect(outputLogger.getStdout()).toBe(
           `
 repo-1
 ------
 
+- Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
+- Does the package have a well-formed manifest (\`package.json\`)? ✅
+  - Does the \`packageManager\` field in \`package.json\` conform? ✅
+- Is \`README.md\` present? ✅
+  - Does the README conform by recommending the correct Yarn version to install? ✅
+- Are all of the files for Yarn Modern present, and do they conform? ✅
+  - Does the README conform by recommending the correct Yarn version to install? ✅
 - Does the \`src/\` directory exist? ✅
 
-Results:       1 passed, 0 failed, 1 total
+Results:       8 passed, 0 failed, 8 total
 Elapsed time:  0 ms
 
 
 repo-2
 ------
 
+- Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
+- Does the package have a well-formed manifest (\`package.json\`)? ✅
+  - Does the \`packageManager\` field in \`package.json\` conform? ✅
+- Is \`README.md\` present? ✅
+  - Does the README conform by recommending the correct Yarn version to install? ✅
+- Are all of the files for Yarn Modern present, and do they conform? ✅
+  - Does the README conform by recommending the correct Yarn version to install? ✅
 - Does the \`src/\` directory exist? ✅
 
-Results:       1 passed, 0 failed, 1 total
+Results:       8 passed, 0 failed, 8 total
 Elapsed time:  0 ms
 
 `,
@@ -262,7 +367,7 @@ Elapsed time:  0 ms
       });
     });
 
-    it('lists the rules executed against the default repositories which fail', async () => {
+    it('lists the failing rules executed against the default repositories', async () => {
       await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
         const projectNames = ['repo-1', 'repo-2'];
         const { cachedRepositoriesDirectoryPath } =
@@ -277,40 +382,56 @@ Elapsed time:  0 ms
               })),
             ],
           });
-        const stdout = new MockWritable();
-        const stderr = new MockWritable();
+        const outputLogger = new FakeOutputLogger();
 
         await main({
           argv: ['node', 'module-lint'],
-          stdout,
-          stderr,
+          stdout: outputLogger.stdout,
+          stderr: outputLogger.stderr,
           config: {
             cachedRepositoriesDirectoryPath,
             defaultProjectNames: projectNames,
           },
         });
 
-        const output = stdout.data().map(stripAnsi).join('');
-
-        expect(output).toBe(
+        expect(outputLogger.getStderr()).toBe('');
+        expect(outputLogger.getStdout()).toBe(
           `
 repo-1
 ------
 
+- Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
+- Does the package have a well-formed manifest (\`package.json\`)? ❌
+  - \`package.json\` does not exist in this project.
+- Is \`README.md\` present? ❌
+  - \`README.md\` does not exist in this project.
+- Are all of the files for Yarn Modern present, and do they conform? ❌
+  - \`.yarnrc.yml\` does not exist in this project.
+  - \`.yarn/releases/\` does not exist in this project.
+  - \`.yarn/plugins/\` does not exist in this project.
 - Does the \`src/\` directory exist? ❌
   - \`src/\` does not exist in this project.
 
-Results:       0 passed, 1 failed, 1 total
+Results:       1 passed, 4 failed, 5 total
 Elapsed time:  0 ms
 
 
 repo-2
 ------
 
+- Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
+- Does the package have a well-formed manifest (\`package.json\`)? ❌
+  - \`package.json\` does not exist in this project.
+- Is \`README.md\` present? ❌
+  - \`README.md\` does not exist in this project.
+- Are all of the files for Yarn Modern present, and do they conform? ❌
+  - \`.yarnrc.yml\` does not exist in this project.
+  - \`.yarn/releases/\` does not exist in this project.
+  - \`.yarn/plugins/\` does not exist in this project.
 - Does the \`src/\` directory exist? ❌
   - \`src/\` does not exist in this project.
 
-Results:       0 passed, 1 failed, 1 total
+Results:       1 passed, 4 failed, 5 total
 Elapsed time:  0 ms
 
 `,
@@ -340,36 +461,43 @@ Elapsed time:  0 ms
               },
             ],
           });
-        const stdout = new MockWritable();
-        const stderr = new MockWritable();
+        const outputLogger = new FakeOutputLogger();
 
         await main({
           argv: ['node', 'module-lint'],
-          stdout,
-          stderr,
+          stdout: outputLogger.stdout,
+          stderr: outputLogger.stderr,
           config: {
             cachedRepositoriesDirectoryPath,
             defaultProjectNames: projectNames,
           },
         });
 
-        expect(stdout.data().map(stripAnsi).join('')).toBe(
+        expect(outputLogger.getStderr()).toContain(
+          `Could not resolve 'repo-1' as it is neither a reference to a directory nor the name of a known MetaMask repository.`,
+        );
+        expect(outputLogger.getStdout()).toBe(
           `Cloning repository MetaMask/repo-2, please wait...
 
 repo-2
 ------
 
+- Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
+- Does the package have a well-formed manifest (\`package.json\`)? ❌
+  - \`package.json\` does not exist in this project.
+- Is \`README.md\` present? ❌
+  - \`README.md\` does not exist in this project.
+- Are all of the files for Yarn Modern present, and do they conform? ❌
+  - \`.yarnrc.yml\` does not exist in this project.
+  - \`.yarn/releases/\` does not exist in this project.
+  - \`.yarn/plugins/\` does not exist in this project.
 - Does the \`src/\` directory exist? ❌
   - \`src/\` does not exist in this project.
 
-Results:       0 passed, 1 failed, 1 total
+Results:       1 passed, 4 failed, 5 total
 Elapsed time:  0 ms
 
 `,
-        );
-
-        expect(stderr.data().map(stripAnsi).join('')).toContain(
-          `Could not resolve 'repo-1' as it is neither a reference to a directory nor the name of a known MetaMask repository.`,
         );
       });
     });
