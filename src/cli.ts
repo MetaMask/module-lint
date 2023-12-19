@@ -18,5 +18,3 @@ main({
   console.error(error);
   process.exitCode = 1;
 });
-
-// vi: ft=typescript
