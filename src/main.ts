@@ -146,7 +146,6 @@ async function parseCommandLineArguments({
   const yargs = createYargs(hideBin(argv))
     .usage(USAGE_TEXT)
     .help(false)
-    .string('_')
     .wrap(null)
     .exitProcess(false)
     .fail(onFail);
