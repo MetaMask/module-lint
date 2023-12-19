@@ -1,11 +1,7 @@
 import { hideBin } from 'yargs/helpers';
 import createYargs from 'yargs/yargs';
 
-import {
-  DEFAULT_TEMPLATE_REPOSITORY_NAME,
-  USAGE_TEXT,
-  WORKING_DIRECTORY_PATH,
-} from './constants';
+import { DEFAULT_TEMPLATE_REPOSITORY_NAME, USAGE_TEXT } from './constants';
 import type { MetaMaskRepository } from './establish-metamask-repository';
 import { establishMetaMaskRepository } from './establish-metamask-repository';
 import { lintProject } from './lint-project';
@@ -57,11 +53,13 @@ export async function main({
   };
 }) {
   const outputLogger = new OutputLogger({ stdout, stderr });
-  const workingDirectoryPath = WORKING_DIRECTORY_PATH;
+  const workingDirectoryPath = process.cwd();
 
   const inputs = await parseInputs({ argv, outputLogger, defaultProjectNames });
   /* istanbul ignore next: At the moment, there is no real way that Yargs could fail */
   if (!inputs) {
+    // Even if `process` changes, it's okay.
+    // eslint-disable-next-line require-atomic-updates
     process.exitCode = 1;
     return;
   }

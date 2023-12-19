@@ -17,11 +17,6 @@ const THIS_PROJECT_DIRECTORY_PATH = path.resolve(__dirname, '..');
 export const ONE_HOUR = 60 * 60 * 1000;
 
 /**
- * Wherever the tool was run.
- */
-export const WORKING_DIRECTORY_PATH = process.cwd();
-
-/**
  * The usage text printed when the user requests help or provides invalid input.
  */
 export const USAGE_TEXT = `
