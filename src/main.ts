@@ -133,8 +133,8 @@ async function parseCommandLineArguments({
   outputLogger: OutputLogger;
 }) {
   let yargsFailure: { message: string; error: Error } | null = null;
-  /* istanbul ignore next: At the moment, there is no real way that Yargs could fail */
   const onFail = (message: string, error: Error) => {
+    /* istanbul ignore next: Not sure how to produce this */
     if (error) {
       throw error;
     }
@@ -162,7 +162,6 @@ async function parseCommandLineArguments({
     return null;
   }
 
-  /* istanbul ignore next: At the moment, there is no real way that Yargs could fail */
   if (yargsFailure) {
     const { message } = yargsFailure;
     outputLogger.logToStderr(
