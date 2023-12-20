@@ -56,7 +56,6 @@ export async function main({
   const workingDirectoryPath = process.cwd();
 
   const inputs = await parseInputs({ argv, outputLogger, defaultProjectNames });
-  /* istanbul ignore next: At the moment, there is no real way that Yargs could fail */
   if (!inputs) {
     // Even if `process` changes, it's okay.
     // eslint-disable-next-line require-atomic-updates
