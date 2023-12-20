@@ -105,7 +105,8 @@ async function parseInputs({
   const args = await parseCommandLineArguments({ argv, outputLogger });
 
   if (args) {
-    const projectReferences = args._.length > 0 ? args._ : defaultProjectNames;
+    const projectReferences =
+      args.projectNames.length > 0 ? args.projectNames : defaultProjectNames;
     return {
       templateRepositoryName: DEFAULT_TEMPLATE_REPOSITORY_NAME,
       projectReferences,
@@ -172,10 +173,8 @@ async function parseCommandLineArguments({
   }
 
   return {
-    ...options,
-    // This is the name that Yargs gives to the arguments that aren't options.
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    _: options._.map(String),
+    options,
+    projectNames: options._.map(String),
   };
 }
 
