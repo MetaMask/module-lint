@@ -1,5 +1,4 @@
 import { ensureDirectoryStructureExists } from '@metamask/utils/node';
-import type { ExecaChildProcess } from 'execa';
 import execa from 'execa';
 import path from 'path';
 import { MockWritable } from 'stdio-mock';
@@ -7,11 +6,7 @@ import stripAnsi from 'strip-ansi';
 
 import { main } from './main';
 import type { PrimaryExecaFunction } from '../tests/helpers';
-import {
-  buildExecaResult,
-  fakeDateOnly,
-  withinSandbox,
-} from '../tests/helpers';
+import { fakeDateOnly, withinSandbox } from '../tests/helpers';
 import { setupToolWithMockRepositories } from '../tests/setup-tool-with-mock-repositories';
 
 jest.mock('execa');
@@ -21,9 +16,6 @@ const execaMock = jest.mocked<PrimaryExecaFunction>(execa);
 describe('main', () => {
   beforeEach(() => {
     fakeDateOnly();
-    execaMock.mockImplementation((): ExecaChildProcess => {
-      return buildExecaResult({ stdout: '' });
-    });
   });
 
   afterEach(() => {
