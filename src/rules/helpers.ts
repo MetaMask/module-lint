@@ -9,8 +9,9 @@ import type {
 
 /**
  * Rule objects are fairly abstract: the name of a rule and the dependencies of
- * a rule can be anything; and unfortunately, we cannot really enforce this or
- * else it would mean we'd have to have a `RuleName` type everywhere.
+ * a rule (which are themselves names) can be anything; and unfortunately, we
+ * cannot really enforce names, or else it would mean we'd have to have a
+ * `RuleName` type everywhere.
  *
  * This function exists to bridge that gap at the point where the rule is
  * actually defined by validating the name and dependencies against a known set
