@@ -121,7 +121,7 @@ repo-1
 ------
 
 - Does the \`src/\` directory exist? ❌
-  - \`src\` exists in the module template, but not in this repo.
+  - \`src\` does not exist in this repo.
 
 Results:       0 passed, 1 failed, 1 total
 Elapsed time:  0 ms
@@ -131,7 +131,7 @@ repo-2
 ------
 
 - Does the \`src/\` directory exist? ❌
-  - \`src\` exists in the module template, but not in this repo.
+  - \`src\` does not exist in this repo.
 
 Results:       0 passed, 1 failed, 1 total
 Elapsed time:  0 ms
@@ -184,7 +184,7 @@ repo-1
 ------
 
 - Does the \`src/\` directory exist? ❌
-  - \`src\` exists in the module template, but not in this repo.
+  - \`src\` does not exist in this repo.
 
 Results:       0 passed, 1 failed, 1 total
 Elapsed time:  0 ms
@@ -298,7 +298,7 @@ repo-1
 ------
 
 - Does the \`src/\` directory exist? ❌
-  - \`src\` exists in the module template, but not in this repo.
+  - \`src\` does not exist in this repo.
 
 Results:       0 passed, 1 failed, 1 total
 Elapsed time:  0 ms
@@ -308,7 +308,7 @@ repo-2
 ------
 
 - Does the \`src/\` directory exist? ❌
-  - \`src\` exists in the module template, but not in this repo.
+  - \`src\` does not exist in this repo.
 
 Results:       0 passed, 1 failed, 1 total
 Elapsed time:  0 ms
@@ -360,7 +360,7 @@ repo-1
 ------
 
 - Does the \`src/\` directory exist? ❌
-  - \`src\` exists in the module template, but not in this repo.
+  - \`src\` does not exist in this repo.
 
 Results:       0 passed, 1 failed, 1 total
 Elapsed time:  0 ms
