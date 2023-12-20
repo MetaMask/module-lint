@@ -87,7 +87,7 @@ export class OutputLogger implements AbstractOutputLogger {
  * format string followed by values.
  */
 export function logToStream(stream: SimpleWriteStream, args: unknown[]) {
-  if (typeof args[0] === 'string' && /%\w/u.test(args[0])) {
+  if (typeof args[0] === 'string' && /%[sdifjoOc%]/u.test(args[0])) {
     stream.write(`${format(args[0], ...args.slice(1))}\n`);
   } else {
     stream.write(

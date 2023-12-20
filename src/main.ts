@@ -1,3 +1,4 @@
+import chalk from 'chalk';
 import { hideBin } from 'yargs/helpers';
 import yargs from 'yargs/yargs';
 
@@ -236,7 +237,7 @@ async function lintProjects({
         outputLogger,
       });
       if (index < fulfilledProjectLintResultPromiseOutcomes.length - 1) {
-        outputLogger.logToStdout('');
+        outputLogger.logToStdout('\n');
       }
     });
   outputLogger.logToStdout('');

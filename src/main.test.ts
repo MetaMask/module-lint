@@ -74,16 +74,19 @@ describe('main', () => {
 repo-1
 ------
 
-Linted project in 0 ms.
-
 - Does the \`src/\` directory exist? ✅
+
+Results:       1 passed, 0 failed, 1 total
+Elapsed time:  0 ms
+
 
 repo-2
 ------
 
-Linted project in 0 ms.
-
 - Does the \`src/\` directory exist? ✅
+
+Results:       1 passed, 0 failed, 1 total
+Elapsed time:  0 ms
 
 `,
         );
@@ -125,18 +128,21 @@ Linted project in 0 ms.
 repo-1
 ------
 
-Linted project in 0 ms.
-
 - Does the \`src/\` directory exist? ❌
   - \`src\` exists in the module template, but not in this repo.
+
+Results:       0 passed, 1 failed, 1 total
+Elapsed time:  0 ms
+
 
 repo-2
 ------
 
-Linted project in 0 ms.
-
 - Does the \`src/\` directory exist? ❌
   - \`src\` exists in the module template, but not in this repo.
+
+Results:       0 passed, 1 failed, 1 total
+Elapsed time:  0 ms
 
 `,
         );
@@ -185,10 +191,11 @@ Cloning repository MetaMask/repo-1, please wait...
 repo-1
 ------
 
-Linted project in 0 ms.
-
 - Does the \`src/\` directory exist? ❌
   - \`src\` exists in the module template, but not in this repo.
+
+Results:       0 passed, 1 failed, 1 total
+Elapsed time:  0 ms
 
 `.trimStart(),
         );
@@ -244,16 +251,19 @@ Linted project in 0 ms.
 repo-1
 ------
 
-Linted project in 0 ms.
-
 - Does the \`src/\` directory exist? ✅
+
+Results:       1 passed, 0 failed, 1 total
+Elapsed time:  0 ms
+
 
 repo-2
 ------
 
-Linted project in 0 ms.
-
 - Does the \`src/\` directory exist? ✅
+
+Results:       1 passed, 0 failed, 1 total
+Elapsed time:  0 ms
 
 `,
         );
@@ -295,18 +305,21 @@ Linted project in 0 ms.
 repo-1
 ------
 
-Linted project in 0 ms.
-
 - Does the \`src/\` directory exist? ❌
   - \`src\` exists in the module template, but not in this repo.
+
+Results:       0 passed, 1 failed, 1 total
+Elapsed time:  0 ms
+
 
 repo-2
 ------
 
-Linted project in 0 ms.
-
 - Does the \`src/\` directory exist? ❌
   - \`src\` exists in the module template, but not in this repo.
+
+Results:       0 passed, 1 failed, 1 total
+Elapsed time:  0 ms
 
 `,
         );
@@ -354,10 +367,11 @@ Linted project in 0 ms.
 repo-1
 ------
 
-Linted project in 0 ms.
-
 - Does the \`src/\` directory exist? ❌
   - \`src\` exists in the module template, but not in this repo.
+
+Results:       0 passed, 1 failed, 1 total
+Elapsed time:  0 ms
 
 `,
         );
