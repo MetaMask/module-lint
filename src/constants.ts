@@ -22,7 +22,7 @@ export const ONE_HOUR = 60 * 60 * 1000;
 export const USAGE_TEXT = `
 Analyzes one or more repos for divergence from a template repo.
 
-${THIS_PROJECT_NAME} OPTIONS [ARGUMENTS...]
+${THIS_PROJECT_NAME} [REPO_NAMES...]
 
 Pass the names of one or more MetaMask repositories to lint them, or pass
 nothing to lint all MetaMask repositories.

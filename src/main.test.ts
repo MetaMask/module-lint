@@ -389,7 +389,7 @@ Linted project in 0 ms.
       expect(output).toBe(
         `Analyzes one or more repos for divergence from a template repo.
 
-module-lint OPTIONS [ARGUMENTS...]
+module-lint [REPO_NAMES...]
 
 Pass the names of one or more MetaMask repositories to lint them, or pass
 nothing to lint all MetaMask repositories.
@@ -424,7 +424,7 @@ Options:
 
 Analyzes one or more repos for divergence from a template repo.
 
-module-lint OPTIONS [ARGUMENTS...]
+module-lint [REPO_NAMES...]
 
 Pass the names of one or more MetaMask repositories to lint them, or pass
 nothing to lint all MetaMask repositories.
