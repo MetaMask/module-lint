@@ -1,5 +1,5 @@
 import type { WriteStream } from 'fs';
-import { format } from 'util';
+import { format, inspect } from 'util';
 
 /**
  * Represents the commonality between an output stream such as `process.stdout`
@@ -19,7 +19,7 @@ export type AbstractOutputLogger = {
    * @param args - Arguments to `stream.write`: either one or more
    * messages, or a format string followed by values.
    */
-  logToStdout(...args: [string, ...any]): void;
+  logToStdout(...args: unknown[]): void;
 
   /**
    * Writes a line to the standard error stream.
@@ -27,7 +27,7 @@ export type AbstractOutputLogger = {
    * @param args - Arguments to `stream.write`: either one or more
    * messages, or a format string followed by values.
    */
-  logToStderr(...args: [string, ...any]): void;
+  logToStderr(...args: unknown[]): void;
 };
 
 /**
@@ -61,20 +61,20 @@ export class OutputLogger implements AbstractOutputLogger {
   /**
    * Writes a line to the standard out stream.
    *
-   * @param args - Either one or more messages, or a format string followed by
-   * values.
+   * @param args - Arguments to `stream.write`: either one or more messages, or
+   * a format string followed by values.
    */
-  logToStdout(...args: [string, ...any]) {
+  logToStdout(...args: unknown[]) {
     logToStream(this.#stdout, args);
   }
 
   /**
    * Writes a line to the standard error stream.
    *
-   * @param args - Either one or more messages, or a format string followed by
-   * values.
+   * @param args - Arguments to `stream.write`: either one or more messages, or
+   * a format string followed by values.
    */
-  logToStderr(...args: [string, ...any]) {
+  logToStderr(...args: unknown[]) {
     logToStream(this.#stderr, args);
   }
 }
@@ -86,11 +86,14 @@ export class OutputLogger implements AbstractOutputLogger {
  * @param args - Arguments to `stream.write`: either one or more messages, or a
  * format string followed by values.
  */
-export function logToStream(stream: SimpleWriteStream, args: [string, ...any]) {
-  const [messageOrFormatString, ...rest] = args;
-  if (rest.length > 0) {
-    stream.write(format(`${messageOrFormatString}\n`, ...rest));
+export function logToStream(stream: SimpleWriteStream, args: unknown[]) {
+  if (typeof args[0] === 'string' && /%\w/u.test(args[0])) {
+    stream.write(`${format(args[0], ...args.slice(1))}\n`);
   } else {
-    stream.write(`${messageOrFormatString}\n`);
+    stream.write(
+      `${args
+        .map((arg) => (typeof arg === 'string' ? arg : inspect(arg)))
+        .join(' ')}\n`,
+    );
   }
 }

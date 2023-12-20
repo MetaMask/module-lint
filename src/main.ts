@@ -243,13 +243,7 @@ async function lintProjects({
 
   rejectedProjectLintResultPromiseOutcomes.forEach(
     (rejectedProjectLintResultPromiseOutcome) => {
-      outputLogger.logToStderr(
-        'stack' in rejectedProjectLintResultPromiseOutcome.reason
-          ? rejectedProjectLintResultPromiseOutcome.reason.stack
-          : /* istanbul ignore next: There's no real way to reproduce this. */ String(
-              rejectedProjectLintResultPromiseOutcome.reason,
-            ),
-      );
+      outputLogger.logToStderr(rejectedProjectLintResultPromiseOutcome.reason);
     },
   );
 }
