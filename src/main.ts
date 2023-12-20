@@ -113,7 +113,6 @@ async function parseInputs({
     };
   }
 
-  /* istanbul ignore next: At the moment, there is no real way that Yargs could fail */
   return null;
 }
 
