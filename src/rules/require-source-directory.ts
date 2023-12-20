@@ -16,8 +16,8 @@ export default buildRule({
 
     const message =
       stats && !stats.isDirectory()
-        ? `\`${entryPath}\` is not a directory when it should be.`
-        : `\`${entryPath}\` does not exist in this repo.`;
+        ? `\`${entryPath}/\` is not a directory when it should be.`
+        : `\`${entryPath}/\` does not exist in this project.`;
     const failures = [{ message }];
     return fail(failures);
   },

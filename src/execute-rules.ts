@@ -224,7 +224,7 @@ async function executeRule({
  * @returns Part of a successful rule execution result (the rest will be filled
  * in automatically).
  */
-function pass(): SuccessfulPartialRuleExecutionResult {
+export function pass(): SuccessfulPartialRuleExecutionResult {
   return {
     passed: true,
   };
@@ -238,7 +238,7 @@ function pass(): SuccessfulPartialRuleExecutionResult {
  * @returns Part of a failed rule execution result (the rest will be filled
  * in automatically).
  */
-function fail(
+export function fail(
   failures: FailedPartialRuleExecutionResult['failures'],
 ): FailedPartialRuleExecutionResult {
   return { passed: false, failures };

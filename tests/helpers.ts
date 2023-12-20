@@ -5,7 +5,11 @@ import type {
   Options as ExecaOptions,
 } from 'execa';
 import { mock } from 'jest-mock-extended';
+import os from 'os';
 import { inspect, isDeepStrictEqual } from 'util';
+
+import type { MetaMaskRepository } from '../src/establish-metamask-repository';
+import { RepositoryFilesystem } from '../src/repository-filesystem';
 
 const { withinSandbox } = createSandbox('module-lint-tests');
 
@@ -111,4 +115,31 @@ export function fakeDateOnly() {
       'clearTimeout',
     ],
   });
+}
+
+/**
+ * Constructs a MetaMaskRepository object for use in testing.
+ *
+ * @param overrides - Overrides for the new MetaMaskRepository.
+ * @param overrides.shortname - The shortname.
+ * @param overrides.directoryPath - The directory path.
+ * @param overrides.defaultBranchName - The default branch name.
+ * @param overrides.lastFetchedDate - The last fetched date.
+ * @param overrides.fs - The RepositoryFilesystem object.
+ * @returns The constructed MetaMaskRepository.
+ */
+export function buildMetaMaskRepository({
+  shortname = 'template',
+  directoryPath = os.tmpdir(),
+  defaultBranchName = 'main',
+  lastFetchedDate = null,
+  fs = new RepositoryFilesystem(directoryPath),
+}: Partial<MetaMaskRepository> = {}): MetaMaskRepository {
+  return {
+    shortname,
+    directoryPath,
+    defaultBranchName,
+    lastFetchedDate,
+    fs,
+  };
 }
