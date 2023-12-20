@@ -34,7 +34,8 @@ nothing to lint all MetaMask repositories.
  */
 export const DEFAULT_CACHED_REPOSITORIES_DIRECTORY_PATH = path.join(
   THIS_PROJECT_DIRECTORY_PATH,
-  'tmp', 'repositories',
+  'tmp',
+  'repositories',
 );
 
 /**
