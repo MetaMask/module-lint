@@ -395,8 +395,7 @@ Pass the names of one or more MetaMask repositories to lint them, or pass
 nothing to lint all MetaMask repositories.
 
 Options:
-      --version  Show version number  [boolean]
-  -h, --help     Show help  [boolean]
+  -h, --help  Show help  [boolean]
 `,
       );
     });
@@ -430,8 +429,7 @@ Pass the names of one or more MetaMask repositories to lint them, or pass
 nothing to lint all MetaMask repositories.
 
 Options:
-      --version  Show version number  [boolean]
-  -h, --help     Show help  [boolean]
+  -h, --help  Show help  [boolean]
 `,
       );
     });

@@ -144,6 +144,7 @@ async function parseCommandLineArguments({
   const parser = yargs(hideBin(argv))
     .usage(USAGE_TEXT)
     .help(false)
+    .version(false)
     .option('help', {
       alias: 'h',
       describe: 'Show help',
