@@ -157,7 +157,7 @@ Elapsed time:  0 ms
             ],
             validRepositories: [
               {
-                name: 'repo-1',
+                name: 'repo-2',
                 fork: false,
                 archived: false,
               },
@@ -178,9 +178,9 @@ Elapsed time:  0 ms
 
         expect(stdout.data().map(stripAnsi).join('')).toBe(
           `
-Cloning repository MetaMask/repo-1, please wait...
+Cloning repository MetaMask/repo-2, please wait...
 
-repo-1
+repo-2
 ------
 
 - Does the \`src/\` directory exist? ❌
@@ -193,7 +193,7 @@ Elapsed time:  0 ms
         );
 
         expect(stderr.data().map(stripAnsi).join('')).toContain(
-          `Could not resolve 'repo-2' as it is neither a reference to a directory nor the name of a known MetaMask repository.`,
+          `Could not resolve 'repo-1' as it is neither a reference to a directory nor the name of a known MetaMask repository.`,
         );
       });
     });
@@ -334,7 +334,7 @@ Elapsed time:  0 ms
             ],
             validRepositories: [
               {
-                name: 'repo-1',
+                name: 'repo-2',
                 fork: false,
                 archived: false,
               },
@@ -354,9 +354,9 @@ Elapsed time:  0 ms
         });
 
         expect(stdout.data().map(stripAnsi).join('')).toBe(
-          `Cloning repository MetaMask/repo-1, please wait...
+          `Cloning repository MetaMask/repo-2, please wait...
 
-repo-1
+repo-2
 ------
 
 - Does the \`src/\` directory exist? ❌
@@ -369,7 +369,7 @@ Elapsed time:  0 ms
         );
 
         expect(stderr.data().map(stripAnsi).join('')).toContain(
-          `Could not resolve 'repo-2' as it is neither a reference to a directory nor the name of a known MetaMask repository.`,
+          `Could not resolve 'repo-1' as it is neither a reference to a directory nor the name of a known MetaMask repository.`,
         );
       });
     });
