@@ -11,9 +11,13 @@ export default buildRule({
     const stats = await project.fs.getEntryStats(entryPath);
 
     if (!stats) {
-      return fail([{ message: `\`${entryPath}/\` does not exist in this project.` }]);
+      return fail([
+        { message: `\`${entryPath}/\` does not exist in this project.` },
+      ]);
     } else if (!stats.isDirectory()) {
-      return fail([{ message: `\`${entryPath}/\` is not a directory when it should be.` }]);
+      return fail([
+        { message: `\`${entryPath}/\` is not a directory when it should be.` },
+      ]);
     }
 
     return pass();
