@@ -88,7 +88,8 @@ module.exports = {
   // moduleNameMapper: {},
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
-  // modulePathIgnorePatterns: [],
+  // Used to silence module naming collision errors from jest-haste-map
+  modulePathIgnorePatterns: ['/tmp'],
 
   // Activates notifications for test results
   // notify: false,
