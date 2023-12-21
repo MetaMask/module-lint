@@ -2,7 +2,7 @@ import { mockDeep } from 'jest-mock-extended';
 
 import type { MetaMaskRepository } from './establish-metamask-repository';
 import type { Rule } from './execute-rules';
-import { executeRules } from './execute-rules';
+import { executeRules, pass, fail } from './execute-rules';
 import { fakeDateOnly } from '../tests/helpers';
 
 describe('executeRules', () => {
@@ -20,16 +20,16 @@ describe('executeRules', () => {
         name: 'rule-1',
         description: 'Description for rule 1',
         dependencies: ['rule-2'],
-        execute: async ({ fail }) => {
-          return fail([{ message: 'Oops' }]);
+        execute: async ({ fail: locallyFail }) => {
+          return locallyFail([{ message: 'Oops' }]);
         },
       },
       {
         name: 'rule-2',
         description: 'Description for rule 2',
         dependencies: [],
-        execute: async ({ pass }) => {
-          return pass();
+        execute: async ({ pass: locallyPass }) => {
+          return locallyPass();
         },
       },
     ];
@@ -72,16 +72,16 @@ describe('executeRules', () => {
         name: 'rule-1',
         description: 'Description for rule 1',
         dependencies: ['rule-2'],
-        execute: async ({ pass }) => {
-          return pass();
+        execute: async ({ pass: locallyPass }) => {
+          return locallyPass();
         },
       },
       {
         name: 'rule-2',
         description: 'Description for rule 2',
         dependencies: [],
-        execute: async ({ fail }) => {
-          return fail([{ message: 'Oops' }]);
+        execute: async ({ fail: locallyFail }) => {
+          return locallyFail([{ message: 'Oops' }]);
         },
       },
     ];
@@ -117,18 +117,18 @@ describe('executeRules', () => {
         name: 'rule-1',
         description: 'Description for rule 1',
         dependencies: ['rule-2'],
-        execute: async ({ fail }) => {
+        execute: async ({ fail: locallyFail }) => {
           jest.setSystemTime(new Date('2023-01-01T00:00:02Z'));
-          return fail([{ message: 'Oops' }]);
+          return locallyFail([{ message: 'Oops' }]);
         },
       },
       {
         name: 'rule-2',
         description: 'Description for rule 2',
         dependencies: [],
-        execute: async ({ pass }) => {
+        execute: async ({ pass: locallyPass }) => {
           jest.setSystemTime(new Date('2023-01-01T00:00:01Z'));
-          return pass();
+          return locallyPass();
         },
       },
     ];
@@ -169,5 +169,20 @@ describe('executeRules', () => {
     });
 
     expect(ruleExecutionResultTree).toStrictEqual({ children: [] });
+  });
+});
+
+describe('pass', () => {
+  it('returns a result that represents a passing rule', () => {
+    expect(pass()).toStrictEqual({ passed: true });
+  });
+});
+
+describe('fail', () => {
+  it('returns a result that represents a failing rule, with the given failures', () => {
+    expect(fail([{ message: 'oops' }])).toStrictEqual({
+      passed: false,
+      failures: [{ message: 'oops' }],
+    });
   });
 });
