@@ -22,6 +22,7 @@
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
   "types": "./dist/types/index.d.ts",
+  "bin": "./dist/cli.js",
   "files": [
     "dist/cjs/**",
     "dist/esm/**",
@@ -44,6 +45,7 @@
     "lint:fix": "yarn lint:eslint --fix && yarn lint:constraints --fix && yarn lint:misc --write && yarn lint:dependencies && yarn lint:changelog",
     "lint:misc": "prettier '**/*.json' '**/*.md' '!CHANGELOG.md' '**/*.yml' '!.yarnrc.yml' --ignore-path .gitignore --no-error-on-unmatched-pattern",
     "prepack": "./scripts/prepack.sh",
+    "run-tool": "ts-node --swc src/cli.ts",
     "test": "jest && jest-it-up",
     "test:watch": "jest --watch"
   },
@@ -51,7 +53,8 @@
     "@metamask/utils": "^8.2.0",
     "chalk": "^4.1.2",
     "dependency-graph": "^0.11.0",
-    "execa": "^5.1.1"
+    "execa": "^5.1.1",
+    "yargs": "^17.7.2"
   },
   "devDependencies": {
     "@lavamoat/allow-scripts": "^2.3.1",

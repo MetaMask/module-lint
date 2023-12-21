@@ -60,13 +60,14 @@ describe('reportProjectLintResult', () => {
 some-project
 ------------
 
-Linted project in 30 ms.
-
 - Description for rule 1 ✅
   - Description for rule 2 ❌
     - Failure 1
     - Failure 2
 - Description for rule 3 ✅
+
+Results:       2 passed, 1 failed, 3 total
+Elapsed time:  30 ms
 `.trimStart(),
     );
   });

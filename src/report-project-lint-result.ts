@@ -35,17 +35,33 @@ export function reportProjectLintResult({
     `${chalk.magenta(repeat('-', projectLintResult.projectName.length))}\n`,
   );
 
-  outputLogger.logToStdout(
-    `Linted project in ${chalk.blue(
-      projectLintResult.elapsedTimeIncludingLinting,
-    )} ms.\n`,
-  );
-
-  reportRuleExecutionResultNodes({
+  const { numberOfPassing, numberOfFailing } = reportRuleExecutionResultNodes({
     ruleExecutionResultNodes:
       projectLintResult.ruleExecutionResultTree.children,
     outputLogger,
   });
+
+  outputLogger.logToStdout('');
+
+  const numberOfPassingPhrase = `${numberOfPassing} passed`;
+  const numberOfFailingPhrase = `${numberOfFailing} failed`;
+  outputLogger.logToStdout(
+    '%s       %s, %s, %s',
+    chalk.bold('Results:'),
+    numberOfPassing > 0
+      ? chalk.green(numberOfPassingPhrase)
+      : numberOfPassingPhrase,
+    numberOfFailing > 0
+      ? chalk.red(numberOfFailingPhrase)
+      : numberOfFailingPhrase,
+    `${numberOfPassing + numberOfFailing} total`,
+  );
+
+  outputLogger.logToStdout(
+    '%s  %s ms',
+    chalk.bold('Elapsed time:'),
+    projectLintResult.elapsedTimeIncludingLinting,
+  );
 }
 
 /**
@@ -60,16 +76,20 @@ export function reportProjectLintResult({
  * @param args.level - The level in the tree we are currently at (this governed
  * how the results are indented as they are displayed).
  * @param args.outputLogger - Writable streams for output messages.
+ * @returns The total number of passing and failing rules encountered.
  */
 function reportRuleExecutionResultNodes({
   ruleExecutionResultNodes,
-  level = 0,
   outputLogger,
+  level = 0,
 }: {
   ruleExecutionResultNodes: RuleExecutionResultNode[];
-  level?: number;
   outputLogger: AbstractOutputLogger;
+  level?: number;
 }) {
+  let numberOfPassing = 0;
+  let numberOfFailing = 0;
+
   for (const ruleExecutionResultNode of ruleExecutionResultNodes) {
     outputLogger.logToStdout(
       indent(
@@ -79,7 +99,12 @@ function reportRuleExecutionResultNodes({
         level,
       ),
     );
-    if ('failures' in ruleExecutionResultNode.result) {
+
+    if (ruleExecutionResultNode.result.passed) {
+      numberOfPassing += 1;
+    } else {
+      numberOfFailing += 1;
+
       for (const failure of ruleExecutionResultNode.result.failures) {
         outputLogger.logToStdout(
           indent(`- ${chalk.yellow(failure.message)}`, level + 1),
@@ -87,10 +112,17 @@ function reportRuleExecutionResultNodes({
       }
     }
 
-    reportRuleExecutionResultNodes({
+    const {
+      numberOfPassing: numberOfChildrenPassing,
+      numberOfFailing: numberOfChildrenFailing,
+    } = reportRuleExecutionResultNodes({
       ruleExecutionResultNodes: ruleExecutionResultNode.children,
-      level: level + 1,
       outputLogger,
+      level: level + 1,
     });
+    numberOfPassing += numberOfChildrenPassing;
+    numberOfFailing += numberOfChildrenFailing;
   }
+
+  return { numberOfPassing, numberOfFailing };
 }

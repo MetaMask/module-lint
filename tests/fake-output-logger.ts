@@ -27,20 +27,20 @@ export class FakeOutputLogger implements AbstractOutputLogger {
   /**
    * Writes a line to the fake standard out stream.
    *
-   * @param args - Either one or more messages, or a format string followed by
-   * values.
+   * @param args - Arguments to `stream.write`: either one or more messages, or
+   * a format string followed by values.
    */
-  logToStdout(...args: [string, ...any]) {
+  logToStdout(...args: unknown[]) {
     logToStream(this.stdout, args);
   }
 
   /**
    * Writes a line to the fake standard error stream.
    *
-   * @param args - Either one or more messages, or a format string followed by
-   * values.
+   * @param args - Arguments to `stream.write`: either one or more messages, or
+   * a format string followed by values.
    */
-  logToStderr(...args: [string, ...any]) {
+  logToStderr(...args: unknown[]) {
     logToStream(this.stderr, args);
   }
 

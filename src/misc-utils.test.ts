@@ -2,7 +2,13 @@ import { writeFile } from '@metamask/utils/node';
 import fs from 'fs';
 import path from 'path';
 
-import { getEntryStats, indent, repeat } from './misc-utils';
+import {
+  getEntryStats,
+  indent,
+  isPromiseFulfilledResult,
+  isPromiseRejectedResult,
+  repeat,
+} from './misc-utils';
 import { withinSandbox } from '../tests/helpers';
 
 describe('getEntryStats', () => {
@@ -72,5 +78,45 @@ describe('repeat', () => {
 describe('indent', () => {
   it('returns the given string with the given number of spaces (times 2) before it', () => {
     expect(indent('hello', 4)).toBe('        hello');
+  });
+});
+
+describe('isPromiseFulfilledResult', () => {
+  it('returns true if given a fulfilled promise settled result', () => {
+    const promiseSettledResult = {
+      status: 'fulfilled',
+      value: 'whatever',
+    } as const;
+
+    expect(isPromiseFulfilledResult(promiseSettledResult)).toBe(true);
+  });
+
+  it('returns false if given a rejected promise settled result', () => {
+    const promiseSettledResult = {
+      status: 'rejected',
+      reason: 'whatever',
+    } as const;
+
+    expect(isPromiseFulfilledResult(promiseSettledResult)).toBe(false);
+  });
+});
+
+describe('isPromiseRejectedResult', () => {
+  it('returns true if given a rejected promise settled result', () => {
+    const promiseSettledResult = {
+      status: 'rejected',
+      reason: 'whatever',
+    } as const;
+
+    expect(isPromiseRejectedResult(promiseSettledResult)).toBe(true);
+  });
+
+  it('returns false if given a fulfilled promise settled result', () => {
+    const promiseSettledResult = {
+      status: 'fulfilled',
+      value: 'whatever',
+    } as const;
+
+    expect(isPromiseRejectedResult(promiseSettledResult)).toBe(false);
   });
 });

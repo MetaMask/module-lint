@@ -52,3 +52,27 @@ export function indent(text: string, level: number) {
   const indentation = repeat(' ', level * 2);
   return `${indentation}${text}`;
 }
+
+/**
+ * Type guard for a fulfilled promise result obtained via `Promise.allSettled`.
+ *
+ * @param promiseSettledResult - The promise settled result.
+ * @returns True if the result is fulfilled, false otherwise.
+ */
+export function isPromiseFulfilledResult<Value>(
+  promiseSettledResult: PromiseSettledResult<Value>,
+): promiseSettledResult is PromiseFulfilledResult<Value> {
+  return promiseSettledResult.status === 'fulfilled';
+}
+
+/**
+ * Type guard for a rejected promise result obtained via `Promise.allSettled`.
+ *
+ * @param promiseSettledResult - The promise settled result.
+ * @returns True if the result is rejected, false otherwise.
+ */
+export function isPromiseRejectedResult<Value>(
+  promiseSettledResult: PromiseSettledResult<Value>,
+): promiseSettledResult is PromiseRejectedResult {
+  return promiseSettledResult.status === 'rejected';
+}
