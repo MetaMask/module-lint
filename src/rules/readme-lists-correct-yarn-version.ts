@@ -12,9 +12,7 @@ export default buildRule({
     const fileContentInTemplate = await template.fs.readFile(entryPath);
     const fileContentInProject = await project.fs.readFile(entryPath);
 
-    const match = fileContentInTemplate.match(
-      /Install \[Yarn .+?\]\(.+?\)/u,
-    );
+    const match = fileContentInTemplate.match(/Install \[Yarn .+?\]\(.+?\)/u);
     if (!match?.[0]) {
       throw new Error(
         "Could not find Yarn version in template's README. This is not the fault of the project, but is rather a bug in a rule.",
