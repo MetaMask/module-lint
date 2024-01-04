@@ -9,7 +9,7 @@ export default buildRule({
   description: 'Does the package have a well-formed manifest (`package.json`)?',
   dependencies: [],
   execute: async (ruleExecutionArguments) => {
-    const { project, pass } = ruleExecutionArguments;
+    const { project, pass, fail } = ruleExecutionArguments;
     const entryPath = 'package.json';
 
     const fileExistsResult = await fileExists(
@@ -29,8 +29,9 @@ export default buildRule({
         isErrorWithMessage(error) &&
         error.code === 'ERR_INVALID_JSON_FILE'
       ) {
-        console.warn(`Invalid \`${entryPath}\`: ${error.message}`);
-        return pass();
+        return fail([
+          { message: `Invalid \`${entryPath}\`: ${error.message}` },
+        ]);
       }
       throw error;
     }

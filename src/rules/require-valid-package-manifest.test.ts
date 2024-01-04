@@ -55,7 +55,7 @@ describe('Rule: require-package-manifest', () => {
     });
   });
 
-  it('passes if the project has a malformed package.json', async () => {
+  it('fails if the project has a malformed package.json', async () => {
     await withinSandbox(async (sandbox) => {
       const project = buildMetaMaskRepository({
         shortname: 'project',
@@ -74,7 +74,10 @@ describe('Rule: require-package-manifest', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: true,
+        passed: false,
+        failures: [
+          { message: 'Invalid `package.json`: Missing `packageManager`.' },
+        ],
       });
     });
   });
