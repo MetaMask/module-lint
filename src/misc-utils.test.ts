@@ -137,15 +137,15 @@ describe('readDirectoryRecursively', () => {
 
       expect(entries).toStrictEqual([
         expect.objectContaining({
-          fullPath: path.join(innerDirectoryPath, 'a'),
+          absolutePath: path.join(innerDirectoryPath, 'a'),
           relativePath: 'a',
         }),
         expect.objectContaining({
-          fullPath: path.join(innerDirectoryPath, 'b/c'),
+          absolutePath: path.join(innerDirectoryPath, 'b/c'),
           relativePath: 'b/c',
         }),
         expect.objectContaining({
-          fullPath: path.join(innerDirectoryPath, 'b/d/e'),
+          absolutePath: path.join(innerDirectoryPath, 'b/d/e'),
           relativePath: 'b/d/e',
         }),
       ]);
@@ -167,15 +167,15 @@ describe('readDirectoryRecursively', () => {
 
       expect(entries).toStrictEqual([
         expect.objectContaining({
-          fullPath: path.join(innerDirectoryPath, 'a'),
+          absolutePath: path.join(innerDirectoryPath, 'a'),
           relativePath: 'x/a',
         }),
         expect.objectContaining({
-          fullPath: path.join(innerDirectoryPath, 'b/c'),
+          absolutePath: path.join(innerDirectoryPath, 'b/c'),
           relativePath: 'x/b/c',
         }),
         expect.objectContaining({
-          fullPath: path.join(innerDirectoryPath, 'b/d/e'),
+          absolutePath: path.join(innerDirectoryPath, 'b/d/e'),
           relativePath: 'x/b/d/e',
         }),
       ]);

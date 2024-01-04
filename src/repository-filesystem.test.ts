@@ -250,15 +250,15 @@ describe('RepositoryFilesystem', () => {
 
         expect(entries).toStrictEqual([
           expect.objectContaining({
-            fullPath: path.join(sandboxDirectoryPath, 'a'),
+            absolutePath: path.join(sandboxDirectoryPath, 'a'),
             relativePath: 'a',
           }),
           expect.objectContaining({
-            fullPath: path.join(sandboxDirectoryPath, 'b/c'),
+            absolutePath: path.join(sandboxDirectoryPath, 'b/c'),
             relativePath: 'b/c',
           }),
           expect.objectContaining({
-            fullPath: path.join(sandboxDirectoryPath, 'b/d/e'),
+            absolutePath: path.join(sandboxDirectoryPath, 'b/d/e'),
             relativePath: 'b/d/e',
           }),
         ]);

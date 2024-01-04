@@ -10,11 +10,12 @@ import type { Struct } from 'superstruct';
 import type { ObjectSchema } from 'superstruct/dist/utils';
 
 /**
- * Represents a directory entry. Like fs.Dirent, but includes a `path` property
- * which is the full path to the entry.
+ * Represents a directory entry. Like fs.Dirent, but includes two additional
+ * properties, `absolutePath` and `relativePath`, where `relativePath` is the
+ * path relative to its parent directory.
  */
 export type DirectoryEntry = fs.Dirent & {
-  fullPath: string;
+  absolutePath: string;
   relativePath: string;
 };
 
@@ -106,15 +107,18 @@ export async function readDirectoryRecursively(
     });
     const groupsOfChildEntries = await Promise.all(
       dirents.map(async (dirent) => {
-        const fullPath = path.join(directoryPath, dirent.name);
+        const absolutePath = path.join(directoryPath, dirent.name);
 
         if (dirent.isDirectory()) {
-          return await readDirectoryRecursively(fullPath, rootDirectoryPath);
+          return await readDirectoryRecursively(
+            absolutePath,
+            rootDirectoryPath,
+          );
         }
 
         const entry: DirectoryEntry = Object.assign({}, dirent, {
-          fullPath,
-          relativePath: path.relative(rootDirectoryPath, fullPath),
+          absolutePath,
+          relativePath: path.relative(rootDirectoryPath, absolutePath),
         });
         return [entry];
       }),
