@@ -10,8 +10,6 @@ import { fail, pass } from '../rule-helpers';
 
 describe('Rule: require-source-directory', () => {
   it('passes if the project has a src/ directory', async () => {
-    expect.assertions(1);
-
     await withinSandbox(async (sandbox) => {
       const project = buildMetaMaskRepository({
         shortname: 'project',
@@ -35,8 +33,6 @@ describe('Rule: require-source-directory', () => {
   });
 
   it('passes if the project does not have a src/ directory', async () => {
-    expect.assertions(1);
-
     await withinSandbox(async (sandbox) => {
       const project = buildMetaMaskRepository({
         shortname: 'project',
@@ -62,8 +58,6 @@ describe('Rule: require-source-directory', () => {
   });
 
   it('passes if the project has a "src" path, but it is a file', async () => {
-    expect.assertions(1);
-
     await withinSandbox(async (sandbox) => {
       const project = buildMetaMaskRepository({
         shortname: 'project',

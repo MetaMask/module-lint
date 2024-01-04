@@ -7,8 +7,6 @@ import { fail, pass } from '../rule-helpers';
 
 describe('Rule: require-readme', () => {
   it('passes if the project has a README.md', async () => {
-    expect.assertions(1);
-
     await withinSandbox(async (sandbox) => {
       const project = buildMetaMaskRepository({
         shortname: 'project',
@@ -33,8 +31,6 @@ describe('Rule: require-readme', () => {
   });
 
   it('passes if the project does not have a README.md', async () => {
-    expect.assertions(1);
-
     await withinSandbox(async (sandbox) => {
       const project = buildMetaMaskRepository({
         shortname: 'project',

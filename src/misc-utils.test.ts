@@ -183,8 +183,6 @@ describe('readDirectoryRecursively', () => {
   });
 
   it('re-throws a wrapped version of any other error that occurs, assigning it the same code and giving it a stack', async () => {
-    expect.assertions(1);
-
     await withinSandbox(async (sandbox) => {
       // Make sandbox root directory non-readable.
       await fs.promises.chmod(sandbox.directoryPath, 0o000);

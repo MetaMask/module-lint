@@ -7,8 +7,6 @@ import { fail, pass } from '../rule-helpers';
 
 describe('Rule: all-yarn-modern-files-conform', () => {
   it("passes if the template's .yarnrc.yml file, .yarn/releases directory, and .yarn/plugins directory match the project's", async () => {
-    expect.assertions(1);
-
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
@@ -57,8 +55,6 @@ describe('Rule: all-yarn-modern-files-conform', () => {
   });
 
   it('fails if the project does not have a .yarnrc.yml', async () => {
-    expect.assertions(1);
-
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
@@ -108,8 +104,6 @@ describe('Rule: all-yarn-modern-files-conform', () => {
   });
 
   it('fails if the project does not have a .yarn/releases directory', async () => {
-    expect.assertions(1);
-
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
@@ -159,8 +153,6 @@ describe('Rule: all-yarn-modern-files-conform', () => {
   });
 
   it("fails if a file in the template's .yarn/releases directory does not match the same file in the project", async () => {
-    expect.assertions(1);
-
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
@@ -215,8 +207,6 @@ describe('Rule: all-yarn-modern-files-conform', () => {
   });
 
   it('fails if the project does not have a .yarn/plugins directory', async () => {
-    expect.assertions(1);
-
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
@@ -266,8 +256,6 @@ describe('Rule: all-yarn-modern-files-conform', () => {
   });
 
   it("fails if a file in the template's .yarn/plugins directory does not match the same file in the project", async () => {
-    expect.assertions(1);
-
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',

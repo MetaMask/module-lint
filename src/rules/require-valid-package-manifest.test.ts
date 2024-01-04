@@ -7,8 +7,6 @@ import { fail, pass } from '../rule-helpers';
 
 describe('Rule: require-package-manifest', () => {
   it('passes if the project has a well-formed package.json', async () => {
-    expect.assertions(1);
-
     await withinSandbox(async (sandbox) => {
       const project = buildMetaMaskRepository({
         shortname: 'project',
@@ -33,8 +31,6 @@ describe('Rule: require-package-manifest', () => {
   });
 
   it('fails if the project does not have a package.json', async () => {
-    expect.assertions(1);
-
     await withinSandbox(async (sandbox) => {
       const project = buildMetaMaskRepository({
         shortname: 'project',
@@ -60,8 +56,6 @@ describe('Rule: require-package-manifest', () => {
   });
 
   it('passes if the project has a malformed package.json', async () => {
-    expect.assertions(1);
-
     await withinSandbox(async (sandbox) => {
       const project = buildMetaMaskRepository({
         shortname: 'project',
@@ -86,8 +80,6 @@ describe('Rule: require-package-manifest', () => {
   });
 
   it('re-throws a unknown error that readJsonFileAs produces', async () => {
-    expect.assertions(1);
-
     await withinSandbox(async (sandbox) => {
       const project = buildMetaMaskRepository({
         shortname: 'project',

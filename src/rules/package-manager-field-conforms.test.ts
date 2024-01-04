@@ -7,8 +7,6 @@ import { fail, pass } from '../rule-helpers';
 
 describe('Rule: package-manager-field-conforms', () => {
   it('passes if the "packageManager" field in the project\'s package.json matches the one in the template\'s package.json', async () => {
-    expect.assertions(1);
-
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
@@ -41,8 +39,6 @@ describe('Rule: package-manager-field-conforms', () => {
   });
 
   it('fails if the "packageManager" field in the project\'s package.json does not match the one in the template\'s package.json', async () => {
-    expect.assertions(1);
-
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',

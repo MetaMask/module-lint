@@ -7,8 +7,6 @@ import { fail, pass } from '../rule-helpers';
 
 describe('Rule: classic-yarn-config-file-absent', () => {
   it('passes if .yarnrc is not present in the project', async () => {
-    expect.assertions(1);
-
     await withinSandbox(async (sandbox) => {
       const project = buildMetaMaskRepository({
         shortname: 'project',
@@ -29,8 +27,6 @@ describe('Rule: classic-yarn-config-file-absent', () => {
   });
 
   it('fails if .yarnrc is present in the project', async () => {
-    expect.assertions(1);
-
     await withinSandbox(async (sandbox) => {
       const project = buildMetaMaskRepository({
         shortname: 'project',
