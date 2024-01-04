@@ -1,8 +1,10 @@
-import { isErrorWithCode, isObject } from '@metamask/utils/node';
+import {
+  isErrorWithCode,
+  wrapError as originalWrapError,
+} from '@metamask/utils/node';
 import type { Json } from '@metamask/utils/node';
 import fs from 'fs';
 import path from 'path';
-import { ErrorWithCause } from 'pony-cause';
 import { StructError, assert } from 'superstruct';
 import type { Struct } from 'superstruct';
 import type { ObjectSchema } from 'superstruct/dist/utils';
@@ -140,52 +142,13 @@ export function wrapError<Throwable>(
   message: string,
   code?: string,
 ): Error & { code?: string } {
-  let error: Error & { code?: string };
+  const error = originalWrapError(originalError, message);
 
-  if (isError(originalError)) {
-    if (Error.length === 2) {
-      // @ts-expect-error Error causes are not supported by our current `tsc`
-      // target (ES2020 — we need ES2022 to make this work).
-      error = new Error(message, { cause: originalError });
-    } else {
-      error = new ErrorWithCause(message, { cause: originalError });
-    }
-
-    if (code !== undefined) {
-      error.code = code;
-    } else if (isErrorWithCode(originalError)) {
-      error.code = originalError.code;
-    }
-  } else {
-    error = new Error(
-      message.length > 0
-        ? `${String(originalError)}: ${message}`
-        : String(originalError),
-    );
-
-    if (code !== undefined) {
-      error.code = code;
-    }
+  if (code !== undefined) {
+    error.code = code;
   }
 
   return error;
-}
-
-/**
- * Type guard for determining whether the given value is an instance of Error.
- * For errors generated via `fs.promises`, `error instanceof Error` won't work,
- * so we have to come up with another way of testing.
- *
- * TODO: Expose this method in `@metamask/utils`.
- *
- * @param error - The object to check.
- * @returns A boolean.
- */
-function isError(error: unknown): error is Error {
-  return (
-    error instanceof Error ||
-    (isObject(error) && error.constructor.name === 'Error')
-  );
 }
 
 /**
