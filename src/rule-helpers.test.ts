@@ -71,6 +71,12 @@ describe('combineRuleExecutionResults', () => {
       ],
     });
   });
+
+  it('returns a passing result if given nothing to combine', () => {
+    const result = combineRuleExecutionResults([]);
+
+    expect(result).toStrictEqual({ passed: true });
+  });
 });
 
 describe('fileExists', () => {
