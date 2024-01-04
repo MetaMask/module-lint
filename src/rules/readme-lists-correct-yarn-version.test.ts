@@ -80,7 +80,7 @@ describe('Rule: readme-lists-correct-yarn-version', () => {
     });
   });
 
-  it('throws if the template does not have the Yarn version listed in its README for some reason', async () => {
+  it('passes if the template does not have the Yarn version listed in its README for some reason', async () => {
     expect.assertions(1);
 
     await withinSandbox(async (sandbox) => {
@@ -101,14 +101,16 @@ describe('Rule: readme-lists-correct-yarn-version', () => {
         'does not matter',
       );
 
-      await expect(
-        readmeListsCorrectYarnVersion.execute({
-          template,
-          project,
-          pass,
-          fail,
-        }),
-      ).rejects.toThrow("Could not find Yarn version in template's README");
+      const result = await readmeListsCorrectYarnVersion.execute({
+        template,
+        project,
+        pass,
+        fail,
+      });
+
+      expect(result).toStrictEqual({
+        passed: true,
+      });
     });
   });
 });
