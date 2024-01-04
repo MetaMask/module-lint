@@ -3,7 +3,7 @@ import path from 'path';
 
 import requireReadme from './require-readme';
 import { buildMetaMaskRepository, withinSandbox } from '../../tests/helpers';
-import { fail, pass } from '../execute-rules';
+import { fail, pass } from '../rule-helpers';
 
 describe('Rule: require-readme', () => {
   it('passes if the project has a README.md', async () => {

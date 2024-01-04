@@ -3,7 +3,7 @@ import path from 'path';
 
 import requireValidPackageManifest from './require-valid-package-manifest';
 import { buildMetaMaskRepository, withinSandbox } from '../../tests/helpers';
-import { fail, pass } from '../execute-rules';
+import { fail, pass } from '../rule-helpers';
 
 describe('Rule: require-package-manifest', () => {
   it('passes if the project has a well-formed package.json', async () => {

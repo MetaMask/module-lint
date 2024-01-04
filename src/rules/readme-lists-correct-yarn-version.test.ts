@@ -3,7 +3,7 @@ import path from 'path';
 
 import readmeListsCorrectYarnVersion from './readme-lists-correct-yarn-version';
 import { buildMetaMaskRepository, withinSandbox } from '../../tests/helpers';
-import { fail, pass } from '../execute-rules';
+import { fail, pass } from '../rule-helpers';
 
 describe('Rule: readme-lists-correct-yarn-version', () => {
   it("passes if the Yarn version listed in the project's README matches the same one in the template", async () => {

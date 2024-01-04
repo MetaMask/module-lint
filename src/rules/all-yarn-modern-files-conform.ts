@@ -1,10 +1,10 @@
+import { buildRule } from './build-rule';
+import { RuleName } from './types';
 import {
-  buildRule,
   combineRuleExecutionResults,
   directoryConforms,
   fileConforms,
-} from './helpers';
-import { RuleName } from './types';
+} from '../rule-helpers';
 
 export default buildRule({
   name: RuleName.AllYarnModernFilesConform,
@@ -18,6 +18,6 @@ export default buildRule({
       directoryConforms('.yarn/plugins', ruleExecutionArguments),
     ]);
 
-    return combineRuleExecutionResults(results, ruleExecutionArguments);
+    return combineRuleExecutionResults(results);
   },
 });

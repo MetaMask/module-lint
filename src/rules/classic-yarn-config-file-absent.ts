@@ -1,12 +1,11 @@
-import { buildRule } from './helpers';
+import { buildRule } from './build-rule';
 import { RuleName } from './types';
-import { fail, pass } from '../execute-rules';
 
 export default buildRule({
   name: RuleName.ClassicYarnConfigFileAbsent,
   description: 'Is the classic Yarn config file (`.yarnrc`) absent?',
   dependencies: [],
-  execute: async ({ project }) => {
+  execute: async ({ project, pass, fail }) => {
     const entryPath = '.yarnrc';
 
     const stats = await project.fs.getEntryStats(entryPath);

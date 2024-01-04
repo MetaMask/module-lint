@@ -6,7 +6,7 @@ import path from 'path';
 
 import requireSourceDirectory from './require-source-directory';
 import { buildMetaMaskRepository, withinSandbox } from '../../tests/helpers';
-import { fail, pass } from '../execute-rules';
+import { fail, pass } from '../rule-helpers';
 
 describe('Rule: require-source-directory', () => {
   it('passes if the project has a src/ directory', async () => {

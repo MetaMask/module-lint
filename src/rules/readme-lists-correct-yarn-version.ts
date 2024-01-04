@@ -1,4 +1,4 @@
-import { buildRule } from './helpers';
+import { buildRule } from './build-rule';
 import { RuleName } from './types';
 
 export default buildRule({

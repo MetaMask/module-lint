@@ -4,6 +4,7 @@ import type { RuleNode } from './build-rule-tree';
 import { buildRuleTree } from './build-rule-tree';
 import type { MetaMaskRepository } from './establish-metamask-repository';
 import { createModuleLogger, projectLogger } from './logging-utils';
+import { fail, pass } from './rule-helpers';
 
 const log = createModuleLogger(projectLogger, 'establish-metamask-repository');
 
@@ -233,31 +234,4 @@ async function executeRule({
     elapsedTimeIncludingChildren,
     children,
   };
-}
-
-/**
- * A helper for a rule which is intended to end its execution by marking it as
- * passing.
- *
- * @returns Part of a successful rule execution result (the rest will be filled
- * in automatically).
- */
-export function pass(): SuccessfulPartialRuleExecutionResult {
-  return {
-    passed: true,
-  };
-}
-
-/**
- * A helper for a rule which is intended to end its execution by marking it as
- * failing.
- *
- * @param failures - The list of associated failures.
- * @returns Part of a failed rule execution result (the rest will be filled
- * in automatically).
- */
-export function fail(
-  failures: FailedPartialRuleExecutionResult['failures'],
-): FailedPartialRuleExecutionResult {
-  return { passed: false, failures };
 }

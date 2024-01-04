@@ -3,7 +3,7 @@ import path from 'path';
 
 import classicYarnConfigFileAbsent from './classic-yarn-config-file-absent';
 import { buildMetaMaskRepository, withinSandbox } from '../../tests/helpers';
-import { fail, pass } from '../execute-rules';
+import { fail, pass } from '../rule-helpers';
 
 describe('Rule: classic-yarn-config-file-absent', () => {
   it('passes if .yarnrc is not present in the project', async () => {

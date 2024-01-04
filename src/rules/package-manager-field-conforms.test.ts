@@ -3,7 +3,7 @@ import path from 'path';
 
 import packageManagerFieldConforms from './package-manager-field-conforms';
 import { buildMetaMaskRepository, withinSandbox } from '../../tests/helpers';
-import { fail, pass } from '../execute-rules';
+import { fail, pass } from '../rule-helpers';
 
 describe('Rule: package-manager-field-conforms', () => {
   it('passes if the "packageManager" field in the project\'s package.json matches the one in the template\'s package.json', async () => {

@@ -1,7 +1,8 @@
 import { isErrorWithCode, isErrorWithMessage } from '@metamask/utils/node';
 
-import { buildRule, fileExists } from './helpers';
+import { buildRule } from './build-rule';
 import { PackageManifestSchema, RuleName } from './types';
+import { fileExists } from '../rule-helpers';
 
 export default buildRule({
   name: RuleName.RequireValidPackageManifest,

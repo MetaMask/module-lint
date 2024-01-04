@@ -1,62 +1,39 @@
-import type { RuleName } from './types';
-import type { MetaMaskRepository } from '../establish-metamask-repository';
 import type {
+  SuccessfulPartialRuleExecutionResult,
   FailedPartialRuleExecutionResult,
   PartialRuleExecutionResult,
-  Rule,
   RuleExecutionArguments,
-  SuccessfulPartialRuleExecutionResult,
-} from '../execute-rules';
+} from './execute-rules';
 
 /**
- * Rule objects are fairly abstract: the name of a rule and the dependencies of
- * a rule (which are themselves names) can be anything; and unfortunately, we
- * cannot really enforce names, or else it would mean we'd have to have a
- * `RuleName` type everywhere.
+ * A helper for a rule which is intended to end its execution by marking it as
+ * passing.
  *
- * This function exists to bridge that gap at the point where the rule is
- * actually defined by validating the name and dependencies against a known set
- * of rules.
- *
- * @param args - The arguments to this function.
- * @param args.name - The name of a rule. This function assumes that all rule
- * names are predefined in an enum and that this is one of the values in that
- * enum.
- * @param args.description - The description of the rule. This will show up when
- * listing rules as a part of the lint report for a project.
- * @param args.dependencies - The names of rules that must be executed first
- * before executing this one.
- * @param args.execute - The "body" of the rule.
- * @returns The (validated) rule.
+ * @returns Part of a successful rule execution result (the rest will be filled
+ * in automatically).
  */
-export function buildRule<Name extends RuleName>({
-  name,
-  description,
-  dependencies,
-  execute,
-}: {
-  name: Name;
-  description: string;
-  dependencies: Exclude<RuleName, Name>[];
-  execute(args: {
-    template: MetaMaskRepository;
-    project: MetaMaskRepository;
-    pass: () => SuccessfulPartialRuleExecutionResult;
-    fail: (
-      failures: FailedPartialRuleExecutionResult['failures'],
-    ) => FailedPartialRuleExecutionResult;
-  }): Promise<PartialRuleExecutionResult>;
-}): Rule {
+export function pass(): SuccessfulPartialRuleExecutionResult {
   return {
-    name,
-    description,
-    dependencies,
-    execute,
+    passed: true,
   };
 }
 
 /**
- * A rule utility which determines whether a file exists in the project.
+ * A helper for a rule which is intended to end its execution by marking it as
+ * failing.
+ *
+ * @param failures - The list of associated failures.
+ * @returns Part of a failed rule execution result (the rest will be filled
+ * in automatically).
+ */
+export function fail(
+  failures: FailedPartialRuleExecutionResult['failures'],
+): FailedPartialRuleExecutionResult {
+  return { passed: false, failures };
+}
+
+/**
+ * A helper for a rule which determines whether a file exists in the project.
  *
  * @param filePath - The path to test.
  * @param ruleExecutionArguments - Rule execution arguments.
@@ -66,7 +43,7 @@ export async function fileExists(
   filePath: string,
   ruleExecutionArguments: RuleExecutionArguments,
 ): Promise<PartialRuleExecutionResult> {
-  const { project, pass, fail } = ruleExecutionArguments;
+  const { project } = ruleExecutionArguments;
   const stats = await project.fs.getEntryStats(filePath);
 
   if (!stats) {
@@ -89,7 +66,8 @@ export async function fileExists(
 }
 
 /**
- * A rule utility which determines whether a directory exists in the project.
+ * A helper for a rule which determines whether a directory exists in the
+ * project.
  *
  * @param directoryPath - The path to test.
  * @param ruleExecutionArguments - Rule execution arguments.
@@ -99,7 +77,7 @@ export async function directoryExists(
   directoryPath: string,
   ruleExecutionArguments: RuleExecutionArguments,
 ): Promise<PartialRuleExecutionResult> {
-  const { project, pass, fail } = ruleExecutionArguments;
+  const { project } = ruleExecutionArguments;
   const stats = await project.fs.getEntryStats(directoryPath);
 
   if (!stats) {
@@ -122,8 +100,8 @@ export async function directoryExists(
 }
 
 /**
- * A rule utility which determines not only whether a file that's assumed to
- * exist in the template exists in the project as well, but also whether it
+ * A helper for a rule which determines not only whether a file that's assumed
+ * to exist in the template exists in the project as well, but also whether it
  * matches the same file in the template content-wise.
  *
  * @param filePath - The path to a file in both the template and project.
@@ -134,7 +112,7 @@ export async function fileConforms(
   filePath: string,
   ruleExecutionArguments: RuleExecutionArguments,
 ): Promise<PartialRuleExecutionResult> {
-  const { template, project, pass, fail } = ruleExecutionArguments;
+  const { template, project } = ruleExecutionArguments;
   const fileExistsResult = await fileExists(filePath, ruleExecutionArguments);
   if (!fileExistsResult.passed) {
     return fileExistsResult;
@@ -156,10 +134,10 @@ export async function fileConforms(
 }
 
 /**
- * A rule utility which determines not only whether a directory that's assumed to
- * exist in the template exists in the project as well, but also whether all
- * files in that directory in the template are present in the project and match
- * content-wise.
+ * A helper for a rule which determines not only whether a directory that's
+ * assumed to exist in the template exists in the project as well, but also
+ * whether all files in that directory in the template are present in the
+ * project and match content-wise.
  *
  * @param directoryPath - The path to a directory in both the template and
  * project.
@@ -185,27 +163,21 @@ export async function directoryConforms(
       return await fileConforms(file.relativePath, ruleExecutionArguments);
     }),
   );
-  return combineRuleExecutionResults(
-    fileConformsResults,
-    ruleExecutionArguments,
-  );
+  return combineRuleExecutionResults(fileConformsResults);
 }
 
 /**
- * Encapsulates multiple rule execution results into one. If all of the results
- * are passing, then the combined result will be passing; otherwise, the
- * combined result will be failing, and messages from failing results will be
- * consolidated into a single array.
+ * A utility which encapsulates multiple rule execution results into one. If all
+ * of the results are passing, then the combined result will be passing;
+ * otherwise, the combined result will be failing, and messages from failing
+ * results will be consolidated into a single array.
  *
  * @param results - The rule execution results.
- * @param ruleExecutionArguments - Rule execution arguments.
  * @returns The combined rule execution result.
  */
 export function combineRuleExecutionResults(
   results: PartialRuleExecutionResult[],
-  ruleExecutionArguments: RuleExecutionArguments,
 ): PartialRuleExecutionResult {
-  const { pass, fail } = ruleExecutionArguments;
   const failures: FailedPartialRuleExecutionResult['failures'] = [];
 
   for (const result of results) {

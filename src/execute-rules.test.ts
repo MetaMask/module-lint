@@ -2,7 +2,7 @@ import { mockDeep } from 'jest-mock-extended';
 
 import type { MetaMaskRepository } from './establish-metamask-repository';
 import type { Rule } from './execute-rules';
-import { executeRules, pass, fail } from './execute-rules';
+import { executeRules } from './execute-rules';
 import { fakeDateOnly } from '../tests/helpers';
 
 describe('executeRules', () => {
@@ -169,20 +169,5 @@ describe('executeRules', () => {
     });
 
     expect(ruleExecutionResultTree).toStrictEqual({ children: [] });
-  });
-});
-
-describe('pass', () => {
-  it('returns a result that represents a passing rule', () => {
-    expect(pass()).toStrictEqual({ passed: true });
-  });
-});
-
-describe('fail', () => {
-  it('returns a result that represents a failing rule, with the given failures', () => {
-    expect(fail([{ message: 'oops' }])).toStrictEqual({
-      passed: false,
-      failures: [{ message: 'oops' }],
-    });
   });
 });

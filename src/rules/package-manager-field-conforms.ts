@@ -1,4 +1,4 @@
-import { buildRule } from './helpers';
+import { buildRule } from './build-rule';
 import { PackageManifestSchema, RuleName } from './types';
 
 export default buildRule({

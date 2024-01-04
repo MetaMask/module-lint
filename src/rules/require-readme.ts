@@ -1,5 +1,6 @@
-import { buildRule, fileExists } from './helpers';
+import { buildRule } from './build-rule';
 import { RuleName } from './types';
+import { fileExists } from '../rule-helpers';
 
 export default buildRule({
   name: RuleName.RequireReadme,

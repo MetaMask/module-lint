@@ -4,9 +4,23 @@ import {
 } from '@metamask/utils/node';
 import path from 'path';
 
-import { directoryExists, fileExists } from './helpers';
-import { buildMetaMaskRepository, withinSandbox } from '../../tests/helpers';
-import { fail, pass } from '../execute-rules';
+import { directoryExists, fail, fileExists, pass } from './rule-helpers';
+import { buildMetaMaskRepository, withinSandbox } from '../tests/helpers';
+
+describe('pass', () => {
+  it('returns a result that represents a passing rule', () => {
+    expect(pass()).toStrictEqual({ passed: true });
+  });
+});
+
+describe('fail', () => {
+  it('returns a result that represents a failing rule, with the given failures', () => {
+    expect(fail([{ message: 'oops' }])).toStrictEqual({
+      passed: false,
+      failures: [{ message: 'oops' }],
+    });
+  });
+});
 
 describe('fileExists', () => {
   it('passes if the given path refers to an existing file', async () => {

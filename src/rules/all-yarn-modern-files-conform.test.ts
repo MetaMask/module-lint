@@ -3,7 +3,7 @@ import path from 'path';
 
 import allYarnModernFilesConform from './all-yarn-modern-files-conform';
 import { buildMetaMaskRepository, withinSandbox } from '../../tests/helpers';
-import { fail, pass } from '../execute-rules';
+import { fail, pass } from '../rule-helpers';
 
 describe('Rule: all-yarn-modern-files-conform', () => {
   it("passes if the template's .yarnrc.yml file, .yarn/releases directory, and .yarn/plugins directory match the project's", async () => {
