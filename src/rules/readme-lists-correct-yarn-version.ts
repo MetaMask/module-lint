@@ -13,7 +13,7 @@ export default buildRule({
     const fileContentInProject = await project.fs.readFile(entryPath);
 
     const match = fileContentInTemplate.match(
-      /Install \[Yarn [^[\]]+\]\([^()]+\)/u,
+      /Install \[Yarn .+?\]\(.+?\)/u,
     );
     if (!match?.[0]) {
       throw new Error(
