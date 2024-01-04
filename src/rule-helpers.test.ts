@@ -24,8 +24,6 @@ describe('fail', () => {
 
 describe('fileExists', () => {
   it('passes if the given path refers to an existing file', async () => {
-    expect.assertions(1);
-
     await withinSandbox(async (sandbox) => {
       const project = buildMetaMaskRepository({
         shortname: 'project',
@@ -48,8 +46,6 @@ describe('fileExists', () => {
   });
 
   it('fails if the given path does not refer to an existing file', async () => {
-    expect.assertions(1);
-
     await withinSandbox(async (sandbox) => {
       const project = buildMetaMaskRepository({
         shortname: 'project',
@@ -76,8 +72,6 @@ describe('fileExists', () => {
   });
 
   it('fails if the given path does refers to an entry, but it is not a file', async () => {
-    expect.assertions(1);
-
     await withinSandbox(async (sandbox) => {
       const project = buildMetaMaskRepository({
         shortname: 'project',
@@ -105,8 +99,6 @@ describe('fileExists', () => {
 
 describe('directoryExists', () => {
   it('passes if the given path refers to an existing directory', async () => {
-    expect.assertions(1);
-
     await withinSandbox(async (sandbox) => {
       const project = buildMetaMaskRepository({
         shortname: 'project',
@@ -129,8 +121,6 @@ describe('directoryExists', () => {
   });
 
   it('fails if the given path does not refer to an existing directory', async () => {
-    expect.assertions(1);
-
     await withinSandbox(async (sandbox) => {
       const project = buildMetaMaskRepository({
         shortname: 'project',
@@ -157,8 +147,6 @@ describe('directoryExists', () => {
   });
 
   it('fails if the given path does refers to an entry, but it is not a directory', async () => {
-    expect.assertions(1);
-
     await withinSandbox(async (sandbox) => {
       const project = buildMetaMaskRepository({
         shortname: 'project',
