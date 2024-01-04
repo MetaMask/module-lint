@@ -9,7 +9,7 @@ export default buildRule({
   description: 'Does the package have a well-formed manifest (`package.json`)?',
   dependencies: [],
   execute: async (ruleExecutionArguments) => {
-    const { project, pass, fail } = ruleExecutionArguments;
+    const { project, pass } = ruleExecutionArguments;
     const entryPath = 'package.json';
 
     const fileExistsResult = await fileExists(
