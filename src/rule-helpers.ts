@@ -6,7 +6,7 @@ import type {
 } from './execute-rules';
 
 /**
- * A helper for a rule which is intended to end its execution by marking it as
+ * A utility for a rule which is intended to end its execution by marking it as
  * passing.
  *
  * @returns Part of a successful rule execution result (the rest will be filled
@@ -19,7 +19,7 @@ export function pass(): SuccessfulPartialRuleExecutionResult {
 }
 
 /**
- * A helper for a rule which is intended to end its execution by marking it as
+ * A utility for a rule which is intended to end its execution by marking it as
  * failing.
  *
  * @param failures - The list of associated failures.
@@ -30,6 +30,29 @@ export function fail(
   failures: FailedPartialRuleExecutionResult['failures'],
 ): FailedPartialRuleExecutionResult {
   return { passed: false, failures };
+}
+
+/**
+ * A utility which encapsulates multiple rule execution results into one. If all
+ * of the results are passing, then the combined result will be passing;
+ * otherwise, the combined result will be failing, and messages from failing
+ * results will be consolidated into a single array.
+ *
+ * @param results - The rule execution results.
+ * @returns The combined rule execution result.
+ */
+export function combineRuleExecutionResults(
+  results: PartialRuleExecutionResult[],
+): PartialRuleExecutionResult {
+  const failures: FailedPartialRuleExecutionResult['failures'] = [];
+
+  for (const result of results) {
+    if (!result.passed) {
+      failures.push(...result.failures);
+    }
+  }
+
+  return failures.length > 0 ? fail(failures) : pass();
 }
 
 /**
@@ -164,27 +187,4 @@ export async function directoryConforms(
     }),
   );
   return combineRuleExecutionResults(fileConformsResults);
-}
-
-/**
- * A utility which encapsulates multiple rule execution results into one. If all
- * of the results are passing, then the combined result will be passing;
- * otherwise, the combined result will be failing, and messages from failing
- * results will be consolidated into a single array.
- *
- * @param results - The rule execution results.
- * @returns The combined rule execution result.
- */
-export function combineRuleExecutionResults(
-  results: PartialRuleExecutionResult[],
-): PartialRuleExecutionResult {
-  const failures: FailedPartialRuleExecutionResult['failures'] = [];
-
-  for (const result of results) {
-    if (!result.passed) {
-      failures.push(...result.failures);
-    }
-  }
-
-  return failures.length > 0 ? fail(failures) : pass();
 }
