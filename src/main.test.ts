@@ -27,7 +27,7 @@ describe('main', () => {
   });
 
   describe('given a list of project references', () => {
-    it('lists the passing rules executed against the given repositories', async () => {
+    it('produces a fully passing report if all rules executed against the given projects pass', async () => {
       await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
         const projectNames = ['repo-1', 'repo-2'];
         const { cachedRepositoriesDirectoryPath, repositories } =
@@ -128,10 +128,10 @@ Elapsed time:  0 ms
       });
     });
 
-    it('lists the failing rules executed against the given repositories', async () => {
+    it('produces a fully failing report if all rules executed against the given projects fail, listing reasons for failure', async () => {
       await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
         const projectNames = ['repo-1', 'repo-2'];
-        const { cachedRepositoriesDirectoryPath } =
+        const { cachedRepositoriesDirectoryPath, repositories } =
           await setupToolWithMockRepositories({
             execaMock,
             sandboxDirectoryPath,
@@ -143,6 +143,10 @@ Elapsed time:  0 ms
               })),
             ],
           });
+        // Skip first repo since it's the module template
+        for (const repository of repositories.slice(1)) {
+          await writeFile(path.join(repository.directoryPath, '.yarnrc'), '');
+        }
         const outputLogger = new FakeOutputLogger();
 
         await main({
@@ -161,7 +165,8 @@ Elapsed time:  0 ms
 repo-1
 ------
 
-- Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
+- Is the classic Yarn config file (\`.yarnrc\`) absent? ❌
+  - The config file for Yarn Classic, \`.yarnrc\`, is present. Please upgrade this project to Yarn Modern.
 - Does the package have a well-formed manifest (\`package.json\`)? ❌
   - \`package.json\` does not exist in this project.
 - Is \`README.md\` present? ❌
@@ -173,14 +178,15 @@ repo-1
 - Does the \`src/\` directory exist? ❌
   - \`src/\` does not exist in this project.
 
-Results:       1 passed, 4 failed, 5 total
+Results:       0 passed, 5 failed, 5 total
 Elapsed time:  0 ms
 
 
 repo-2
 ------
 
-- Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
+- Is the classic Yarn config file (\`.yarnrc\`) absent? ❌
+  - The config file for Yarn Classic, \`.yarnrc\`, is present. Please upgrade this project to Yarn Modern.
 - Does the package have a well-formed manifest (\`package.json\`)? ❌
   - \`package.json\` does not exist in this project.
 - Is \`README.md\` present? ❌
@@ -192,7 +198,7 @@ repo-2
 - Does the \`src/\` directory exist? ❌
   - \`src/\` does not exist in this project.
 
-Results:       1 passed, 4 failed, 5 total
+Results:       0 passed, 5 failed, 5 total
 Elapsed time:  0 ms
 
 `,
@@ -200,7 +206,7 @@ Elapsed time:  0 ms
       });
     });
 
-    it('does not exit immediately if a project fails to lint for any reason, but shows the reason and continues', async () => {
+    it('does not exit immediately if a project errors during linting, but shows the error and continues', async () => {
       await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
         const projectNames = ['repo-1', 'repo-2'];
         const { cachedRepositoriesDirectoryPath } =
@@ -266,7 +272,7 @@ Elapsed time:  0 ms
   });
 
   describe('given no project references', () => {
-    it('lists the passing rules executed against the default repositories', async () => {
+    it('produces a fully passing report if all rules executed against the default projects pass', async () => {
       await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
         const projectNames = ['repo-1', 'repo-2'];
         const { cachedRepositoriesDirectoryPath, repositories } =
@@ -367,10 +373,10 @@ Elapsed time:  0 ms
       });
     });
 
-    it('lists the failing rules executed against the default repositories', async () => {
+    it('produces a fully failing report if all rules executed against the default projects fail, listing reasons for failure', async () => {
       await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
         const projectNames = ['repo-1', 'repo-2'];
-        const { cachedRepositoriesDirectoryPath } =
+        const { cachedRepositoriesDirectoryPath, repositories } =
           await setupToolWithMockRepositories({
             execaMock,
             sandboxDirectoryPath,
@@ -382,6 +388,10 @@ Elapsed time:  0 ms
               })),
             ],
           });
+        // Skip first repo since it's the module template
+        for (const repository of repositories.slice(1)) {
+          await writeFile(path.join(repository.directoryPath, '.yarnrc'), '');
+        }
         const outputLogger = new FakeOutputLogger();
 
         await main({
@@ -400,7 +410,8 @@ Elapsed time:  0 ms
 repo-1
 ------
 
-- Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
+- Is the classic Yarn config file (\`.yarnrc\`) absent? ❌
+  - The config file for Yarn Classic, \`.yarnrc\`, is present. Please upgrade this project to Yarn Modern.
 - Does the package have a well-formed manifest (\`package.json\`)? ❌
   - \`package.json\` does not exist in this project.
 - Is \`README.md\` present? ❌
@@ -412,14 +423,15 @@ repo-1
 - Does the \`src/\` directory exist? ❌
   - \`src/\` does not exist in this project.
 
-Results:       1 passed, 4 failed, 5 total
+Results:       0 passed, 5 failed, 5 total
 Elapsed time:  0 ms
 
 
 repo-2
 ------
 
-- Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
+- Is the classic Yarn config file (\`.yarnrc\`) absent? ❌
+  - The config file for Yarn Classic, \`.yarnrc\`, is present. Please upgrade this project to Yarn Modern.
 - Does the package have a well-formed manifest (\`package.json\`)? ❌
   - \`package.json\` does not exist in this project.
 - Is \`README.md\` present? ❌
@@ -431,7 +443,7 @@ repo-2
 - Does the \`src/\` directory exist? ❌
   - \`src/\` does not exist in this project.
 
-Results:       1 passed, 4 failed, 5 total
+Results:       0 passed, 5 failed, 5 total
 Elapsed time:  0 ms
 
 `,
@@ -439,7 +451,7 @@ Elapsed time:  0 ms
       });
     });
 
-    it('does not exit immediately if a project fails to lint for any reason, but shows the reason and continues', async () => {
+    it('does not exit immediately if a project errors during linting, but shows the error and continues', async () => {
       await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
         const projectNames = ['repo-1', 'repo-2'];
         const { cachedRepositoriesDirectoryPath } =
