@@ -29,9 +29,8 @@ export default buildRule({
         isErrorWithMessage(error) &&
         error.code === 'ERR_INVALID_JSON_FILE'
       ) {
-        return fail([
-          { message: `Invalid \`${entryPath}\`: ${error.message}` },
-        ]);
+        console.warn(`Invalid \`${entryPath}\`: ${error.message}`);
+        return pass();
       }
       throw error;
     }

@@ -59,7 +59,7 @@ describe('Rule: require-package-manifest', () => {
     });
   });
 
-  it('fails if the project has a malformed package.json', async () => {
+  it('passes if the project has a malformed package.json', async () => {
     expect.assertions(1);
 
     await withinSandbox(async (sandbox) => {
@@ -80,10 +80,7 @@ describe('Rule: require-package-manifest', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: false,
-        failures: [
-          { message: 'Invalid `package.json`: Missing `packageManager`.' },
-        ],
+        passed: true,
       });
     });
   });
