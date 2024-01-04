@@ -1023,6 +1023,7 @@ __metadata:
     rimraf: ^3.0.2
     stdio-mock: ^1.2.0
     strip-ansi: ^6.0.0
+    superstruct: ^1.0.3
     ts-jest: ^28.0.7
     ts-node: ^10.7.0
     typedoc: ^0.23.15

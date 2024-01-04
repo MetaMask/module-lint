@@ -4,6 +4,7 @@ import type { RuleNode } from './build-rule-tree';
 import { buildRuleTree } from './build-rule-tree';
 import type { MetaMaskRepository } from './establish-metamask-repository';
 import { createModuleLogger, projectLogger } from './logging-utils';
+import { fail, pass } from './rule-helpers';
 
 const log = createModuleLogger(projectLogger, 'establish-metamask-repository');
 
@@ -66,6 +67,31 @@ export type RootRuleExecutionResultNode = {
 };
 
 /**
+ * The arguments passed to every rule's `execute` method.
+ */
+export type RuleExecutionArguments = {
+  /**
+   * A reference to a template repository that serves as a baseline for the
+   * project.
+   */
+  template: MetaMaskRepository;
+  /**
+   * A reference to the project repository.
+   */
+  project: MetaMaskRepository;
+  /**
+   * A supporting function that causes the rule to pass.
+   */
+  pass: () => SuccessfulPartialRuleExecutionResult;
+  /**
+   * A supporting function that causes the rule to fail.
+   */
+  fail: (
+    failures: FailedPartialRuleExecutionResult['failures'],
+  ) => FailedPartialRuleExecutionResult;
+};
+
+/**
  * A lint rule that can be executed against a project.
  */
 export type Rule = {
@@ -85,14 +111,7 @@ export type Rule = {
   /**
    * The "body" of the rule.
    */
-  execute(args: {
-    project: MetaMaskRepository;
-    template: MetaMaskRepository;
-    pass: () => SuccessfulPartialRuleExecutionResult;
-    fail: (
-      failures: FailedPartialRuleExecutionResult['failures'],
-    ) => FailedPartialRuleExecutionResult;
-  }): Promise<PartialRuleExecutionResult>;
+  execute(args: RuleExecutionArguments): Promise<PartialRuleExecutionResult>;
 };
 
 /**
@@ -215,31 +234,4 @@ async function executeRule({
     elapsedTimeIncludingChildren,
     children,
   };
-}
-
-/**
- * A helper intended to be used in a rule which ends its execution by marking it
- * as passing.
- *
- * @returns Part of a successful rule execution result (the rest will be filled
- * in automatically).
- */
-export function pass(): SuccessfulPartialRuleExecutionResult {
-  return {
-    passed: true,
-  };
-}
-
-/**
- * A helper intended to be used in a rule which ends its execution by marking it
- * as failing.
- *
- * @param failures - The list of associated failures.
- * @returns Part of a failed rule execution result (the rest will be filled
- * in automatically).
- */
-export function fail(
-  failures: FailedPartialRuleExecutionResult['failures'],
-): FailedPartialRuleExecutionResult {
-  return { passed: false, failures };
 }

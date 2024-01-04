@@ -1,8 +1,16 @@
-import { readFile } from '@metamask/utils/node';
+import type { Json } from '@metamask/utils/node';
+import { readFile, readJsonFile } from '@metamask/utils/node';
 import type fs from 'fs';
 import path from 'path';
+import type { Struct } from 'superstruct';
+import type { ObjectSchema } from 'superstruct/dist/utils';
 
-import { getEntryStats } from './misc-utils';
+import type { DirectoryEntry } from './misc-utils';
+import {
+  assertJsonMatchesStruct,
+  getEntryStats,
+  readDirectoryRecursively,
+} from './misc-utils';
 
 /**
  * Used to access files within either a project (the repository being linted) or
@@ -15,6 +23,8 @@ export class RepositoryFilesystem {
 
   #fileContents: Record<string, string>;
 
+  #jsonFileContents: Record<string, Json>;
+
   #entryStats: Record<string, fs.Stats | null>;
 
   /**
@@ -25,6 +35,7 @@ export class RepositoryFilesystem {
   constructor(directoryPath: string) {
     this.#directoryPath = directoryPath;
     this.#fileContents = {};
+    this.#jsonFileContents = {};
     this.#entryStats = {};
   }
 
@@ -40,6 +51,54 @@ export class RepositoryFilesystem {
       cachedContent ?? (await readFile(this.#getFullPath(filePath))).trim();
     this.#fileContents[filePath] = content;
     return content;
+  }
+
+  /**
+   * Reads a JSON file within the repository.
+   *
+   * @param filePath - The path to the file relative to the repository root.
+   * @returns The contents of the file as a JSON object.
+   */
+  async readJsonFile(filePath: string): Promise<Json> {
+    const cachedContent = this.#jsonFileContents[filePath];
+    const fullPath = this.#getFullPath(filePath);
+    const content = cachedContent ?? (await readJsonFile(fullPath));
+    this.#jsonFileContents[filePath] = content;
+    return content;
+  }
+
+  /**
+   * Reads a JSON file within the repository, ensuring that it matches the
+   * given Superstruct struct.
+   *
+   * @param filePath - The path to the file relative to the repository root.
+   * @param struct - The Superstruct object struct that you want to match
+   * against the content of the file.
+   * @returns The contents of the file as a JSON object.
+   */
+  async readJsonFileAs<Value extends Json, Schema extends ObjectSchema>(
+    filePath: string,
+    struct: Struct<Value, Schema>,
+  ): Promise<Value> {
+    const content = await this.readJsonFile(filePath);
+    assertJsonMatchesStruct(content, struct);
+    return content;
+  }
+
+  /**
+   * Reads a directory recursively within the repository.
+   *
+   * @param directoryPath - The path to the directory relative to the repository
+   * root.
+   * @returns Objects representing the entries in the directory.
+   */
+  async readDirectoryRecursively(
+    directoryPath: string,
+  ): Promise<DirectoryEntry[]> {
+    return await readDirectoryRecursively(
+      this.#getFullPath(directoryPath),
+      this.#directoryPath,
+    );
   }
 
   /**
@@ -64,6 +123,6 @@ export class RepositoryFilesystem {
    * @returns The full path.
    */
   #getFullPath(entryPath: string): string {
-    return path.join(this.#directoryPath, entryPath);
+    return path.resolve(this.#directoryPath, entryPath);
   }
 }

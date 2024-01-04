@@ -38,8 +38,8 @@ export function buildRule<Name extends RuleName>({
   description: string;
   dependencies: Exclude<RuleName, Name>[];
   execute(args: {
-    project: MetaMaskRepository;
     template: MetaMaskRepository;
+    project: MetaMaskRepository;
     pass: () => SuccessfulPartialRuleExecutionResult;
     fail: (
       failures: FailedPartialRuleExecutionResult['failures'],
