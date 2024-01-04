@@ -14,12 +14,10 @@ export default buildRule({
 
     const match = fileContentInTemplate.match(/Install \[Yarn .+?\]\(.+?\)/u);
     if (!match?.[0]) {
-      console.warn(
+      throw new Error(
         "Could not find Yarn version in template's README. This is not the fault of the project, but is rather a bug in a rule.",
       );
-      return pass();
     }
-
     if (!fileContentInProject.includes(match[0])) {
       return fail([
         {

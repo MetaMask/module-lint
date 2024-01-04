@@ -76,7 +76,7 @@ describe('Rule: readme-lists-correct-yarn-version', () => {
     });
   });
 
-  it('passes if the template does not have the Yarn version listed in its README for some reason', async () => {
+  it('throws if the template does not have the Yarn version listed in its README for some reason', async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
@@ -95,16 +95,14 @@ describe('Rule: readme-lists-correct-yarn-version', () => {
         'does not matter',
       );
 
-      const result = await readmeListsCorrectYarnVersion.execute({
-        template,
-        project,
-        pass,
-        fail,
-      });
-
-      expect(result).toStrictEqual({
-        passed: true,
-      });
+      await expect(
+        readmeListsCorrectYarnVersion.execute({
+          template,
+          project,
+          pass,
+          fail,
+        }),
+      ).rejects.toThrow("Could not find Yarn version in template's README");
     });
   });
 });
