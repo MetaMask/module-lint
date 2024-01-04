@@ -167,7 +167,7 @@ export async function fileConforms(
  * @param ruleExecutionArguments - Rule execution arguments.
  * @returns Either a successful or failed result.
  */
-export async function directoryConforms(
+export async function directoryAndContentsConform(
   directoryPath: string,
   ruleExecutionArguments: RuleExecutionArguments,
 ): Promise<PartialRuleExecutionResult> {

@@ -2,7 +2,7 @@ import { buildRule } from './build-rule';
 import { RuleName } from './types';
 import {
   combineRuleExecutionResults,
-  directoryConforms,
+  directoryAndContentsConform,
   fileConforms,
 } from '../rule-helpers';
 
@@ -14,8 +14,8 @@ export default buildRule({
   execute: async (ruleExecutionArguments) => {
     const results = await Promise.all([
       fileConforms('.yarnrc.yml', ruleExecutionArguments),
-      directoryConforms('.yarn/releases', ruleExecutionArguments),
-      directoryConforms('.yarn/plugins', ruleExecutionArguments),
+      directoryAndContentsConform('.yarn/releases', ruleExecutionArguments),
+      directoryAndContentsConform('.yarn/plugins', ruleExecutionArguments),
     ]);
 
     return combineRuleExecutionResults(results);
