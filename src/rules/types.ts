@@ -11,6 +11,7 @@ export enum RuleName {
   RequireReadme = 'require-readme',
   RequireSourceDirectory = 'require-source-directory',
   RequireValidPackageManifest = 'require-valid-package-manifest',
+  RequireNvmrc = 'require-nvmrc',
 }
 
 export const PackageManifestSchema = type({
