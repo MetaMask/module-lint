@@ -12,8 +12,12 @@ export enum RuleName {
   RequireSourceDirectory = 'require-source-directory',
   RequireValidPackageManifest = 'require-valid-package-manifest',
   RequireNvmrc = 'require-nvmrc',
+  PackageEnginesNodeFieldConforms = 'package-engines-node-field-conforms',
 }
 
 export const PackageManifestSchema = type({
   packageManager: string(),
+  engines: type({
+    node: string(),
+  }),
 });

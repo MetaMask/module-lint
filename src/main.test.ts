@@ -70,7 +70,10 @@ describe('main', () => {
           );
           await writeFile(
             path.join(repository.directoryPath, 'package.json'),
-            JSON.stringify({ packageManager: 'yarn' }),
+            JSON.stringify({
+              packageManager: 'yarn',
+              engines: { node: 'test' },
+            }),
           );
           await writeFile(
             path.join(repository.directoryPath, 'README.md'),
@@ -102,6 +105,7 @@ repo-1
 - Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
 - Does the package have a well-formed manifest (\`package.json\`)? ✅
   - Does the \`packageManager\` field in \`package.json\` conform? ✅
+  - Does the \`engines.node\` field in \`package.json\` conform? ✅
 - Is \`README.md\` present? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
 - Are all of the files for Yarn Modern present, and do they conform? ✅
@@ -109,7 +113,7 @@ repo-1
 - Does the \`src/\` directory exist? ✅
 - Is \`.nvmrc\` present, and conform? ✅
 
-Results:       9 passed, 0 failed, 9 total
+Results:       10 passed, 0 failed, 10 total
 Elapsed time:  0 ms
 
 
@@ -119,6 +123,7 @@ repo-2
 - Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
 - Does the package have a well-formed manifest (\`package.json\`)? ✅
   - Does the \`packageManager\` field in \`package.json\` conform? ✅
+  - Does the \`engines.node\` field in \`package.json\` conform? ✅
 - Is \`README.md\` present? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
 - Are all of the files for Yarn Modern present, and do they conform? ✅
@@ -126,7 +131,7 @@ repo-2
 - Does the \`src/\` directory exist? ✅
 - Is \`.nvmrc\` present, and conform? ✅
 
-Results:       9 passed, 0 failed, 9 total
+Results:       10 passed, 0 failed, 10 total
 Elapsed time:  0 ms
 
 `,
@@ -327,7 +332,10 @@ Elapsed time:  0 ms
           );
           await writeFile(
             path.join(repository.directoryPath, 'package.json'),
-            JSON.stringify({ packageManager: 'yarn' }),
+            JSON.stringify({
+              packageManager: 'yarn',
+              engines: { node: 'test' },
+            }),
           );
           await writeFile(
             path.join(repository.directoryPath, 'README.md'),
@@ -359,6 +367,7 @@ repo-1
 - Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
 - Does the package have a well-formed manifest (\`package.json\`)? ✅
   - Does the \`packageManager\` field in \`package.json\` conform? ✅
+  - Does the \`engines.node\` field in \`package.json\` conform? ✅
 - Is \`README.md\` present? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
 - Are all of the files for Yarn Modern present, and do they conform? ✅
@@ -366,7 +375,7 @@ repo-1
 - Does the \`src/\` directory exist? ✅
 - Is \`.nvmrc\` present, and conform? ✅
 
-Results:       9 passed, 0 failed, 9 total
+Results:       10 passed, 0 failed, 10 total
 Elapsed time:  0 ms
 
 
@@ -376,6 +385,7 @@ repo-2
 - Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
 - Does the package have a well-formed manifest (\`package.json\`)? ✅
   - Does the \`packageManager\` field in \`package.json\` conform? ✅
+  - Does the \`engines.node\` field in \`package.json\` conform? ✅
 - Is \`README.md\` present? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
 - Are all of the files for Yarn Modern present, and do they conform? ✅
@@ -383,7 +393,7 @@ repo-2
 - Does the \`src/\` directory exist? ✅
 - Is \`.nvmrc\` present, and conform? ✅
 
-Results:       9 passed, 0 failed, 9 total
+Results:       10 passed, 0 failed, 10 total
 Elapsed time:  0 ms
 
 `,

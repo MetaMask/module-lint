@@ -1,5 +1,6 @@
 import allYarnModernFilesConform from './all-yarn-modern-files-conform';
 import classicYarnConfigFileAbsent from './classic-yarn-config-file-absent';
+import packageEnginesNodeFieldConforms from './package-engines-node-field-conforms';
 import packageManagerFieldConforms from './package-manager-field-conforms';
 import readmeListsCorrectYarnVersion from './readme-lists-correct-yarn-version';
 import requireNvmrc from './require-nvmrc';
@@ -16,4 +17,5 @@ export const rules = [
   requireSourceDirectory,
   requireValidPackageManifest,
   requireNvmrc,
+  packageEnginesNodeFieldConforms,
 ] as const;
