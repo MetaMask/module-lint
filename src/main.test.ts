@@ -83,6 +83,10 @@ describe('main', () => {
             path.join(repository.directoryPath, '.nvmrc'),
             'content for .nvmrc',
           );
+          await writeFile(
+            path.join(repository.directoryPath, '.nvmrc'),
+            'content for .nvmrc',
+          );
         }
         const outputLogger = new FakeOutputLogger();
 
@@ -342,6 +346,10 @@ Elapsed time:  0 ms
           await writeFile(
             path.join(repository.directoryPath, 'README.md'),
             'Install [Yarn whatever](...) Install the current LTS version of [Node.js](https://nodejs.org)',
+          );
+          await writeFile(
+            path.join(repository.directoryPath, '.nvmrc'),
+            'content for .nvmrc',
           );
           await writeFile(
             path.join(repository.directoryPath, '.nvmrc'),
