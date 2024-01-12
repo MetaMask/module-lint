@@ -97,11 +97,11 @@ repo-1
 
 - Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
 - Does the package have a well-formed manifest (\`package.json\`)? ✅
-  - Does the \`packageManager\` field in \`package.json\` conform? ✅
+- Does the \`packageManager\` field in \`package.json\` conform? ✅
 - Is \`README.md\` present? ✅
-  - Does the README conform by recommending the correct Yarn version to install? ✅
+- Does the README conform by recommending the correct Yarn version to install? ✅
 - Are all of the files for Yarn Modern present, and do they conform? ✅
-  - Does the README conform by recommending the correct Yarn version to install? ✅
+- Does the README conform by recommending the correct Yarn version to install? ✅
 - Does the \`src/\` directory exist? ✅
 
 Results:       8 passed, 0 failed, 8 total
@@ -113,11 +113,11 @@ repo-2
 
 - Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
 - Does the package have a well-formed manifest (\`package.json\`)? ✅
-  - Does the \`packageManager\` field in \`package.json\` conform? ✅
+- Does the \`packageManager\` field in \`package.json\` conform? ✅
 - Is \`README.md\` present? ✅
-  - Does the README conform by recommending the correct Yarn version to install? ✅
+- Does the README conform by recommending the correct Yarn version to install? ✅
 - Are all of the files for Yarn Modern present, and do they conform? ✅
-  - Does the README conform by recommending the correct Yarn version to install? ✅
+- Does the README conform by recommending the correct Yarn version to install? ✅
 - Does the \`src/\` directory exist? ✅
 
 Results:       8 passed, 0 failed, 8 total
@@ -342,11 +342,11 @@ repo-1
 
 - Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
 - Does the package have a well-formed manifest (\`package.json\`)? ✅
-  - Does the \`packageManager\` field in \`package.json\` conform? ✅
+- Does the \`packageManager\` field in \`package.json\` conform? ✅
 - Is \`README.md\` present? ✅
-  - Does the README conform by recommending the correct Yarn version to install? ✅
+- Does the README conform by recommending the correct Yarn version to install? ✅
 - Are all of the files for Yarn Modern present, and do they conform? ✅
-  - Does the README conform by recommending the correct Yarn version to install? ✅
+- Does the README conform by recommending the correct Yarn version to install? ✅
 - Does the \`src/\` directory exist? ✅
 
 Results:       8 passed, 0 failed, 8 total
@@ -358,11 +358,11 @@ repo-2
 
 - Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
 - Does the package have a well-formed manifest (\`package.json\`)? ✅
-  - Does the \`packageManager\` field in \`package.json\` conform? ✅
+- Does the \`packageManager\` field in \`package.json\` conform? ✅
 - Is \`README.md\` present? ✅
-  - Does the README conform by recommending the correct Yarn version to install? ✅
+- Does the README conform by recommending the correct Yarn version to install? ✅
 - Are all of the files for Yarn Modern present, and do they conform? ✅
-  - Does the README conform by recommending the correct Yarn version to install? ✅
+- Does the README conform by recommending the correct Yarn version to install? ✅
 - Does the \`src/\` directory exist? ✅
 
 Results:       8 passed, 0 failed, 8 total
