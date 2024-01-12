@@ -77,7 +77,7 @@ describe('main', () => {
           );
           await writeFile(
             path.join(repository.directoryPath, 'README.md'),
-            'Install [Yarn whatever](...)',
+            'Install [Yarn whatever](...) Install the current LTS version of [Node.js](https://nodejs.org)',
           );
           await writeFile(
             path.join(repository.directoryPath, '.nvmrc'),
@@ -108,12 +108,13 @@ repo-1
   - Does the \`engines.node\` field in \`package.json\` conform? ✅
 - Is \`README.md\` present? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
+  - Does the README conform by recommending node install from nodejs.org? ✅
 - Are all of the files for Yarn Modern present, and do they conform? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
 - Does the \`src/\` directory exist? ✅
 - Is \`.nvmrc\` present, and conform? ✅
 
-Results:       10 passed, 0 failed, 10 total
+Results:       11 passed, 0 failed, 11 total
 Elapsed time:  0 ms
 
 
@@ -126,12 +127,13 @@ repo-2
   - Does the \`engines.node\` field in \`package.json\` conform? ✅
 - Is \`README.md\` present? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
+  - Does the README conform by recommending node install from nodejs.org? ✅
 - Are all of the files for Yarn Modern present, and do they conform? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
 - Does the \`src/\` directory exist? ✅
 - Is \`.nvmrc\` present, and conform? ✅
 
-Results:       10 passed, 0 failed, 10 total
+Results:       11 passed, 0 failed, 11 total
 Elapsed time:  0 ms
 
 `,
@@ -339,7 +341,7 @@ Elapsed time:  0 ms
           );
           await writeFile(
             path.join(repository.directoryPath, 'README.md'),
-            'Install [Yarn whatever](...)',
+            'Install [Yarn whatever](...) Install the current LTS version of [Node.js](https://nodejs.org)',
           );
           await writeFile(
             path.join(repository.directoryPath, '.nvmrc'),
@@ -370,12 +372,13 @@ repo-1
   - Does the \`engines.node\` field in \`package.json\` conform? ✅
 - Is \`README.md\` present? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
+  - Does the README conform by recommending node install from nodejs.org? ✅
 - Are all of the files for Yarn Modern present, and do they conform? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
 - Does the \`src/\` directory exist? ✅
 - Is \`.nvmrc\` present, and conform? ✅
 
-Results:       10 passed, 0 failed, 10 total
+Results:       11 passed, 0 failed, 11 total
 Elapsed time:  0 ms
 
 
@@ -388,12 +391,13 @@ repo-2
   - Does the \`engines.node\` field in \`package.json\` conform? ✅
 - Is \`README.md\` present? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
+  - Does the README conform by recommending node install from nodejs.org? ✅
 - Are all of the files for Yarn Modern present, and do they conform? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
 - Does the \`src/\` directory exist? ✅
 - Is \`.nvmrc\` present, and conform? ✅
 
-Results:       10 passed, 0 failed, 10 total
+Results:       11 passed, 0 failed, 11 total
 Elapsed time:  0 ms
 
 `,

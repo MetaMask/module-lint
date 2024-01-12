@@ -13,6 +13,7 @@ export enum RuleName {
   RequireValidPackageManifest = 'require-valid-package-manifest',
   RequireNvmrc = 'require-nvmrc',
   PackageEnginesNodeFieldConforms = 'package-engines-node-field-conforms',
+  ReadmeRecommendsNodeInstall = 'readme-recommends-node-install',
 }
 
 export const PackageManifestSchema = type({
