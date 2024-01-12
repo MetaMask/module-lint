@@ -78,10 +78,13 @@ describe('main', () => {
           await writeFile(
             path.join(repository.directoryPath, 'README.md'),
             'Install [Yarn whatever](...) Install the current LTS version of [Node.js](https://nodejs.org)',
+<<<<<<< HEAD
           );
           await writeFile(
             path.join(repository.directoryPath, '.nvmrc'),
             'content for .nvmrc',
+=======
+>>>>>>> 1db8431 (validate node install in readme and unit tests)
           );
           await writeFile(
             path.join(repository.directoryPath, '.nvmrc'),
@@ -346,10 +349,13 @@ Elapsed time:  0 ms
           await writeFile(
             path.join(repository.directoryPath, 'README.md'),
             'Install [Yarn whatever](...) Install the current LTS version of [Node.js](https://nodejs.org)',
+<<<<<<< HEAD
           );
           await writeFile(
             path.join(repository.directoryPath, '.nvmrc'),
             'content for .nvmrc',
+=======
+>>>>>>> 1db8431 (validate node install in readme and unit tests)
           );
           await writeFile(
             path.join(repository.directoryPath, '.nvmrc'),
