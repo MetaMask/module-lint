@@ -6,7 +6,7 @@ import { buildMetaMaskRepository, withinSandbox } from '../../tests/helpers';
 import { fail, pass } from '../rule-helpers';
 
 describe('Rule: require-nvmrc', () => {
-  it('lint passes if the project has a .nvmrc', async () => {
+  it('passes if the project has a .nvmrc', async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
@@ -38,7 +38,7 @@ describe('Rule: require-nvmrc', () => {
     });
   });
 
-  it('lint fails with failure message when .nvmrc does not exist', async () => {
+  it('fails with failure message when .nvmrc does not exist', async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',

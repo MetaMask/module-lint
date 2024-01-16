@@ -68,7 +68,7 @@ describe('Rule: package-engines-node-field-conforms', () => {
         passed: false,
         failures: [
           {
-            message: '`engines.node` is test2, when it should be test1.',
+            message: '`engines.node` is "test2", when it should be "test1".',
           },
         ],
       });

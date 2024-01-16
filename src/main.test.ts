@@ -112,7 +112,7 @@ repo-1
 - Are all of the files for Yarn Modern present, and do they conform? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
 - Does the \`src/\` directory exist? ✅
-- Is \`.nvmrc\` present, and conform? ✅
+- Is \`.nvmrc\` present, and does it conform? ✅
 
 Results:       11 passed, 0 failed, 11 total
 Elapsed time:  0 ms
@@ -131,7 +131,7 @@ repo-2
 - Are all of the files for Yarn Modern present, and do they conform? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
 - Does the \`src/\` directory exist? ✅
-- Is \`.nvmrc\` present, and conform? ✅
+- Is \`.nvmrc\` present, and does it conform? ✅
 
 Results:       11 passed, 0 failed, 11 total
 Elapsed time:  0 ms
@@ -190,7 +190,7 @@ repo-1
   - \`.yarn/plugins/\` does not exist in this project.
 - Does the \`src/\` directory exist? ❌
   - \`src/\` does not exist in this project.
-- Is \`.nvmrc\` present, and conform? ❌
+- Is \`.nvmrc\` present, and does it conform? ❌
   - \`.nvmrc\` does not exist in this project.
 
 Results:       0 passed, 6 failed, 6 total
@@ -212,7 +212,7 @@ repo-2
   - \`.yarn/plugins/\` does not exist in this project.
 - Does the \`src/\` directory exist? ❌
   - \`src/\` does not exist in this project.
-- Is \`.nvmrc\` present, and conform? ❌
+- Is \`.nvmrc\` present, and does it conform? ❌
   - \`.nvmrc\` does not exist in this project.
 
 Results:       0 passed, 6 failed, 6 total
@@ -278,7 +278,7 @@ repo-2
   - \`.yarn/plugins/\` does not exist in this project.
 - Does the \`src/\` directory exist? ❌
   - \`src/\` does not exist in this project.
-- Is \`.nvmrc\` present, and conform? ❌
+- Is \`.nvmrc\` present, and does it conform? ❌
   - \`.nvmrc\` does not exist in this project.
 
 Results:       1 passed, 5 failed, 6 total
@@ -376,7 +376,7 @@ repo-1
 - Are all of the files for Yarn Modern present, and do they conform? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
 - Does the \`src/\` directory exist? ✅
-- Is \`.nvmrc\` present, and conform? ✅
+- Is \`.nvmrc\` present, and does it conform? ✅
 
 Results:       11 passed, 0 failed, 11 total
 Elapsed time:  0 ms
@@ -395,7 +395,7 @@ repo-2
 - Are all of the files for Yarn Modern present, and do they conform? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
 - Does the \`src/\` directory exist? ✅
-- Is \`.nvmrc\` present, and conform? ✅
+- Is \`.nvmrc\` present, and does it conform? ✅
 
 Results:       11 passed, 0 failed, 11 total
 Elapsed time:  0 ms
@@ -454,7 +454,7 @@ repo-1
   - \`.yarn/plugins/\` does not exist in this project.
 - Does the \`src/\` directory exist? ❌
   - \`src/\` does not exist in this project.
-- Is \`.nvmrc\` present, and conform? ❌
+- Is \`.nvmrc\` present, and does it conform? ❌
   - \`.nvmrc\` does not exist in this project.
 
 Results:       0 passed, 6 failed, 6 total
@@ -476,7 +476,7 @@ repo-2
   - \`.yarn/plugins/\` does not exist in this project.
 - Does the \`src/\` directory exist? ❌
   - \`src/\` does not exist in this project.
-- Is \`.nvmrc\` present, and conform? ❌
+- Is \`.nvmrc\` present, and does it conform? ❌
   - \`.nvmrc\` does not exist in this project.
 
 Results:       0 passed, 6 failed, 6 total
@@ -541,7 +541,7 @@ repo-2
   - \`.yarn/plugins/\` does not exist in this project.
 - Does the \`src/\` directory exist? ❌
   - \`src/\` does not exist in this project.
-- Is \`.nvmrc\` present, and conform? ❌
+- Is \`.nvmrc\` present, and does it conform? ❌
   - \`.nvmrc\` does not exist in this project.
 
 Results:       1 passed, 5 failed, 6 total

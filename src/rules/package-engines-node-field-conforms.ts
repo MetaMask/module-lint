@@ -19,7 +19,7 @@ export default buildRule({
     if (projectManifest.engines.node !== templateManifest.engines.node) {
       return fail([
         {
-          message: `\`engines.node\` is ${projectManifest.engines.node}, when it should be ${templateManifest.engines.node}.`,
+          message: `\`engines.node\` is "${projectManifest.engines.node}", when it should be "${templateManifest.engines.node}".`,
         },
       ]);
     }
