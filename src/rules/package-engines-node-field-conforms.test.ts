@@ -14,7 +14,11 @@ describe('Rule: package-engines-node-field-conforms', () => {
       });
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify({ packageManager: 'a', engines: { node: 'test' } }),
+        JSON.stringify({
+          packageManager: 'a',
+          engines: { node: 'test' },
+          devDependencies: {},
+        }),
       );
       const project = buildMetaMaskRepository({
         shortname: 'project',
@@ -22,7 +26,11 @@ describe('Rule: package-engines-node-field-conforms', () => {
       });
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify({ packageManager: 'a', engines: { node: 'test' } }),
+        JSON.stringify({
+          packageManager: 'a',
+          engines: { node: 'test' },
+          devDependencies: {},
+        }),
       );
 
       const result = await packageEnginesNodeFieldConforms.execute({
@@ -46,7 +54,11 @@ describe('Rule: package-engines-node-field-conforms', () => {
       });
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify({ packageManager: 'a', engines: { node: 'test1' } }),
+        JSON.stringify({
+          packageManager: 'a',
+          engines: { node: 'test1' },
+          devDependencies: {},
+        }),
       );
       const project = buildMetaMaskRepository({
         shortname: 'project',
@@ -54,7 +66,11 @@ describe('Rule: package-engines-node-field-conforms', () => {
       });
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify({ packageManager: 'a', engines: { node: 'test2' } }),
+        JSON.stringify({
+          packageManager: 'a',
+          engines: { node: 'test2' },
+          devDependencies: {},
+        }),
       );
 
       const result = await packageEnginesNodeFieldConforms.execute({

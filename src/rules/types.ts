@@ -14,6 +14,7 @@ export enum RuleName {
   RequireNvmrc = 'require-nvmrc',
   PackageEnginesNodeFieldConforms = 'package-engines-node-field-conforms',
   ReadmeRecommendsNodeInstall = 'readme-recommends-node-install',
+  PackageLintDependenciesConforms = 'package-lint-dependencies-conforms',
 }
 
 export const PackageManifestSchema = type({
@@ -21,4 +22,5 @@ export const PackageManifestSchema = type({
   engines: type({
     node: string(),
   }),
+  devDependencies: type({}),
 });
