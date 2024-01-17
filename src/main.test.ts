@@ -73,19 +73,15 @@ describe('main', () => {
             JSON.stringify({
               packageManager: 'yarn',
               engines: { node: 'test' },
-              devDependencies: { eslint: '1.1.0' },
             }),
           );
           await writeFile(
             path.join(repository.directoryPath, 'README.md'),
             'Install [Yarn whatever](...) Install the current LTS version of [Node.js](https://nodejs.org)',
-<<<<<<< HEAD
           );
           await writeFile(
             path.join(repository.directoryPath, '.nvmrc'),
             'content for .nvmrc',
-=======
->>>>>>> 1db8431 (validate node install in readme and unit tests)
           );
           await writeFile(
             path.join(repository.directoryPath, '.nvmrc'),
@@ -114,7 +110,6 @@ repo-1
 - Does the package have a well-formed manifest (\`package.json\`)? ✅
   - Does the \`packageManager\` field in \`package.json\` conform? ✅
   - Does the \`engines.node\` field in \`package.json\` conform? ✅
-  - Does the lint related \`devDependencies\` in \`package.json\` conform? ✅
 - Is \`README.md\` present? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
   - Does the README conform by recommending node install from nodejs.org? ✅
@@ -123,7 +118,7 @@ repo-1
 - Does the \`src/\` directory exist? ✅
 - Is \`.nvmrc\` present, and does it conform? ✅
 
-Results:       12 passed, 0 failed, 12 total
+Results:       11 passed, 0 failed, 11 total
 Elapsed time:  0 ms
 
 
@@ -134,7 +129,6 @@ repo-2
 - Does the package have a well-formed manifest (\`package.json\`)? ✅
   - Does the \`packageManager\` field in \`package.json\` conform? ✅
   - Does the \`engines.node\` field in \`package.json\` conform? ✅
-  - Does the lint related \`devDependencies\` in \`package.json\` conform? ✅
 - Is \`README.md\` present? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
   - Does the README conform by recommending node install from nodejs.org? ✅
@@ -143,7 +137,7 @@ repo-2
 - Does the \`src/\` directory exist? ✅
 - Is \`.nvmrc\` present, and does it conform? ✅
 
-Results:       12 passed, 0 failed, 12 total
+Results:       11 passed, 0 failed, 11 total
 Elapsed time:  0 ms
 
 `,
@@ -347,19 +341,15 @@ Elapsed time:  0 ms
             JSON.stringify({
               packageManager: 'yarn',
               engines: { node: 'test' },
-              devDependencies: { eslint: '1.1.0' },
             }),
           );
           await writeFile(
             path.join(repository.directoryPath, 'README.md'),
             'Install [Yarn whatever](...) Install the current LTS version of [Node.js](https://nodejs.org)',
-<<<<<<< HEAD
           );
           await writeFile(
             path.join(repository.directoryPath, '.nvmrc'),
             'content for .nvmrc',
-=======
->>>>>>> 1db8431 (validate node install in readme and unit tests)
           );
           await writeFile(
             path.join(repository.directoryPath, '.nvmrc'),
@@ -388,7 +378,6 @@ repo-1
 - Does the package have a well-formed manifest (\`package.json\`)? ✅
   - Does the \`packageManager\` field in \`package.json\` conform? ✅
   - Does the \`engines.node\` field in \`package.json\` conform? ✅
-  - Does the lint related \`devDependencies\` in \`package.json\` conform? ✅
 - Is \`README.md\` present? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
   - Does the README conform by recommending node install from nodejs.org? ✅
@@ -397,7 +386,7 @@ repo-1
 - Does the \`src/\` directory exist? ✅
 - Is \`.nvmrc\` present, and does it conform? ✅
 
-Results:       12 passed, 0 failed, 12 total
+Results:       11 passed, 0 failed, 11 total
 Elapsed time:  0 ms
 
 
@@ -408,7 +397,6 @@ repo-2
 - Does the package have a well-formed manifest (\`package.json\`)? ✅
   - Does the \`packageManager\` field in \`package.json\` conform? ✅
   - Does the \`engines.node\` field in \`package.json\` conform? ✅
-  - Does the lint related \`devDependencies\` in \`package.json\` conform? ✅
 - Is \`README.md\` present? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
   - Does the README conform by recommending node install from nodejs.org? ✅
@@ -417,7 +405,7 @@ repo-2
 - Does the \`src/\` directory exist? ✅
 - Is \`.nvmrc\` present, and does it conform? ✅
 
-Results:       12 passed, 0 failed, 12 total
+Results:       11 passed, 0 failed, 11 total
 Elapsed time:  0 ms
 
 `,
