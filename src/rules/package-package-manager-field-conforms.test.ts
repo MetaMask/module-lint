@@ -1,7 +1,7 @@
 import { writeFile } from '@metamask/utils/node';
 import path from 'path';
 
-import packageManagerFieldConforms from './package-manager-field-conforms';
+import packageManagerFieldConforms from './package-package-manager-field-conforms';
 import { buildMetaMaskRepository, withinSandbox } from '../../tests/helpers';
 import { fail, pass } from '../rule-helpers';
 
