@@ -1,4 +1,4 @@
-import { type, string } from 'superstruct';
+import { type, string, record } from 'superstruct';
 
 /**
  * All of the known rules.
@@ -14,7 +14,7 @@ export enum RuleName {
   RequireNvmrc = 'require-nvmrc',
   PackageEnginesNodeFieldConforms = 'package-engines-node-field-conforms',
   ReadmeRecommendsNodeInstall = 'readme-recommends-node-install',
-  PackageLintDependenciesConforms = 'package-lint-dependencies-conforms',
+  PackageLintDependenciesConform = 'package-lint-dependencies-conform',
 }
 
 export const PackageManifestSchema = type({
@@ -22,5 +22,5 @@ export const PackageManifestSchema = type({
   engines: type({
     node: string(),
   }),
-  devDependencies: type({}),
+  devDependencies: record(string(), string()),
 });

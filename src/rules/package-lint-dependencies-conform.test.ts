@@ -1,11 +1,11 @@
 import { writeFile } from '@metamask/utils/node';
 import path from 'path';
 
-import packageLintDependenciesConforms from './package-lint-dependencies-conforms';
+import packageLintDependenciesConform from './package-lint-dependencies-conform';
 import { buildMetaMaskRepository, withinSandbox } from '../../tests/helpers';
 import { fail, pass } from '../rule-helpers';
 
-describe('Rule: package-lint-dependencies-conforms', () => {
+describe('Rule: package-lint-dependencies-conform', () => {
   it("passes if the lint related dependencies in the project's package.json matches the one in the template's package.json", async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
@@ -17,7 +17,16 @@ describe('Rule: package-lint-dependencies-conforms', () => {
         JSON.stringify({
           packageManager: 'a',
           engines: { node: 'test' },
-          devDependencies: { eslint: '1.0.0' },
+          devDependencies: {
+            '@metamask/eslint-config-foo': '1.0.0',
+            '@typescript-eslint/foo': '1.0.0',
+            eslint: '1.0.0',
+            'eslint-plugin-foo': '1.0.0',
+            'eslint-config-foo': '1.0.0',
+            prettier: '1.0.0',
+            'prettier-plugin-foo': '1.0.0',
+            'prettier-config-foo': '1.0.0',
+          },
         }),
       );
       const project = buildMetaMaskRepository({
@@ -29,11 +38,20 @@ describe('Rule: package-lint-dependencies-conforms', () => {
         JSON.stringify({
           packageManager: 'a',
           engines: { node: 'test' },
-          devDependencies: { eslint: '1.0.0' },
+          devDependencies: {
+            '@metamask/eslint-config-foo': '1.0.0',
+            '@typescript-eslint/foo': '1.0.0',
+            eslint: '1.0.0',
+            'eslint-plugin-foo': '1.0.0',
+            'eslint-config-foo': '1.0.0',
+            prettier: '1.0.0',
+            'prettier-plugin-foo': '1.0.0',
+            'prettier-config-foo': '1.0.0',
+          },
         }),
       );
 
-      const result = await packageLintDependenciesConforms.execute({
+      const result = await packageLintDependenciesConform.execute({
         template,
         project,
         pass,
@@ -73,7 +91,7 @@ describe('Rule: package-lint-dependencies-conforms', () => {
         }),
       );
 
-      const result = await packageLintDependenciesConforms.execute({
+      const result = await packageLintDependenciesConform.execute({
         template,
         project,
         pass,
@@ -116,7 +134,7 @@ describe('Rule: package-lint-dependencies-conforms', () => {
         }),
       );
 
-      const result = await packageLintDependenciesConforms.execute({
+      const result = await packageLintDependenciesConform.execute({
         template,
         project,
         pass,
@@ -126,7 +144,10 @@ describe('Rule: package-lint-dependencies-conforms', () => {
       expect(result).toStrictEqual({
         passed: false,
         failures: [
-          { message: '`package.json` should contain "eslint", but does not.' },
+          {
+            message:
+              '`package.json` should list `"eslint": "1.1.0"` in `devDependencies`, but does not.',
+          },
         ],
       });
     });
