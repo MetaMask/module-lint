@@ -39,15 +39,15 @@ async function lintPackageConform(
   templateDependencies: Record<string, string>,
   projectDependencies: Record<string, string>,
 ): Promise<RuleExecutionFailure[]> {
-  const templateLintPackageNames =
-    getTemplateLintPackageNames(templateDependencies);
+  const templateLintPackages = getTemplateLintPackages(templateDependencies);
   const failures: RuleExecutionFailure[] = [];
-  for (const lintPackage of templateLintPackageNames) {
-    const projectPackageVersion = projectDependencies[lintPackage];
-    const templatePackageVersion = templateDependencies[lintPackage] as string;
+  for (const [templatePackageName, templatePackageVersion] of Object.entries(
+    templateLintPackages,
+  )) {
+    const projectPackageVersion = projectDependencies[templatePackageName];
     if (!projectPackageVersion) {
       failures.push({
-        message: `\`package.json\` should list \`"${lintPackage}": "${templatePackageVersion}"\` in \`devDependencies\`, but does not.`,
+        message: `\`package.json\` should list \`"${templatePackageName}": "${templatePackageVersion}"\` in \`devDependencies\`, but does not.`,
       });
 
       continue;
@@ -55,7 +55,7 @@ async function lintPackageConform(
 
     if (projectPackageVersion !== templatePackageVersion) {
       failures.push({
-        message: `${lintPackage} version is "${projectPackageVersion}", when it should be "${templatePackageVersion}".`,
+        message: `\`${templatePackageName}\` is "${projectPackageVersion}", when it should be "${templatePackageVersion}".`,
       });
     }
   }
@@ -64,25 +64,29 @@ async function lintPackageConform(
 }
 
 /**
- * Extracts array of lint package names from template's package.json.
+ * Extracts the records of lint package name and version from template's package.json.
  *
  * @param templateDependencies - The record of lint package name and version.
- * @returns The array of lint package names.
+ * @returns The records of lint package name and version.
  */
-function getTemplateLintPackageNames(
+function getTemplateLintPackages(
   templateDependencies: Record<string, string>,
-): string[] {
+): Record<string, string> {
   const requiredPackagePatterns: RegExp[] = [
     /^@metamask\/eslint-config-[^/]+$/u,
     /^@typescript-eslint\/[^/]+$/u,
     /^eslint(-[^/]+)?$/u,
     /^prettier(-[^/]+)?$/u,
   ];
-
-  const templatePackageNames = Object.keys(templateDependencies);
-  return templatePackageNames.filter((packageName) => {
-    return requiredPackagePatterns.some((pattern) => {
-      return packageName.match(pattern);
-    });
-  });
+  return Object.entries(templateDependencies).reduce<Record<string, string>>(
+    (packages, [packageName, packageVersion]) => {
+      if (
+        requiredPackagePatterns.some((pattern) => packageName.match(pattern))
+      ) {
+        return { ...packages, [packageName]: packageVersion };
+      }
+      return packages;
+    },
+    {},
+  );
 }

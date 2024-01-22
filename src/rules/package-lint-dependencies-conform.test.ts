@@ -101,7 +101,7 @@ describe('Rule: package-lint-dependencies-conform', () => {
       expect(result).toStrictEqual({
         passed: false,
         failures: [
-          { message: 'eslint version is "1.0.0", when it should be "1.1.0".' },
+          { message: '`eslint` is "1.0.0", when it should be "1.1.0".' },
         ],
       });
     });
@@ -149,6 +149,57 @@ describe('Rule: package-lint-dependencies-conform', () => {
               '`package.json` should list `"eslint": "1.1.0"` in `devDependencies`, but does not.',
           },
         ],
+      });
+    });
+  });
+
+  it("passes if the there're no lint related dependencies in the template's package.json", async () => {
+    await withinSandbox(async (sandbox) => {
+      const template = buildMetaMaskRepository({
+        shortname: 'template',
+        directoryPath: path.join(sandbox.directoryPath, 'template'),
+      });
+      await writeFile(
+        path.join(template.directoryPath, 'package.json'),
+        JSON.stringify({
+          packageManager: 'a',
+          engines: { node: 'test' },
+          devDependencies: {
+            '@metamask/test-config-foo': '1.0.0',
+          },
+        }),
+      );
+      const project = buildMetaMaskRepository({
+        shortname: 'project',
+        directoryPath: path.join(sandbox.directoryPath, 'project'),
+      });
+      await writeFile(
+        path.join(project.directoryPath, 'package.json'),
+        JSON.stringify({
+          packageManager: 'a',
+          engines: { node: 'test' },
+          devDependencies: {
+            '@metamask/eslint-config-foo': '1.0.0',
+            '@typescript-eslint/foo': '1.0.0',
+            eslint: '1.0.0',
+            'eslint-plugin-foo': '1.0.0',
+            'eslint-config-foo': '1.0.0',
+            prettier: '1.0.0',
+            'prettier-plugin-foo': '1.0.0',
+            'prettier-config-foo': '1.0.0',
+          },
+        }),
+      );
+
+      const result = await packageLintDependenciesConform.execute({
+        template,
+        project,
+        pass,
+        fail,
+      });
+
+      expect(result).toStrictEqual({
+        passed: true,
       });
     });
   });
