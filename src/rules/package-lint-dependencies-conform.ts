@@ -39,9 +39,8 @@ async function lintPackageConform(
   templateDependencies: Record<string, string>,
   projectDependencies: Record<string, string>,
 ): Promise<RuleExecutionFailure[]> {
-  const templateLintPackageNames = await getTemplateLintPackageNames(
-    templateDependencies,
-  );
+  const templateLintPackageNames =
+    getTemplateLintPackageNames(templateDependencies);
   const failures: RuleExecutionFailure[] = [];
   for (const lintPackage of templateLintPackageNames) {
     const projectPackageVersion = projectDependencies[lintPackage];
@@ -65,13 +64,14 @@ async function lintPackageConform(
 }
 
 /**
- * Extracts list of lint package names from template's package.json.
+ * Extracts array of lint package names from template's package.json.
  *
  * @param templateDependencies - The record of lint package name and version.
+ * @returns The array of lint package names.
  */
-async function getTemplateLintPackageNames(
+function getTemplateLintPackageNames(
   templateDependencies: Record<string, string>,
-): Promise<string[]> {
+): string[] {
   const requiredPackagePatterns: RegExp[] = [
     /^@metamask\/eslint-config-[^/]+$/u,
     /^@typescript-eslint\/[^/]+$/u,
