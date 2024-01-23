@@ -14,7 +14,11 @@ describe('Rule: package-manager-field-conforms', () => {
       });
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify({ packageManager: 'a', engines: { node: 'test' } }),
+        JSON.stringify({
+          packageManager: 'a',
+          engines: { node: 'test' },
+          devDependencies: { eslint: '1.0.0' },
+        }),
       );
       const project = buildMetaMaskRepository({
         shortname: 'project',
@@ -22,7 +26,11 @@ describe('Rule: package-manager-field-conforms', () => {
       });
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify({ packageManager: 'a', engines: { node: 'test' } }),
+        JSON.stringify({
+          packageManager: 'a',
+          engines: { node: 'test' },
+          devDependencies: { eslint: '1.0.0' },
+        }),
       );
 
       const result = await packageManagerFieldConforms.execute({
@@ -46,7 +54,11 @@ describe('Rule: package-manager-field-conforms', () => {
       });
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify({ packageManager: 'a', engines: { node: 'test' } }),
+        JSON.stringify({
+          packageManager: 'a',
+          engines: { node: 'test' },
+          devDependencies: { eslint: '1.0.0' },
+        }),
       );
       const project = buildMetaMaskRepository({
         shortname: 'project',
@@ -54,7 +66,11 @@ describe('Rule: package-manager-field-conforms', () => {
       });
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify({ packageManager: 'b', engines: { node: 'test' } }),
+        JSON.stringify({
+          packageManager: 'b',
+          engines: { node: 'test' },
+          devDependencies: { eslint: '1.0.0' },
+        }),
       );
 
       const result = await packageManagerFieldConforms.execute({
