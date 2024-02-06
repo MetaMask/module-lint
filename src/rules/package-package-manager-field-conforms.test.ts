@@ -18,6 +18,7 @@ describe('Rule: package-manager-field-conforms', () => {
           packageManager: 'a',
           engines: { node: 'test' },
           devDependencies: { eslint: '1.0.0' },
+          scripts: { test: '' },
         }),
       );
       const project = buildMetaMaskRepository({
@@ -30,6 +31,7 @@ describe('Rule: package-manager-field-conforms', () => {
           packageManager: 'a',
           engines: { node: 'test' },
           devDependencies: { eslint: '1.0.0' },
+          scripts: { test: '' },
         }),
       );
 
@@ -58,6 +60,7 @@ describe('Rule: package-manager-field-conforms', () => {
           packageManager: 'a',
           engines: { node: 'test' },
           devDependencies: { eslint: '1.0.0' },
+          scripts: { test: '' },
         }),
       );
       const project = buildMetaMaskRepository({
@@ -70,6 +73,7 @@ describe('Rule: package-manager-field-conforms', () => {
           packageManager: 'b',
           engines: { node: 'test' },
           devDependencies: { eslint: '1.0.0' },
+          scripts: { test: '' },
         }),
       );
 

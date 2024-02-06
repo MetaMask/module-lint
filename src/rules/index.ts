@@ -1,10 +1,13 @@
 import allYarnModernFilesConform from './all-yarn-modern-files-conform';
 import classicYarnConfigFileAbsent from './classic-yarn-config-file-absent';
 import packageEnginesNodeFieldConforms from './package-engines-node-field-conforms';
+import packageJestDependenciesConform from './package-jest-dependencies-conform';
+import packageJestScriptsConform from './package-jest-scripts-conform';
 import packageLintDependenciesConform from './package-lint-dependencies-conform';
 import packagePackageManagerFieldConforms from './package-package-manager-field-conforms';
 import readmeListsCorrectYarnVersion from './readme-lists-correct-yarn-version';
 import readmeListsNodejsWebsite from './readme-recommends-node-install';
+import requireJestConfig from './require-jest-config';
 import requireNvmrc from './require-nvmrc';
 import requireReadme from './require-readme';
 import requireSourceDirectory from './require-source-directory';
@@ -22,4 +25,7 @@ export const rules = [
   packageEnginesNodeFieldConforms,
   readmeListsNodejsWebsite,
   packageLintDependenciesConform,
+  packageJestDependenciesConform,
+  requireJestConfig,
+  packageJestScriptsConform,
 ] as const;

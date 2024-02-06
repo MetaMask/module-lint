@@ -15,6 +15,9 @@ export enum RuleName {
   PackageEnginesNodeFieldConforms = 'package-engines-node-field-conforms',
   ReadmeRecommendsNodeInstall = 'readme-recommends-node-install',
   PackageLintDependenciesConform = 'package-lint-dependencies-conform',
+  PackageJestDependenciesConform = 'package-jest-dependencies-conform',
+  RequireJestConfig = 'require-jest-config',
+  PackageJestScriptsConform = 'package-jest-scripts-conform',
 }
 
 export const PackageManifestSchema = type({
@@ -22,5 +25,6 @@ export const PackageManifestSchema = type({
   engines: type({
     node: string(),
   }),
+  scripts: record(string(), string()),
   devDependencies: record(string(), string()),
 });

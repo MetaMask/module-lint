@@ -18,6 +18,7 @@ describe('Rule: require-package-manifest', () => {
           packageManager: 'foo',
           engines: { node: 'test' },
           devDependencies: { eslint: '1.0.0' },
+          scripts: { test: 'test script' },
         }),
       );
 
@@ -82,7 +83,7 @@ describe('Rule: require-package-manifest', () => {
         failures: [
           {
             message:
-              'Invalid `package.json`: Missing `packageManager`; Missing `engines`; Missing `devDependencies`.',
+              'Invalid `package.json`: Missing `packageManager`; Missing `engines`; Missing `scripts`; Missing `devDependencies`.',
           },
         ],
       });
