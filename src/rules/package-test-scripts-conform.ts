@@ -3,8 +3,8 @@ import { PackageManifestSchema, RuleName } from './types';
 import type { RuleExecutionFailure } from '../execute-rules';
 
 export default buildRule({
-  name: RuleName.PackageJestScriptsConform,
-  description: 'Do the jest-related `scripts` in `package.json` conform?',
+  name: RuleName.PackageTestScriptsConform,
+  description: 'Do the test-related `scripts` in `package.json` conform?',
   dependencies: [RuleName.RequireValidPackageManifest],
   execute: async ({ project, template, pass, fail }) => {
     const entryPath = 'package.json';
@@ -19,7 +19,7 @@ export default buildRule({
       PackageManifestSchema,
     );
 
-    const failures: RuleExecutionFailure[] = await jestConform(
+    const failures: RuleExecutionFailure[] = await testConform(
       templateManifest.scripts,
       projectManifest.scripts,
     );
@@ -29,29 +29,29 @@ export default buildRule({
 });
 
 /**
- * Validates whether target project has all the required jest scripts matching with template project.
+ * Validates whether target project has all the required test scripts matching with template project.
  *
  * @param templateScripts - The record of key and value from template scripts.
  * @param projectScripts - The record of key and value from project scripts.
  */
-async function jestConform(
+async function testConform(
   templateScripts: Record<string, string>,
   projectScripts: Record<string, string>,
 ): Promise<RuleExecutionFailure[]> {
-  const jestScriptsRequired = ['test', 'test:watch'];
+  const testScriptsRequired = ['test', 'test:watch'];
   const failures: RuleExecutionFailure[] = [];
-  for (const jestScriptKey of jestScriptsRequired) {
-    const templateScript = templateScripts[jestScriptKey];
+  for (const testScriptKey of testScriptsRequired) {
+    const templateScript = templateScripts[testScriptKey];
     if (!templateScript) {
       throw new Error(
-        `Could not find "${jestScriptKey}" in \`scripts\` of template's package.json. This is not the fault of the project, but is rather a bug in a rule.`,
+        `Could not find "${testScriptKey}" in \`scripts\` of template's package.json. This is not the fault of the project, but is rather a bug in a rule.`,
       );
     }
 
-    const projectScript = projectScripts[jestScriptKey];
+    const projectScript = projectScripts[testScriptKey];
     if (!projectScript) {
       failures.push({
-        message: `\`package.json\` should list \`"${jestScriptKey}": "${templateScript}"\` in \`scripts\`, but does not.`,
+        message: `\`package.json\` should list \`"${testScriptKey}": "${templateScript}"\` in \`scripts\`, but does not.`,
       });
 
       continue;
@@ -59,7 +59,7 @@ async function jestConform(
 
     if (projectScript !== templateScript) {
       failures.push({
-        message: `\`${jestScriptKey}\` is "${projectScript}", when it should be "${templateScript}".`,
+        message: `\`${testScriptKey}\` is "${projectScript}", when it should be "${templateScript}".`,
       });
     }
   }

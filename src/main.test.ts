@@ -121,7 +121,7 @@ repo-1
   - Does the \`engines.node\` field in \`package.json\` conform? ✅
   - Do the lint-related \`devDependencies\` in \`package.json\` conform? ✅
   - Do the jest-related \`devDependencies\` in \`package.json\` conform? ✅
-  - Do the jest-related \`scripts\` in \`package.json\` conform? ✅
+  - Do the test-related \`scripts\` in \`package.json\` conform? ✅
 - Is \`README.md\` present? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
   - Does the README conform by recommending node install from nodejs.org? ✅
@@ -144,7 +144,7 @@ repo-2
   - Does the \`engines.node\` field in \`package.json\` conform? ✅
   - Do the lint-related \`devDependencies\` in \`package.json\` conform? ✅
   - Do the jest-related \`devDependencies\` in \`package.json\` conform? ✅
-  - Do the jest-related \`scripts\` in \`package.json\` conform? ✅
+  - Do the test-related \`scripts\` in \`package.json\` conform? ✅
 - Is \`README.md\` present? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
   - Does the README conform by recommending node install from nodejs.org? ✅
@@ -412,7 +412,7 @@ repo-1
   - Does the \`engines.node\` field in \`package.json\` conform? ✅
   - Do the lint-related \`devDependencies\` in \`package.json\` conform? ✅
   - Do the jest-related \`devDependencies\` in \`package.json\` conform? ✅
-  - Do the jest-related \`scripts\` in \`package.json\` conform? ✅
+  - Do the test-related \`scripts\` in \`package.json\` conform? ✅
 - Is \`README.md\` present? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
   - Does the README conform by recommending node install from nodejs.org? ✅
@@ -435,7 +435,7 @@ repo-2
   - Does the \`engines.node\` field in \`package.json\` conform? ✅
   - Do the lint-related \`devDependencies\` in \`package.json\` conform? ✅
   - Do the jest-related \`devDependencies\` in \`package.json\` conform? ✅
-  - Do the jest-related \`scripts\` in \`package.json\` conform? ✅
+  - Do the test-related \`scripts\` in \`package.json\` conform? ✅
 - Is \`README.md\` present? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
   - Does the README conform by recommending node install from nodejs.org? ✅

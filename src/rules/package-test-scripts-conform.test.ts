@@ -1,12 +1,12 @@
 import { writeFile } from '@metamask/utils/node';
 import path from 'path';
 
-import packageJestScriptsConform from './package-jest-scripts-conform';
+import packageTestScriptsConform from './package-test-scripts-conform';
 import { buildMetaMaskRepository, withinSandbox } from '../../tests/helpers';
 import { fail, pass } from '../rule-helpers';
 
-describe('Rule: package-jest-scripts-conform', () => {
-  it("passes if the jest related scripts in the project's package.json matches the one in the template's package.json", async () => {
+describe('Rule: package-test-scripts-conform', () => {
+  it("passes if the test related scripts in the project's package.json match the ones in the template's package.json", async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
@@ -47,7 +47,7 @@ describe('Rule: package-jest-scripts-conform', () => {
         }),
       );
 
-      const result = await packageJestScriptsConform.execute({
+      const result = await packageTestScriptsConform.execute({
         template,
         project,
         pass,
@@ -60,7 +60,7 @@ describe('Rule: package-jest-scripts-conform', () => {
     });
   });
 
-  it("fails if the script of jest related in the project's package.json does not match the one in the template's package.json", async () => {
+  it("fails if a test related script in the project's package.json does not match the same one in the template's package.json", async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
@@ -95,7 +95,7 @@ describe('Rule: package-jest-scripts-conform', () => {
         }),
       );
 
-      const result = await packageJestScriptsConform.execute({
+      const result = await packageTestScriptsConform.execute({
         template,
         project,
         pass,
@@ -111,7 +111,7 @@ describe('Rule: package-jest-scripts-conform', () => {
     });
   });
 
-  it("fails if the jest related script exist in the template's package.json, but not in the project's package.json", async () => {
+  it("fails if a test related script exists in the template's package.json, but not in the project's package.json", async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
@@ -145,7 +145,7 @@ describe('Rule: package-jest-scripts-conform', () => {
         }),
       );
 
-      const result = await packageJestScriptsConform.execute({
+      const result = await packageTestScriptsConform.execute({
         template,
         project,
         pass,
@@ -164,7 +164,7 @@ describe('Rule: package-jest-scripts-conform', () => {
     });
   });
 
-  it("throws error if there're no jest related scripts in the template's package.json", async () => {
+  it("throws error if there are no test related scripts in the template's package.json", async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
@@ -204,7 +204,7 @@ describe('Rule: package-jest-scripts-conform', () => {
       );
 
       await expect(
-        packageJestScriptsConform.execute({
+        packageTestScriptsConform.execute({
           template,
           project,
           pass,

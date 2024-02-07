@@ -6,7 +6,7 @@ import { buildMetaMaskRepository, withinSandbox } from '../../tests/helpers';
 import { fail, pass } from '../rule-helpers';
 
 describe('Rule: package-jest-dependencies-conform', () => {
-  it("passes if the jest related dependencies in the project's package.json matches the one in the template's package.json", async () => {
+  it("passes if the jest related dependencies in the project's package.json match the ones in the template's package.json", async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
@@ -58,7 +58,7 @@ describe('Rule: package-jest-dependencies-conform', () => {
     });
   });
 
-  it("fails if the version of jest related dependencies in the project's package.json does not match the one in the template's package.json", async () => {
+  it("fails if the version of a jest related dependency in the project's package.json does not match the version of the same dependency in the template's package.json", async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
@@ -113,7 +113,7 @@ describe('Rule: package-jest-dependencies-conform', () => {
     });
   });
 
-  it("fails if the jest related dependency exist in the template's package.json, but not in the project's package.json", async () => {
+  it("fails if the jest related dependency exists in the template's package.json, but not in the project's package.json", async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',

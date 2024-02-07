@@ -17,7 +17,7 @@ export enum RuleName {
   PackageLintDependenciesConform = 'package-lint-dependencies-conform',
   PackageJestDependenciesConform = 'package-jest-dependencies-conform',
   RequireJestConfig = 'require-jest-config',
-  PackageJestScriptsConform = 'package-jest-scripts-conform',
+  PackageTestScriptsConform = 'package-test-scripts-conform',
 }
 
 export const PackageManifestSchema = type({
