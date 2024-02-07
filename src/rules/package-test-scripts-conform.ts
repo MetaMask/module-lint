@@ -19,7 +19,7 @@ export default buildRule({
       PackageManifestSchema,
     );
 
-    const failures: RuleExecutionFailure[] = await testConform(
+    const failures: RuleExecutionFailure[] = await testScriptsConform(
       templateManifest.scripts,
       projectManifest.scripts,
     );
@@ -34,7 +34,7 @@ export default buildRule({
  * @param templateScripts - The record of key and value from template scripts.
  * @param projectScripts - The record of key and value from project scripts.
  */
-async function testConform(
+async function testScriptsConform(
   templateScripts: Record<string, string>,
   projectScripts: Record<string, string>,
 ): Promise<RuleExecutionFailure[]> {
