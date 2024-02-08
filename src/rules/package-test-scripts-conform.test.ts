@@ -1,12 +1,12 @@
 import { writeFile } from '@metamask/utils/node';
 import path from 'path';
 
-import packageLintDependenciesConform from './package-lint-dependencies-conform';
+import packageTestScriptsConform from './package-test-scripts-conform';
 import { buildMetaMaskRepository, withinSandbox } from '../../tests/helpers';
 import { fail, pass } from '../rule-helpers';
 
-describe('Rule: package-lint-dependencies-conform', () => {
-  it("passes if the lint related dependencies in the project's package.json matches the one in the template's package.json", async () => {
+describe('Rule: package-test-scripts-conform', () => {
+  it("passes if the test related scripts in the project's package.json match the ones in the template's package.json", async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
@@ -18,16 +18,13 @@ describe('Rule: package-lint-dependencies-conform', () => {
           packageManager: 'a',
           engines: { node: 'test' },
           devDependencies: {
-            '@metamask/eslint-config-foo': '1.0.0',
-            '@typescript-eslint/foo': '1.0.0',
-            eslint: '1.0.0',
-            'eslint-plugin-foo': '1.0.0',
-            'eslint-config-foo': '1.0.0',
-            prettier: '1.0.0',
-            'prettier-plugin-foo': '1.0.0',
-            'prettier-config-foo': '1.0.0',
+            jest: '1.0.0',
+            'jest-it-up': '1.0.0',
           },
-          scripts: { test: '' },
+          scripts: {
+            test: 'test script',
+            'test:watch': 'test watch script',
+          },
         }),
       );
       const project = buildMetaMaskRepository({
@@ -40,20 +37,17 @@ describe('Rule: package-lint-dependencies-conform', () => {
           packageManager: 'a',
           engines: { node: 'test' },
           devDependencies: {
-            '@metamask/eslint-config-foo': '1.0.0',
-            '@typescript-eslint/foo': '1.0.0',
-            eslint: '1.0.0',
-            'eslint-plugin-foo': '1.0.0',
-            'eslint-config-foo': '1.0.0',
-            prettier: '1.0.0',
-            'prettier-plugin-foo': '1.0.0',
-            'prettier-config-foo': '1.0.0',
+            jest: '1.0.0',
+            'jest-it-up': '1.0.0',
           },
-          scripts: { test: '' },
+          scripts: {
+            test: 'test script',
+            'test:watch': 'test watch script',
+          },
         }),
       );
 
-      const result = await packageLintDependenciesConform.execute({
+      const result = await packageTestScriptsConform.execute({
         template,
         project,
         pass,
@@ -66,7 +60,7 @@ describe('Rule: package-lint-dependencies-conform', () => {
     });
   });
 
-  it("fails if the version of lint related dependencies in the project's package.json does not match the one in the template's package.json", async () => {
+  it("fails if a test related script in the project's package.json does not match the same one in the template's package.json", async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
@@ -77,8 +71,11 @@ describe('Rule: package-lint-dependencies-conform', () => {
         JSON.stringify({
           packageManager: 'a',
           engines: { node: 'test' },
-          devDependencies: { eslint: '1.1.0' },
-          scripts: { test: '' },
+          devDependencies: { jest: '1.1.0' },
+          scripts: {
+            test: 'test script',
+            'test:watch': 'test watch script',
+          },
         }),
       );
       const project = buildMetaMaskRepository({
@@ -90,12 +87,15 @@ describe('Rule: package-lint-dependencies-conform', () => {
         JSON.stringify({
           packageManager: 'a',
           engines: { node: 'test' },
-          devDependencies: { eslint: '1.0.0' },
-          scripts: { test: '' },
+          devDependencies: { jest: '1.0.0' },
+          scripts: {
+            test: 'test',
+            'test:watch': 'test watch script',
+          },
         }),
       );
 
-      const result = await packageLintDependenciesConform.execute({
+      const result = await packageTestScriptsConform.execute({
         template,
         project,
         pass,
@@ -105,13 +105,13 @@ describe('Rule: package-lint-dependencies-conform', () => {
       expect(result).toStrictEqual({
         passed: false,
         failures: [
-          { message: '`eslint` is "1.0.0", when it should be "1.1.0".' },
+          { message: '`test` is "test", when it should be "test script".' },
         ],
       });
     });
   });
 
-  it("fails if the lint related dependency exist in the template's package.json, but not in the project's package.json", async () => {
+  it("fails if a test related script exists in the template's package.json, but not in the project's package.json", async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
@@ -122,8 +122,11 @@ describe('Rule: package-lint-dependencies-conform', () => {
         JSON.stringify({
           packageManager: 'a',
           engines: { node: 'test' },
-          devDependencies: { eslint: '1.1.0' },
-          scripts: { test: '' },
+          devDependencies: { jest: '1.1.0' },
+          scripts: {
+            test: 'test script',
+            'test:watch': 'test watch script',
+          },
         }),
       );
       const project = buildMetaMaskRepository({
@@ -135,12 +138,14 @@ describe('Rule: package-lint-dependencies-conform', () => {
         JSON.stringify({
           packageManager: 'a',
           engines: { node: 'test' },
-          devDependencies: { testlint: '1.0.0' },
-          scripts: { test: '' },
+          devDependencies: { test: '1.0.0' },
+          scripts: {
+            'test:watch': 'test watch script',
+          },
         }),
       );
 
-      const result = await packageLintDependenciesConform.execute({
+      const result = await packageTestScriptsConform.execute({
         template,
         project,
         pass,
@@ -152,14 +157,14 @@ describe('Rule: package-lint-dependencies-conform', () => {
         failures: [
           {
             message:
-              '`package.json` should list `"eslint": "1.1.0"` in `devDependencies`, but does not.',
+              '`package.json` should list `"test": "test script"` in `scripts`, but does not.',
           },
         ],
       });
     });
   });
 
-  it("passes if the there're no lint related dependencies in the template's package.json", async () => {
+  it("throws error if there are no test related scripts in the template's package.json", async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
@@ -171,9 +176,11 @@ describe('Rule: package-lint-dependencies-conform', () => {
           packageManager: 'a',
           engines: { node: 'test' },
           devDependencies: {
-            '@metamask/test-config-foo': '1.0.0',
+            foo: '1.0.0',
           },
-          scripts: { test: '' },
+          scripts: {
+            'test:watch': 'test watch script',
+          },
         }),
       );
       const project = buildMetaMaskRepository({
@@ -186,29 +193,26 @@ describe('Rule: package-lint-dependencies-conform', () => {
           packageManager: 'a',
           engines: { node: 'test' },
           devDependencies: {
-            '@metamask/eslint-config-foo': '1.0.0',
-            '@typescript-eslint/foo': '1.0.0',
-            eslint: '1.0.0',
-            'eslint-plugin-foo': '1.0.0',
-            'eslint-config-foo': '1.0.0',
-            prettier: '1.0.0',
-            'prettier-plugin-foo': '1.0.0',
-            'prettier-config-foo': '1.0.0',
+            jest: '1.0.0',
+            'jest-it-up': '1.0.0',
           },
-          scripts: { test: '' },
+          scripts: {
+            test: 'test scripts',
+            'test:watch': 'test watch scripts',
+          },
         }),
       );
 
-      const result = await packageLintDependenciesConform.execute({
-        template,
-        project,
-        pass,
-        fail,
-      });
-
-      expect(result).toStrictEqual({
-        passed: true,
-      });
+      await expect(
+        packageTestScriptsConform.execute({
+          template,
+          project,
+          pass,
+          fail,
+        }),
+      ).rejects.toThrow(
+        'Could not find "test" in `scripts` of template\'s package.json. This is not the fault of the project, but is rather a bug in a rule.',
+      );
     });
   });
 });

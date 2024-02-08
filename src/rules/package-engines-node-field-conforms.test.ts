@@ -18,6 +18,7 @@ describe('Rule: package-engines-node-field-conforms', () => {
           packageManager: 'a',
           engines: { node: 'test' },
           devDependencies: { eslint: '1.0.0' },
+          scripts: { test: 'jest && jest-it-up' },
         }),
       );
       const project = buildMetaMaskRepository({
@@ -30,6 +31,7 @@ describe('Rule: package-engines-node-field-conforms', () => {
           packageManager: 'a',
           engines: { node: 'test' },
           devDependencies: { eslint: '1.0.0' },
+          scripts: { test: 'jest && jest-it-up' },
         }),
       );
 
@@ -58,6 +60,7 @@ describe('Rule: package-engines-node-field-conforms', () => {
           packageManager: 'a',
           engines: { node: 'test1' },
           devDependencies: { eslint: '1.0.0' },
+          scripts: { test: 'jest && jest-it-up' },
         }),
       );
       const project = buildMetaMaskRepository({
@@ -70,6 +73,7 @@ describe('Rule: package-engines-node-field-conforms', () => {
           packageManager: 'a',
           engines: { node: 'test2' },
           devDependencies: { eslint: '1.0.0' },
+          scripts: { test: 'jest && jest-it-up' },
         }),
       );
 
