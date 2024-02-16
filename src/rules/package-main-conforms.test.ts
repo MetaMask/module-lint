@@ -1,7 +1,7 @@
 import { writeFile } from '@metamask/utils/node';
 import path from 'path';
 
-import packageManagerFieldConforms from './package-package-manager-field-conforms';
+import packageMainConform from './package-main-conform';
 import {
   buildMetaMaskRepository,
   fakePackageManifest,
@@ -9,8 +9,8 @@ import {
 } from '../../tests/helpers';
 import { fail, pass } from '../rule-helpers';
 
-describe('Rule: package-manager-field-conforms', () => {
-  it('passes if the "packageManager" field in the project\'s package.json matches the one in the template\'s package.json', async () => {
+describe('Rule: package-main-conforms', () => {
+  it('passes if the "main" field in the project\'s package.json matches the one in the template\'s package.json', async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
@@ -29,7 +29,7 @@ describe('Rule: package-manager-field-conforms', () => {
         JSON.stringify(fakePackageManifest),
       );
 
-      const result = await packageManagerFieldConforms.execute({
+      const result = await packageMainConform.execute({
         template,
         project,
         pass,
@@ -42,7 +42,7 @@ describe('Rule: package-manager-field-conforms', () => {
     });
   });
 
-  it('fails if the "packageManager" field in the project\'s package.json does not match the one in the template\'s package.json', async () => {
+  it('fails if the "main" field in the project\'s package.json does not match the one in the template\'s package.json', async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
@@ -58,14 +58,14 @@ describe('Rule: package-manager-field-conforms', () => {
       });
       const fakeProjectPackageManifest = {
         ...fakePackageManifest,
-        packageManager: 'test',
+        main: 'test',
       };
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
         JSON.stringify(fakeProjectPackageManifest),
       );
 
-      const result = await packageManagerFieldConforms.execute({
+      const result = await packageMainConform.execute({
         template,
         project,
         pass,
@@ -75,7 +75,9 @@ describe('Rule: package-manager-field-conforms', () => {
       expect(result).toStrictEqual({
         passed: false,
         failures: [
-          { message: '`packageManager` is "test", when it should be "yarn".' },
+          {
+            message: '`main` is "test", when it should be "test-main".',
+          },
         ],
       });
     });

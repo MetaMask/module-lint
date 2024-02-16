@@ -1,9 +1,14 @@
+import { isEqual } from 'lodash';
+import { inspect } from 'util';
+
 import type {
   SuccessfulPartialRuleExecutionResult,
   FailedPartialRuleExecutionResult,
   PartialRuleExecutionResult,
   RuleExecutionArguments,
+  RuleExecutionFailure,
 } from './execute-rules';
+import { PackageManifestSchema } from './rules/types';
 
 /**
  * A utility for a rule which is intended to end its execution by marking it as
@@ -187,4 +192,109 @@ export async function directoryAndContentsConform(
     }),
   );
   return combineRuleExecutionResults(fileConformsResults);
+}
+
+/**
+ * Returns a string representation of object.
+ *
+ * @param input - Object to be stringified.
+ * @returns String.
+ */
+export function getString<Type>(input: Type): string {
+  if (!input) {
+    return '';
+  }
+  return typeof input === 'object' ? inspect(input) : input.toString();
+}
+
+/**
+ * Verifies whether project has the required property name/s and with it's value equivalent to the same in template project.
+ *
+ * @param propertyName - Name of the property from package.json.
+ * @param ruleExecutionArguments - Rule execution arguments.
+ * @param childPropertyNames - The array of property names to be verified.
+ */
+export async function packagePropertiesConform(
+  propertyName: string,
+  ruleExecutionArguments: RuleExecutionArguments,
+  childPropertyNames?: string[],
+): Promise<PartialRuleExecutionResult> {
+  const { template, project } = ruleExecutionArguments;
+  const entryPath = 'package.json';
+  const templateManifest = await template.fs.readJsonFileAs(
+    entryPath,
+    PackageManifestSchema,
+  );
+
+  const projectManifest = await project.fs.readJsonFileAs(
+    entryPath,
+    PackageManifestSchema,
+  );
+
+  type Key = keyof typeof templateManifest;
+  const propertyKey = propertyName as Key;
+  const failures: RuleExecutionFailure[] = [];
+  if (childPropertyNames) {
+    const templateProperties = templateManifest[propertyKey];
+    const projectProperties = projectManifest[propertyKey];
+    type SubKey = keyof typeof templateProperties;
+    for (const childPropetyName of childPropertyNames) {
+      const failure = dataConform(
+        templateProperties[childPropetyName as SubKey],
+        projectProperties[childPropetyName as SubKey],
+        childPropetyName,
+      );
+      if (failure) {
+        failures.push(failure);
+      }
+    }
+  } else {
+    const failure = dataConform(
+      templateManifest[propertyKey],
+      projectManifest[propertyKey],
+      propertyName,
+    );
+    if (failure) {
+      failures.push(failure);
+    }
+  }
+
+  return failures.length === 0 ? pass() : fail(failures);
+}
+
+/**
+ * Performs a deep comparison between template data and project data to determine if they are equivalent.
+ * In case of equals, it returns undefined, otherwise failure message.
+ *
+ * @param templateProperty - Data from template.
+ * @param projectProperty - Data from project.
+ * @param propertyName - Name of the property.
+ * @returns RuleExecutionFailure.
+ */
+function dataConform<Schema>(
+  templateProperty: Schema,
+  projectProperty: Schema,
+  propertyName: string,
+): RuleExecutionFailure | undefined {
+  if (!templateProperty) {
+    throw new Error(
+      `Could not find "${propertyName}" in template's package.json. This is not the fault of the project, but is rather a bug in a rule.`,
+    );
+  }
+
+  if (!projectProperty) {
+    return {
+      message: `\`package.json\` should list \`"${propertyName}": "${getString(
+        templateProperty,
+      )}"\`, but does not.`,
+    };
+  } else if (!isEqual(projectProperty, templateProperty)) {
+    return {
+      message: `\`${propertyName}\` is "${getString(
+        projectProperty,
+      )}", when it should be "${getString(templateProperty)}".`,
+    };
+  }
+
+  return undefined;
 }

@@ -143,3 +143,33 @@ export function buildMetaMaskRepository({
     fs,
   };
 }
+
+export const fakePackageManifest = {
+  packageManager: 'yarn',
+  engines: { node: '1.0.0' },
+  main: 'test-main',
+  module: 'test-module',
+  types: 'test-types',
+  files: ['test-files'],
+  exports: {
+    '.': {
+      test: 'test-pack',
+    },
+    './package.json': 'test',
+  },
+  devDependencies: {
+    test: '1.0.0',
+    jest: '1.0.0',
+    'jest-it-up': '1.0.0',
+    '@types/node': '1.0.0',
+    'ts-node': '1.0.0',
+    tsup: '1.0.0',
+    typescript: '1.0.0',
+  },
+  scripts: {
+    test: 'test script',
+    'test:watch': 'test watch script',
+    build: 'test build',
+    'build:types': 'test build types',
+  },
+};

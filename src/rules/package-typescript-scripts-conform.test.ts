@@ -1,7 +1,7 @@
 import { writeFile } from '@metamask/utils/node';
 import path from 'path';
 
-import packageTestScriptsConform from './package-test-scripts-conform';
+import packageTypescriptScriptsConform from './package-typescript-scripts-conform';
 import {
   buildMetaMaskRepository,
   fakePackageManifest,
@@ -9,8 +9,8 @@ import {
 } from '../../tests/helpers';
 import { fail, pass } from '../rule-helpers';
 
-describe('Rule: package-test-scripts-conform', () => {
-  it("passes if the test related scripts in the project's package.json match the ones in the template's package.json", async () => {
+describe('Rule: package-typescript-scripts-conform', () => {
+  it('passes if the project and template have the same referenced scripts and matches', async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
@@ -28,21 +28,18 @@ describe('Rule: package-test-scripts-conform', () => {
         path.join(project.directoryPath, 'package.json'),
         JSON.stringify(fakePackageManifest),
       );
-
-      const result = await packageTestScriptsConform.execute({
+      const result = await packageTypescriptScriptsConform.execute({
         template,
         project,
         pass,
         fail,
       });
 
-      expect(result).toStrictEqual({
-        passed: true,
-      });
+      expect(result).toStrictEqual({ passed: true });
     });
   });
 
-  it("fails if a test related script in the project's package.json does not match the same one in the template's package.json", async () => {
+  it('fails if the project has the same referenced scripts as the template, but its value does not match', async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
@@ -59,16 +56,15 @@ describe('Rule: package-test-scripts-conform', () => {
       const fakeProjectPackageManifest = {
         ...fakePackageManifest,
         scripts: {
-          test: 'test',
-          'test:watch': 'test watch script',
+          build: 'test',
+          'build:types': 'test build types',
         },
       };
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
         JSON.stringify(fakeProjectPackageManifest),
       );
-
-      const result = await packageTestScriptsConform.execute({
+      const result = await packageTypescriptScriptsConform.execute({
         template,
         project,
         pass,
@@ -78,13 +74,15 @@ describe('Rule: package-test-scripts-conform', () => {
       expect(result).toStrictEqual({
         passed: false,
         failures: [
-          { message: '`test` is "test", when it should be "test script".' },
+          {
+            message: '`build` is "test", when it should be "test build".',
+          },
         ],
       });
     });
   });
 
-  it("fails if a test related script exists in the template's package.json, but not in the project's package.json", async () => {
+  it('fails if the project does not have the same referenced script as the template', async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
@@ -101,15 +99,14 @@ describe('Rule: package-test-scripts-conform', () => {
       const fakeProjectPackageManifest = {
         ...fakePackageManifest,
         scripts: {
-          'test:watch': 'test watch script',
+          'build:types': 'test build types',
         },
       };
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
         JSON.stringify(fakeProjectPackageManifest),
       );
-
-      const result = await packageTestScriptsConform.execute({
+      const result = await packageTypescriptScriptsConform.execute({
         template,
         project,
         pass,
@@ -121,14 +118,14 @@ describe('Rule: package-test-scripts-conform', () => {
         failures: [
           {
             message:
-              '`package.json` should list `"test": "test script"`, but does not.',
+              '`package.json` should list `"build": "test build"`, but does not.',
           },
         ],
       });
     });
   });
 
-  it("throws error if there are no test related scripts in the template's package.json", async () => {
+  it('throws error if the script does not exist in the template scripts', async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
@@ -137,7 +134,7 @@ describe('Rule: package-test-scripts-conform', () => {
       const fakeTemplatePackageManifest = {
         ...fakePackageManifest,
         scripts: {
-          'test:watch': 'test watch script',
+          'build:types': 'test build types',
         },
       };
       await writeFile(
@@ -152,16 +149,15 @@ describe('Rule: package-test-scripts-conform', () => {
         path.join(project.directoryPath, 'package.json'),
         JSON.stringify(fakePackageManifest),
       );
-
       await expect(
-        packageTestScriptsConform.execute({
+        packageTypescriptScriptsConform.execute({
           template,
           project,
           pass,
           fail,
         }),
       ).rejects.toThrow(
-        'Could not find "test" in template\'s package.json. This is not the fault of the project, but is rather a bug in a rule.',
+        'Could not find "build" in template\'s package.json. This is not the fault of the project, but is rather a bug in a rule.',
       );
     });
   });

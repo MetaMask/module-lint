@@ -2,7 +2,11 @@ import { writeFile } from '@metamask/utils/node';
 import path from 'path';
 
 import packageEnginesNodeFieldConforms from './package-engines-node-field-conforms';
-import { buildMetaMaskRepository, withinSandbox } from '../../tests/helpers';
+import {
+  buildMetaMaskRepository,
+  fakePackageManifest,
+  withinSandbox,
+} from '../../tests/helpers';
 import { fail, pass } from '../rule-helpers';
 
 describe('Rule: package-engines-node-field-conforms', () => {
@@ -14,12 +18,7 @@ describe('Rule: package-engines-node-field-conforms', () => {
       });
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify({
-          packageManager: 'a',
-          engines: { node: 'test' },
-          devDependencies: { eslint: '1.0.0' },
-          scripts: { test: 'jest && jest-it-up' },
-        }),
+        JSON.stringify(fakePackageManifest),
       );
       const project = buildMetaMaskRepository({
         shortname: 'project',
@@ -27,12 +26,7 @@ describe('Rule: package-engines-node-field-conforms', () => {
       });
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify({
-          packageManager: 'a',
-          engines: { node: 'test' },
-          devDependencies: { eslint: '1.0.0' },
-          scripts: { test: 'jest && jest-it-up' },
-        }),
+        JSON.stringify(fakePackageManifest),
       );
 
       const result = await packageEnginesNodeFieldConforms.execute({
@@ -56,25 +50,19 @@ describe('Rule: package-engines-node-field-conforms', () => {
       });
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify({
-          packageManager: 'a',
-          engines: { node: 'test1' },
-          devDependencies: { eslint: '1.0.0' },
-          scripts: { test: 'jest && jest-it-up' },
-        }),
+        JSON.stringify(fakePackageManifest),
       );
       const project = buildMetaMaskRepository({
         shortname: 'project',
         directoryPath: path.join(sandbox.directoryPath, 'project'),
       });
+      const fakeProjectPackageManifest = {
+        ...fakePackageManifest,
+        engines: { node: 'wrong version' },
+      };
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify({
-          packageManager: 'a',
-          engines: { node: 'test2' },
-          devDependencies: { eslint: '1.0.0' },
-          scripts: { test: 'jest && jest-it-up' },
-        }),
+        JSON.stringify(fakeProjectPackageManifest),
       );
 
       const result = await packageEnginesNodeFieldConforms.execute({
@@ -88,7 +76,8 @@ describe('Rule: package-engines-node-field-conforms', () => {
         passed: false,
         failures: [
           {
-            message: '`engines.node` is "test2", when it should be "test1".',
+            message:
+              '`engines.node` is "wrong version", when it should be "1.0.0".',
           },
         ],
       });

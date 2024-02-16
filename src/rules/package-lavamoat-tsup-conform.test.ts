@@ -1,7 +1,7 @@
 import { writeFile } from '@metamask/utils/node';
 import path from 'path';
 
-import packageTestScriptsConform from './package-test-scripts-conform';
+import packageLavamoatTsupConforms from './package-lavamoat-tsup-conforms';
 import {
   buildMetaMaskRepository,
   fakePackageManifest,
@@ -9,8 +9,17 @@ import {
 } from '../../tests/helpers';
 import { fail, pass } from '../rule-helpers';
 
-describe('Rule: package-test-scripts-conform', () => {
-  it("passes if the test related scripts in the project's package.json match the ones in the template's package.json", async () => {
+const fakeLavamoatPackageManifest = {
+  ...fakePackageManifest,
+  lavamoat: {
+    allowScripts: {
+      'tsup>esbuild': true,
+    },
+  },
+};
+
+describe('Rule: package-lavamoat-tsup-conform', () => {
+  it('passes if the project and template have the same referenced scripts and matches', async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
@@ -18,7 +27,7 @@ describe('Rule: package-test-scripts-conform', () => {
       });
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify(fakePackageManifest),
+        JSON.stringify(fakeLavamoatPackageManifest),
       );
       const project = buildMetaMaskRepository({
         shortname: 'project',
@@ -26,23 +35,20 @@ describe('Rule: package-test-scripts-conform', () => {
       });
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify(fakePackageManifest),
+        JSON.stringify(fakeLavamoatPackageManifest),
       );
-
-      const result = await packageTestScriptsConform.execute({
+      const result = await packageLavamoatTsupConforms.execute({
         template,
         project,
         pass,
         fail,
       });
 
-      expect(result).toStrictEqual({
-        passed: true,
-      });
+      expect(result).toStrictEqual({ passed: true });
     });
   });
 
-  it("fails if a test related script in the project's package.json does not match the same one in the template's package.json", async () => {
+  it('fails if the project has the same referenced scripts as the template, but its value does not match', async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
@@ -50,25 +56,26 @@ describe('Rule: package-test-scripts-conform', () => {
       });
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify(fakePackageManifest),
+        JSON.stringify(fakeLavamoatPackageManifest),
       );
+
       const project = buildMetaMaskRepository({
         shortname: 'project',
         directoryPath: path.join(sandbox.directoryPath, 'project'),
       });
       const fakeProjectPackageManifest = {
         ...fakePackageManifest,
-        scripts: {
-          test: 'test',
-          'test:watch': 'test watch script',
+        lavamoat: {
+          allowScripts: {
+            'tsup>esbuild': false,
+          },
         },
       };
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
         JSON.stringify(fakeProjectPackageManifest),
       );
-
-      const result = await packageTestScriptsConform.execute({
+      const result = await packageLavamoatTsupConforms.execute({
         template,
         project,
         pass,
@@ -78,13 +85,15 @@ describe('Rule: package-test-scripts-conform', () => {
       expect(result).toStrictEqual({
         passed: false,
         failures: [
-          { message: '`test` is "test", when it should be "test script".' },
+          {
+            message: '`tsup>esbuild` is "false", when it should be "true".',
+          },
         ],
       });
     });
   });
 
-  it("fails if a test related script exists in the template's package.json, but not in the project's package.json", async () => {
+  it('fails if the project has lavamoat and allowScripts, but does not contain tsup>ebuild', async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
@@ -92,7 +101,7 @@ describe('Rule: package-test-scripts-conform', () => {
       });
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify(fakePackageManifest),
+        JSON.stringify(fakeLavamoatPackageManifest),
       );
       const project = buildMetaMaskRepository({
         shortname: 'project',
@@ -100,16 +109,17 @@ describe('Rule: package-test-scripts-conform', () => {
       });
       const fakeProjectPackageManifest = {
         ...fakePackageManifest,
-        scripts: {
-          'test:watch': 'test watch script',
+        lavamoat: {
+          allowScripts: {
+            test: false,
+          },
         },
       };
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
         JSON.stringify(fakeProjectPackageManifest),
       );
-
-      const result = await packageTestScriptsConform.execute({
+      const result = await packageLavamoatTsupConforms.execute({
         template,
         project,
         pass,
@@ -121,28 +131,22 @@ describe('Rule: package-test-scripts-conform', () => {
         failures: [
           {
             message:
-              '`package.json` should list `"test": "test script"`, but does not.',
+              '`package.json` should list `"tsup>esbuild": "true"` in `lavamoat.allowScripts`, but does not.',
           },
         ],
       });
     });
   });
 
-  it("throws error if there are no test related scripts in the template's package.json", async () => {
+  it('passes if the project does not contain lavamoat and allowScripts', async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
         directoryPath: path.join(sandbox.directoryPath, 'template'),
       });
-      const fakeTemplatePackageManifest = {
-        ...fakePackageManifest,
-        scripts: {
-          'test:watch': 'test watch script',
-        },
-      };
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify(fakeTemplatePackageManifest),
+        JSON.stringify(fakePackageManifest),
       );
       const project = buildMetaMaskRepository({
         shortname: 'project',
@@ -152,17 +156,13 @@ describe('Rule: package-test-scripts-conform', () => {
         path.join(project.directoryPath, 'package.json'),
         JSON.stringify(fakePackageManifest),
       );
-
-      await expect(
-        packageTestScriptsConform.execute({
-          template,
-          project,
-          pass,
-          fail,
-        }),
-      ).rejects.toThrow(
-        'Could not find "test" in template\'s package.json. This is not the fault of the project, but is rather a bug in a rule.',
-      );
+      const result = await packageLavamoatTsupConforms.execute({
+        template,
+        project,
+        pass,
+        fail,
+      });
+      expect(result).toStrictEqual({ passed: true });
     });
   });
 });

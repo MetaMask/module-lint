@@ -5,15 +5,21 @@ import {
 import path from 'path';
 
 import {
+  buildMetaMaskRepository,
+  fakePackageManifest,
+  withinSandbox,
+} from '../tests/helpers';
+import {
   combineRuleExecutionResults,
   directoryAndContentsConform,
   directoryExists,
   fail,
   fileConforms,
   fileExists,
+  getString,
+  packagePropertiesConform,
   pass,
 } from './rule-helpers';
-import { buildMetaMaskRepository, withinSandbox } from '../tests/helpers';
 
 describe('pass', () => {
   it('returns a result that represents a passing rule', () => {
@@ -567,5 +573,216 @@ describe('directoryAndContentsConform', () => {
         ],
       });
     });
+  });
+});
+
+describe('packagePropertiesConform', () => {
+  it('passes if the project and template have the same referenced property with its value matching', async () => {
+    await withinSandbox(async (sandbox) => {
+      const template = buildMetaMaskRepository({
+        shortname: 'template',
+        directoryPath: path.join(sandbox.directoryPath, 'template'),
+      });
+      await writeFile(
+        path.join(template.directoryPath, 'package.json'),
+        JSON.stringify(fakePackageManifest),
+      );
+      const project = buildMetaMaskRepository({
+        shortname: 'project',
+        directoryPath: path.join(sandbox.directoryPath, 'project'),
+      });
+      await writeFile(
+        path.join(project.directoryPath, 'package.json'),
+        JSON.stringify(fakePackageManifest),
+      );
+      const result = await packagePropertiesConform('main', {
+        template,
+        project,
+        pass,
+        fail,
+      });
+
+      expect(result).toStrictEqual({ passed: true });
+    });
+  });
+
+  it('passes if the project and template have the same referenced property and its child properties', async () => {
+    await withinSandbox(async (sandbox) => {
+      const template = buildMetaMaskRepository({
+        shortname: 'template',
+        directoryPath: path.join(sandbox.directoryPath, 'template'),
+      });
+      await writeFile(
+        path.join(template.directoryPath, 'package.json'),
+        JSON.stringify(fakePackageManifest),
+      );
+      const project = buildMetaMaskRepository({
+        shortname: 'project',
+        directoryPath: path.join(sandbox.directoryPath, 'project'),
+      });
+      await writeFile(
+        path.join(project.directoryPath, 'package.json'),
+        JSON.stringify(fakePackageManifest),
+      );
+      const result = await packagePropertiesConform(
+        'devDependencies',
+        {
+          template,
+          project,
+          pass,
+          fail,
+        },
+        ['test'],
+      );
+
+      expect(result).toStrictEqual({ passed: true });
+    });
+  });
+
+  it('fails if the project has the same referenced package as the template, but its version does not match', async () => {
+    await withinSandbox(async (sandbox) => {
+      const template = buildMetaMaskRepository({
+        shortname: 'template',
+        directoryPath: path.join(sandbox.directoryPath, 'template'),
+      });
+      await writeFile(
+        path.join(template.directoryPath, 'package.json'),
+        JSON.stringify(fakePackageManifest),
+      );
+      const project = buildMetaMaskRepository({
+        shortname: 'project',
+        directoryPath: path.join(sandbox.directoryPath, 'project'),
+      });
+      const fakeProjectPackageManifest = {
+        ...fakePackageManifest,
+        devDependencies: {
+          test: '0.0.1',
+        },
+      };
+
+      await writeFile(
+        path.join(project.directoryPath, 'package.json'),
+        JSON.stringify(fakeProjectPackageManifest),
+      );
+      const result = await packagePropertiesConform(
+        'devDependencies',
+        {
+          template,
+          project,
+          pass,
+          fail,
+        },
+        ['test'],
+      );
+
+      expect(result).toStrictEqual({
+        passed: false,
+        failures: [
+          {
+            message: '`test` is "0.0.1", when it should be "1.0.0".',
+          },
+        ],
+      });
+    });
+  });
+
+  it('fails if the project does not have the same referenced package as the template', async () => {
+    await withinSandbox(async (sandbox) => {
+      const template = buildMetaMaskRepository({
+        shortname: 'template',
+        directoryPath: path.join(sandbox.directoryPath, 'template'),
+      });
+      const fakeTemplatePackageManifest = {
+        ...fakePackageManifest,
+        devDependencies: {
+          test: '1.0.0',
+          'new-pack': '1.0.0',
+        },
+      };
+      await writeFile(
+        path.join(template.directoryPath, 'package.json'),
+        JSON.stringify(fakeTemplatePackageManifest),
+      );
+      const project = buildMetaMaskRepository({
+        shortname: 'project',
+        directoryPath: path.join(sandbox.directoryPath, 'project'),
+      });
+
+      await writeFile(
+        path.join(project.directoryPath, 'package.json'),
+        JSON.stringify(fakePackageManifest),
+      );
+
+      const result = await packagePropertiesConform(
+        'devDependencies',
+        {
+          template,
+          project,
+          pass,
+          fail,
+        },
+        ['new-pack'],
+      );
+
+      expect(result).toStrictEqual({
+        passed: false,
+        failures: [
+          {
+            message:
+              '`package.json` should list `"new-pack": "1.0.0"`, but does not.',
+          },
+        ],
+      });
+    });
+  });
+
+  it('throws error if the package does not exist in the template devDependencies', async () => {
+    await withinSandbox(async (sandbox) => {
+      const template = buildMetaMaskRepository({
+        shortname: 'template',
+        directoryPath: path.join(sandbox.directoryPath, 'template'),
+      });
+      await writeFile(
+        path.join(template.directoryPath, 'package.json'),
+        JSON.stringify(fakePackageManifest),
+      );
+      const project = buildMetaMaskRepository({
+        shortname: 'project',
+        directoryPath: path.join(sandbox.directoryPath, 'project'),
+      });
+      await writeFile(
+        path.join(project.directoryPath, 'package.json'),
+        JSON.stringify(fakePackageManifest),
+      );
+
+      await expect(
+        packagePropertiesConform(
+          'devDependencies',
+          {
+            template,
+            project,
+            pass,
+            fail,
+          },
+          ['new-pack'],
+        ),
+      ).rejects.toThrow(
+        'Could not find "new-pack" in template\'s package.json. This is not the fault of the project, but is rather a bug in a rule.',
+      );
+    });
+  });
+});
+
+describe('getString', () => {
+  it('returns empty string when the input is undefined', async () => {
+    expect(getString(undefined)).toBe('');
+  });
+
+  it('returns same string when the input is string', async () => {
+    expect(getString('test')).toBe('test');
+  });
+
+  it('returns stringified object when the input is json object', async () => {
+    expect(getString({ test: 'test' })).toBe("{ test: 'test' }");
   });
 });
