@@ -5,11 +5,6 @@ import {
 import path from 'path';
 
 import {
-  buildMetaMaskRepository,
-  fakePackageManifest,
-  withinSandbox,
-} from '../tests/helpers';
-import {
   combineRuleExecutionResults,
   directoryAndContentsConform,
   directoryExists,
@@ -20,6 +15,11 @@ import {
   packagePropertiesConform,
   pass,
 } from './rule-helpers';
+import {
+  buildMetaMaskRepository,
+  fakePackageManifest,
+  withinSandbox,
+} from '../tests/helpers';
 
 describe('pass', () => {
   it('returns a result that represents a passing rule', () => {
