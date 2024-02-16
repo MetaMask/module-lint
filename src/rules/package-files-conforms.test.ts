@@ -1,13 +1,13 @@
 import { writeFile } from '@metamask/utils/node';
 import path from 'path';
 
-import { fail, pass } from '../rule-helpers';
 import packageFilesConform from './package-files-conform';
 import {
   buildMetaMaskRepository,
   fakePackageManifest,
   withinSandbox,
 } from '../../tests/helpers';
+import { fail, pass } from '../rule-helpers';
 
 describe('Rule: package-files-conforms', () => {
   it('passes if the "files" field in the project\'s package.json matches the one in the template\'s package.json', async () => {

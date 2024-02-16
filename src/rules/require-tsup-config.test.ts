@@ -1,9 +1,9 @@
 import { writeFile } from '@metamask/utils/node';
 import path from 'path';
 
-import { fail, pass } from '../rule-helpers';
 import requireTsupConfig from './require-tsup-config';
 import { buildMetaMaskRepository, withinSandbox } from '../../tests/helpers';
+import { fail, pass } from '../rule-helpers';
 
 describe('Rule: require-tsup-config', () => {
   it('passes if the project has a tsup.config.ts', async () => {

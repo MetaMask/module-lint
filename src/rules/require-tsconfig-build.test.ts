@@ -1,9 +1,9 @@
 import { writeFile } from '@metamask/utils/node';
 import path from 'path';
 
-import { fail, pass } from '../rule-helpers';
 import requireTsconfigBuild from './require-tsconfig-build';
 import { buildMetaMaskRepository, withinSandbox } from '../../tests/helpers';
+import { fail, pass } from '../rule-helpers';
 
 describe('Rule: require-tsconfig-build', () => {
   it('passes if the project has a tsconfig.build.json', async () => {
