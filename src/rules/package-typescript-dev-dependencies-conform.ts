@@ -3,7 +3,7 @@ import { RuleName } from './types';
 import { packagePropertiesConform } from '../rule-helpers';
 
 export default buildRule({
-  name: RuleName.PackageTypeScriptDependenciesConform,
+  name: RuleName.PackageTypescriptDependenciesConform,
   description:
     'Do the typescript-related `devDependencies` in `package.json` conform?',
   dependencies: [RuleName.RequireValidPackageManifest],
