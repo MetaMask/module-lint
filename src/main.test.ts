@@ -100,6 +100,10 @@ describe('main', () => {
             path.join(repository.directoryPath, 'tsup.config.ts'),
             'content for tsup.config.ts',
           );
+          await writeFile(
+            path.join(repository.directoryPath, 'typedoc.json'),
+            'content for typedoc.json',
+          );
         }
         const outputLogger = new FakeOutputLogger();
 
@@ -134,6 +138,8 @@ repo-1
   - Do the \`types\` in \`package.json\` conform? ✅
   - Do the \`files\` in \`package.json\` conform? ✅
   - Does the \`lavamoat.allowscripts\` field in \`package.json\` conform? ✅
+  - Do the typedoc-related \`devDependencies\` in \`package.json\` conform? ✅
+  - Do the typedoc-related \`scripts\` in \`package.json\` conform? ✅
 - Is \`README.md\` present? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
   - Does the README conform by recommending node install from nodejs.org? ✅
@@ -145,8 +151,9 @@ repo-1
 - Is \`tsconfig.json\` present, and does it conform? ✅
 - Is \`tsconfig.build.json\` present, and does it conform? ✅
 - Is \`tsup.config.ts\` present, and does it conform? ✅
+- Is \`typedoc.json\` present, and does it conform? ✅
 
-Results:       26 passed, 0 failed, 26 total
+Results:       29 passed, 0 failed, 29 total
 Elapsed time:  0 ms
 
 
@@ -168,6 +175,8 @@ repo-2
   - Do the \`types\` in \`package.json\` conform? ✅
   - Do the \`files\` in \`package.json\` conform? ✅
   - Does the \`lavamoat.allowscripts\` field in \`package.json\` conform? ✅
+  - Do the typedoc-related \`devDependencies\` in \`package.json\` conform? ✅
+  - Do the typedoc-related \`scripts\` in \`package.json\` conform? ✅
 - Is \`README.md\` present? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
   - Does the README conform by recommending node install from nodejs.org? ✅
@@ -179,8 +188,9 @@ repo-2
 - Is \`tsconfig.json\` present, and does it conform? ✅
 - Is \`tsconfig.build.json\` present, and does it conform? ✅
 - Is \`tsup.config.ts\` present, and does it conform? ✅
+- Is \`typedoc.json\` present, and does it conform? ✅
 
-Results:       26 passed, 0 failed, 26 total
+Results:       29 passed, 0 failed, 29 total
 Elapsed time:  0 ms
 
 `,
@@ -247,8 +257,10 @@ repo-1
   - \`tsconfig.build.json\` does not exist in this project.
 - Is \`tsup.config.ts\` present, and does it conform? ❌
   - \`tsup.config.ts\` does not exist in this project.
+- Is \`typedoc.json\` present, and does it conform? ❌
+  - \`typedoc.json\` does not exist in this project.
 
-Results:       0 passed, 10 failed, 10 total
+Results:       0 passed, 11 failed, 11 total
 Elapsed time:  0 ms
 
 
@@ -277,8 +289,10 @@ repo-2
   - \`tsconfig.build.json\` does not exist in this project.
 - Is \`tsup.config.ts\` present, and does it conform? ❌
   - \`tsup.config.ts\` does not exist in this project.
+- Is \`typedoc.json\` present, and does it conform? ❌
+  - \`typedoc.json\` does not exist in this project.
 
-Results:       0 passed, 10 failed, 10 total
+Results:       0 passed, 11 failed, 11 total
 Elapsed time:  0 ms
 
 `,
@@ -351,8 +365,10 @@ repo-2
   - \`tsconfig.build.json\` does not exist in this project.
 - Is \`tsup.config.ts\` present, and does it conform? ❌
   - \`tsup.config.ts\` does not exist in this project.
+- Is \`typedoc.json\` present, and does it conform? ❌
+  - \`typedoc.json\` does not exist in this project.
 
-Results:       1 passed, 9 failed, 10 total
+Results:       1 passed, 10 failed, 11 total
 Elapsed time:  0 ms
 
 `.trimStart(),
@@ -431,6 +447,10 @@ Elapsed time:  0 ms
             path.join(repository.directoryPath, 'tsup.config.ts'),
             'content for tsup.config.ts',
           );
+          await writeFile(
+            path.join(repository.directoryPath, 'typedoc.json'),
+            'content for typedoc.json',
+          );
         }
         const outputLogger = new FakeOutputLogger();
 
@@ -465,6 +485,8 @@ repo-1
   - Do the \`types\` in \`package.json\` conform? ✅
   - Do the \`files\` in \`package.json\` conform? ✅
   - Does the \`lavamoat.allowscripts\` field in \`package.json\` conform? ✅
+  - Do the typedoc-related \`devDependencies\` in \`package.json\` conform? ✅
+  - Do the typedoc-related \`scripts\` in \`package.json\` conform? ✅
 - Is \`README.md\` present? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
   - Does the README conform by recommending node install from nodejs.org? ✅
@@ -476,8 +498,9 @@ repo-1
 - Is \`tsconfig.json\` present, and does it conform? ✅
 - Is \`tsconfig.build.json\` present, and does it conform? ✅
 - Is \`tsup.config.ts\` present, and does it conform? ✅
+- Is \`typedoc.json\` present, and does it conform? ✅
 
-Results:       26 passed, 0 failed, 26 total
+Results:       29 passed, 0 failed, 29 total
 Elapsed time:  0 ms
 
 
@@ -499,6 +522,8 @@ repo-2
   - Do the \`types\` in \`package.json\` conform? ✅
   - Do the \`files\` in \`package.json\` conform? ✅
   - Does the \`lavamoat.allowscripts\` field in \`package.json\` conform? ✅
+  - Do the typedoc-related \`devDependencies\` in \`package.json\` conform? ✅
+  - Do the typedoc-related \`scripts\` in \`package.json\` conform? ✅
 - Is \`README.md\` present? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
   - Does the README conform by recommending node install from nodejs.org? ✅
@@ -510,8 +535,9 @@ repo-2
 - Is \`tsconfig.json\` present, and does it conform? ✅
 - Is \`tsconfig.build.json\` present, and does it conform? ✅
 - Is \`tsup.config.ts\` present, and does it conform? ✅
+- Is \`typedoc.json\` present, and does it conform? ✅
 
-Results:       26 passed, 0 failed, 26 total
+Results:       29 passed, 0 failed, 29 total
 Elapsed time:  0 ms
 
 `,
@@ -578,8 +604,10 @@ repo-1
   - \`tsconfig.build.json\` does not exist in this project.
 - Is \`tsup.config.ts\` present, and does it conform? ❌
   - \`tsup.config.ts\` does not exist in this project.
+- Is \`typedoc.json\` present, and does it conform? ❌
+  - \`typedoc.json\` does not exist in this project.
 
-Results:       0 passed, 10 failed, 10 total
+Results:       0 passed, 11 failed, 11 total
 Elapsed time:  0 ms
 
 
@@ -608,8 +636,10 @@ repo-2
   - \`tsconfig.build.json\` does not exist in this project.
 - Is \`tsup.config.ts\` present, and does it conform? ❌
   - \`tsup.config.ts\` does not exist in this project.
+- Is \`typedoc.json\` present, and does it conform? ❌
+  - \`typedoc.json\` does not exist in this project.
 
-Results:       0 passed, 10 failed, 10 total
+Results:       0 passed, 11 failed, 11 total
 Elapsed time:  0 ms
 
 `,
@@ -681,8 +711,10 @@ repo-2
   - \`tsconfig.build.json\` does not exist in this project.
 - Is \`tsup.config.ts\` present, and does it conform? ❌
   - \`tsup.config.ts\` does not exist in this project.
+- Is \`typedoc.json\` present, and does it conform? ❌
+  - \`typedoc.json\` does not exist in this project.
 
-Results:       1 passed, 9 failed, 10 total
+Results:       1 passed, 10 failed, 11 total
 Elapsed time:  0 ms
 
 `,

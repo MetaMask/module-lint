@@ -165,11 +165,13 @@ export const fakePackageManifest = {
     'ts-node': '1.0.0',
     tsup: '1.0.0',
     typescript: '1.0.0',
+    typedoc: '1.0.0',
   },
   scripts: {
     test: 'test script',
     'test:watch': 'test watch script',
     build: 'test build',
     'build:types': 'test build types',
+    'build:docs': 'test build docs',
   },
 };

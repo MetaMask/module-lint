@@ -29,6 +29,9 @@ export enum RuleName {
   PackageTypesConform = 'package-types-conform',
   PackageFilesConform = 'package-files-conform',
   PackageLavamoatTsupConform = 'package-lavamoat-tsup-conform',
+  PackageTypedocDependenciesConform = 'package-typedoc-dependencies-conform',
+  RequireTypedoc = 'require-typedoc',
+  PackageTypedocScriptsConform = 'package-typedoc-scripts-conform',
 }
 
 export const PackageManifestSchema = type({
