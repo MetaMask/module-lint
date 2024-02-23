@@ -23,12 +23,12 @@ export enum RuleName {
   RequireTsupConfig = 'require-tsup-config',
   PackageTypescriptDependenciesConform = 'package-typescript-dependencies-conform',
   PackageTypescriptScriptsConform = 'package-typescript-scripts-conform',
-  PackageExportsConform = 'package-exports-conform',
-  PackageMainConform = 'package-main-conform',
-  PackageModuleConform = 'package-module-conform',
-  PackageTypesConform = 'package-types-conform',
-  PackageFilesConform = 'package-files-conform',
-  PackageLavamoatTsupConform = 'package-lavamoat-tsup-conform',
+  PackageExportsFieldConforms = 'package-exports-field-conforms',
+  PackageMainFieldConforms = 'package-main-field-conforms',
+  PackageModuleFieldConforms = 'package-module-field-conforms',
+  PackageTypesFieldConforms = 'package-types-field-conforms',
+  PackageFilesFieldConforms = 'package-files-field-conforms',
+  PackageLavamoatTsupConforms = 'package-lavamoat-tsup-conforms',
 }
 
 export const PackageManifestSchema = type({

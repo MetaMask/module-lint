@@ -4,7 +4,7 @@ import path from 'path';
 import packageTestScriptsConform from './package-test-scripts-conform';
 import {
   buildMetaMaskRepository,
-  fakePackageManifest,
+  buildPackageManifestMock,
   withinSandbox,
 } from '../../tests/helpers';
 import { fail, pass } from '../rule-helpers';
@@ -18,7 +18,9 @@ describe('Rule: package-test-scripts-conform', () => {
       });
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify(fakePackageManifest),
+        buildPackageManifestMock({
+          scripts: { test: 'test script', 'test:watch': 'test watch script' },
+        }),
       );
       const project = buildMetaMaskRepository({
         shortname: 'project',
@@ -26,7 +28,9 @@ describe('Rule: package-test-scripts-conform', () => {
       });
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify(fakePackageManifest),
+        buildPackageManifestMock({
+          scripts: { test: 'test script', 'test:watch': 'test watch script' },
+        }),
       );
 
       const result = await packageTestScriptsConform.execute({
@@ -50,63 +54,19 @@ describe('Rule: package-test-scripts-conform', () => {
       });
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify(fakePackageManifest),
+        buildPackageManifestMock({
+          scripts: { test: 'test script', 'test:watch': 'test watch script' },
+        }),
       );
       const project = buildMetaMaskRepository({
         shortname: 'project',
         directoryPath: path.join(sandbox.directoryPath, 'project'),
       });
-      const fakeProjectPackageManifest = {
-        ...fakePackageManifest,
-        scripts: {
-          test: 'test',
-          'test:watch': 'test watch script',
-        },
-      };
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify(fakeProjectPackageManifest),
-      );
-
-      const result = await packageTestScriptsConform.execute({
-        template,
-        project,
-        pass,
-        fail,
-      });
-
-      expect(result).toStrictEqual({
-        passed: false,
-        failures: [
-          { message: '`test` is "test", when it should be "test script".' },
-        ],
-      });
-    });
-  });
-
-  it("fails if a test related script exists in the template's package.json, but not in the project's package.json", async () => {
-    await withinSandbox(async (sandbox) => {
-      const template = buildMetaMaskRepository({
-        shortname: 'template',
-        directoryPath: path.join(sandbox.directoryPath, 'template'),
-      });
-      await writeFile(
-        path.join(template.directoryPath, 'package.json'),
-        JSON.stringify(fakePackageManifest),
-      );
-      const project = buildMetaMaskRepository({
-        shortname: 'project',
-        directoryPath: path.join(sandbox.directoryPath, 'project'),
-      });
-      const fakeProjectPackageManifest = {
-        ...fakePackageManifest,
-        scripts: {
-          'test:watch': 'test watch script',
-        },
-      };
-      await writeFile(
-        path.join(project.directoryPath, 'package.json'),
-        JSON.stringify(fakeProjectPackageManifest),
+        buildPackageManifestMock({
+          scripts: { test: 'test', 'test:watch': 'test watch script' },
+        }),
       );
 
       const result = await packageTestScriptsConform.execute({
@@ -121,7 +81,49 @@ describe('Rule: package-test-scripts-conform', () => {
         failures: [
           {
             message:
-              '`package.json` should list `"test": "test script"`, but does not.',
+              "`scripts.[test]` is 'test', when it should be 'test script'.",
+          },
+        ],
+      });
+    });
+  });
+
+  it("fails if a test related script exists in the template's package.json, but not in the project's package.json", async () => {
+    await withinSandbox(async (sandbox) => {
+      const template = buildMetaMaskRepository({
+        shortname: 'template',
+        directoryPath: path.join(sandbox.directoryPath, 'template'),
+      });
+      await writeFile(
+        path.join(template.directoryPath, 'package.json'),
+        buildPackageManifestMock({
+          scripts: { test: 'test script', 'test:watch': 'test watch script' },
+        }),
+      );
+      const project = buildMetaMaskRepository({
+        shortname: 'project',
+        directoryPath: path.join(sandbox.directoryPath, 'project'),
+      });
+      await writeFile(
+        path.join(project.directoryPath, 'package.json'),
+        buildPackageManifestMock({
+          scripts: { 'test:watch': 'test watch script' },
+        }),
+      );
+
+      const result = await packageTestScriptsConform.execute({
+        template,
+        project,
+        pass,
+        fail,
+      });
+
+      expect(result).toStrictEqual({
+        passed: false,
+        failures: [
+          {
+            message:
+              "`package.json` should list `'scripts.[test]': 'test script'`, but does not.",
           },
         ],
       });
@@ -134,15 +136,11 @@ describe('Rule: package-test-scripts-conform', () => {
         shortname: 'template',
         directoryPath: path.join(sandbox.directoryPath, 'template'),
       });
-      const fakeTemplatePackageManifest = {
-        ...fakePackageManifest,
-        scripts: {
-          'test:watch': 'test watch script',
-        },
-      };
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify(fakeTemplatePackageManifest),
+        buildPackageManifestMock({
+          scripts: { 'test:watch': 'test watch script' },
+        }),
       );
       const project = buildMetaMaskRepository({
         shortname: 'project',
@@ -150,7 +148,9 @@ describe('Rule: package-test-scripts-conform', () => {
       });
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify(fakePackageManifest),
+        buildPackageManifestMock({
+          scripts: { test: 'test script', 'test:watch': 'test watch script' },
+        }),
       );
 
       await expect(
@@ -161,7 +161,7 @@ describe('Rule: package-test-scripts-conform', () => {
           fail,
         }),
       ).rejects.toThrow(
-        'Could not find "test" in template\'s package.json. This is not the fault of the project, but is rather a bug in a rule.',
+        'Could not find `scripts.[test]` in reference `package.json`. This is not the fault of the target `package.json`, but is rather a bug in a rule.',
       );
     });
   });

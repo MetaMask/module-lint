@@ -11,8 +11,8 @@ import { main } from './main';
 import { FakeOutputLogger } from '../tests/fake-output-logger';
 import type { PrimaryExecaFunction } from '../tests/helpers';
 import {
+  buildPackageManifestMock,
   fakeDateOnly,
-  fakePackageManifest,
   withinSandbox,
 } from '../tests/helpers';
 import { setupToolWithMockRepositories } from '../tests/setup-tool-with-mock-repositories';
@@ -74,7 +74,23 @@ describe('main', () => {
           );
           await writeFile(
             path.join(repository.directoryPath, 'package.json'),
-            JSON.stringify(fakePackageManifest),
+            buildPackageManifestMock({
+              devDependencies: {
+                test: '1.0.0',
+                jest: '1.0.0',
+                'jest-it-up': '1.0.0',
+                '@types/node': '1.0.0',
+                'ts-node': '1.0.0',
+                tsup: '1.0.0',
+                typescript: '1.0.0',
+              },
+              scripts: {
+                test: 'test script',
+                'test:watch': 'test watch script',
+                build: 'test build',
+                'build:types': 'test build types',
+              },
+            }),
           );
           await writeFile(
             path.join(repository.directoryPath, 'README.md'),
@@ -129,8 +145,8 @@ repo-1
   - Do the typescript-related \`devDependencies\` in \`package.json\` conform? ✅
   - Do the typescript-related \`scripts\` in \`package.json\` conform? ✅
   - Do the \`exports\` in \`package.json\` conform? ✅
-  - Do the \`main\` in \`package.json\` conform? ✅
-  - Do the \`module\` in \`package.json\` conform? ✅
+  - Does the \`main\` in \`package.json\` conform? ✅
+  - Does the \`module\` in \`package.json\` conform? ✅
   - Do the \`types\` in \`package.json\` conform? ✅
   - Do the \`files\` in \`package.json\` conform? ✅
   - Does the \`lavamoat.allowscripts\` field in \`package.json\` conform? ✅
@@ -163,8 +179,8 @@ repo-2
   - Do the typescript-related \`devDependencies\` in \`package.json\` conform? ✅
   - Do the typescript-related \`scripts\` in \`package.json\` conform? ✅
   - Do the \`exports\` in \`package.json\` conform? ✅
-  - Do the \`main\` in \`package.json\` conform? ✅
-  - Do the \`module\` in \`package.json\` conform? ✅
+  - Does the \`main\` in \`package.json\` conform? ✅
+  - Does the \`module\` in \`package.json\` conform? ✅
   - Do the \`types\` in \`package.json\` conform? ✅
   - Do the \`files\` in \`package.json\` conform? ✅
   - Does the \`lavamoat.allowscripts\` field in \`package.json\` conform? ✅
@@ -405,7 +421,23 @@ Elapsed time:  0 ms
           );
           await writeFile(
             path.join(repository.directoryPath, 'package.json'),
-            JSON.stringify(fakePackageManifest),
+            buildPackageManifestMock({
+              devDependencies: {
+                test: '1.0.0',
+                jest: '1.0.0',
+                'jest-it-up': '1.0.0',
+                '@types/node': '1.0.0',
+                'ts-node': '1.0.0',
+                tsup: '1.0.0',
+                typescript: '1.0.0',
+              },
+              scripts: {
+                test: 'test script',
+                'test:watch': 'test watch script',
+                build: 'test build',
+                'build:types': 'test build types',
+              },
+            }),
           );
           await writeFile(
             path.join(repository.directoryPath, 'README.md'),
@@ -460,8 +492,8 @@ repo-1
   - Do the typescript-related \`devDependencies\` in \`package.json\` conform? ✅
   - Do the typescript-related \`scripts\` in \`package.json\` conform? ✅
   - Do the \`exports\` in \`package.json\` conform? ✅
-  - Do the \`main\` in \`package.json\` conform? ✅
-  - Do the \`module\` in \`package.json\` conform? ✅
+  - Does the \`main\` in \`package.json\` conform? ✅
+  - Does the \`module\` in \`package.json\` conform? ✅
   - Do the \`types\` in \`package.json\` conform? ✅
   - Do the \`files\` in \`package.json\` conform? ✅
   - Does the \`lavamoat.allowscripts\` field in \`package.json\` conform? ✅
@@ -494,8 +526,8 @@ repo-2
   - Do the typescript-related \`devDependencies\` in \`package.json\` conform? ✅
   - Do the typescript-related \`scripts\` in \`package.json\` conform? ✅
   - Do the \`exports\` in \`package.json\` conform? ✅
-  - Do the \`main\` in \`package.json\` conform? ✅
-  - Do the \`module\` in \`package.json\` conform? ✅
+  - Does the \`main\` in \`package.json\` conform? ✅
+  - Does the \`module\` in \`package.json\` conform? ✅
   - Do the \`types\` in \`package.json\` conform? ✅
   - Do the \`files\` in \`package.json\` conform? ✅
   - Does the \`lavamoat.allowscripts\` field in \`package.json\` conform? ✅

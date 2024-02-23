@@ -4,19 +4,10 @@ import path from 'path';
 import packageLavamoatTsupConforms from './package-lavamoat-tsup-conforms';
 import {
   buildMetaMaskRepository,
-  fakePackageManifest,
+  buildPackageManifestMock,
   withinSandbox,
 } from '../../tests/helpers';
 import { fail, pass } from '../rule-helpers';
-
-const fakeLavamoatPackageManifest = {
-  ...fakePackageManifest,
-  lavamoat: {
-    allowScripts: {
-      'tsup>esbuild': true,
-    },
-  },
-};
 
 describe('Rule: package-lavamoat-tsup-conform', () => {
   it('passes if the project and template have the same referenced scripts and matches', async () => {
@@ -27,7 +18,13 @@ describe('Rule: package-lavamoat-tsup-conform', () => {
       });
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify(fakeLavamoatPackageManifest),
+        buildPackageManifestMock({
+          lavamoat: {
+            allowScripts: {
+              'tsup>esbuild': true,
+            },
+          },
+        }),
       );
       const project = buildMetaMaskRepository({
         shortname: 'project',
@@ -35,7 +32,13 @@ describe('Rule: package-lavamoat-tsup-conform', () => {
       });
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify(fakeLavamoatPackageManifest),
+        buildPackageManifestMock({
+          lavamoat: {
+            allowScripts: {
+              'tsup>esbuild': true,
+            },
+          },
+        }),
       );
       const result = await packageLavamoatTsupConforms.execute({
         template,
@@ -56,24 +59,28 @@ describe('Rule: package-lavamoat-tsup-conform', () => {
       });
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify(fakeLavamoatPackageManifest),
+        buildPackageManifestMock({
+          lavamoat: {
+            allowScripts: {
+              'tsup>esbuild': true,
+            },
+          },
+        }),
       );
 
       const project = buildMetaMaskRepository({
         shortname: 'project',
         directoryPath: path.join(sandbox.directoryPath, 'project'),
       });
-      const fakeProjectPackageManifest = {
-        ...fakePackageManifest,
-        lavamoat: {
-          allowScripts: {
-            'tsup>esbuild': false,
-          },
-        },
-      };
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify(fakeProjectPackageManifest),
+        buildPackageManifestMock({
+          lavamoat: {
+            allowScripts: {
+              'tsup>esbuild': false,
+            },
+          },
+        }),
       );
       const result = await packageLavamoatTsupConforms.execute({
         template,
@@ -86,7 +93,7 @@ describe('Rule: package-lavamoat-tsup-conform', () => {
         passed: false,
         failures: [
           {
-            message: '`tsup>esbuild` is "false", when it should be "true".',
+            message: '`tsup>esbuild` is false, when it should be true.',
           },
         ],
       });
@@ -101,23 +108,27 @@ describe('Rule: package-lavamoat-tsup-conform', () => {
       });
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify(fakeLavamoatPackageManifest),
+        buildPackageManifestMock({
+          lavamoat: {
+            allowScripts: {
+              'tsup>esbuild': true,
+            },
+          },
+        }),
       );
       const project = buildMetaMaskRepository({
         shortname: 'project',
         directoryPath: path.join(sandbox.directoryPath, 'project'),
       });
-      const fakeProjectPackageManifest = {
-        ...fakePackageManifest,
-        lavamoat: {
-          allowScripts: {
-            test: false,
-          },
-        },
-      };
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify(fakeProjectPackageManifest),
+        buildPackageManifestMock({
+          lavamoat: {
+            allowScripts: {
+              test: true,
+            },
+          },
+        }),
       );
       const result = await packageLavamoatTsupConforms.execute({
         template,
@@ -131,7 +142,7 @@ describe('Rule: package-lavamoat-tsup-conform', () => {
         failures: [
           {
             message:
-              '`package.json` should list `"tsup>esbuild": "true"` in `lavamoat.allowScripts`, but does not.',
+              "`package.json` should list `'tsup>esbuild': true`, but does not.",
           },
         ],
       });
@@ -146,7 +157,13 @@ describe('Rule: package-lavamoat-tsup-conform', () => {
       });
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify(fakePackageManifest),
+        buildPackageManifestMock({
+          lavamoat: {
+            allowScripts: {
+              'tsup>esbuild': true,
+            },
+          },
+        }),
       );
       const project = buildMetaMaskRepository({
         shortname: 'project',
@@ -154,7 +171,7 @@ describe('Rule: package-lavamoat-tsup-conform', () => {
       });
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify(fakePackageManifest),
+        buildPackageManifestMock(),
       );
       const result = await packageLavamoatTsupConforms.execute({
         template,

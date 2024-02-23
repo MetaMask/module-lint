@@ -4,7 +4,7 @@ import path from 'path';
 import packageManagerFieldConforms from './package-package-manager-field-conforms';
 import {
   buildMetaMaskRepository,
-  fakePackageManifest,
+  buildPackageManifestMock,
   withinSandbox,
 } from '../../tests/helpers';
 import { fail, pass } from '../rule-helpers';
@@ -18,7 +18,9 @@ describe('Rule: package-manager-field-conforms', () => {
       });
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify(fakePackageManifest),
+        buildPackageManifestMock({
+          packageManager: 'yarn',
+        }),
       );
       const project = buildMetaMaskRepository({
         shortname: 'project',
@@ -26,7 +28,9 @@ describe('Rule: package-manager-field-conforms', () => {
       });
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify(fakePackageManifest),
+        buildPackageManifestMock({
+          packageManager: 'yarn',
+        }),
       );
 
       const result = await packageManagerFieldConforms.execute({
@@ -50,19 +54,19 @@ describe('Rule: package-manager-field-conforms', () => {
       });
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify(fakePackageManifest),
+        buildPackageManifestMock({
+          packageManager: 'yarn',
+        }),
       );
       const project = buildMetaMaskRepository({
         shortname: 'project',
         directoryPath: path.join(sandbox.directoryPath, 'project'),
       });
-      const fakeProjectPackageManifest = {
-        ...fakePackageManifest,
-        packageManager: 'test',
-      };
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify(fakeProjectPackageManifest),
+        buildPackageManifestMock({
+          packageManager: 'test',
+        }),
       );
 
       const result = await packageManagerFieldConforms.execute({

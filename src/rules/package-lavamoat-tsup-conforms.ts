@@ -1,12 +1,13 @@
 import { buildRule } from './build-rule';
 import { RuleName } from './types';
+import { dataConform } from '../rule-helpers';
 
 export default buildRule({
-  name: RuleName.PackageLavamoatTsupConform,
+  name: RuleName.PackageLavamoatTsupConforms,
   description:
     'Does the `lavamoat.allowscripts` field in `package.json` conform?',
   dependencies: [RuleName.RequireValidPackageManifest],
-  execute: async ({ project, template, pass, fail }) => {
+  execute: async ({ project, template, pass }) => {
     const entryPath = 'package.json';
     const templateManifest = await template.fs.readJsonFile(entryPath);
     const projectManifest = await project.fs.readJsonFile(entryPath);
@@ -18,31 +19,16 @@ export default buildRule({
       type ChildKey = keyof typeof templateLavamoat;
       const templateAllowScripts = templateLavamoat['allowScripts' as ChildKey];
       const projectAllowScripts = projectLavamoat['allowScripts' as ChildKey];
-      if (projectAllowScripts && !('tsup>esbuild' in projectAllowScripts)) {
-        return fail([
-          {
-            message: `\`package.json\` should list \`"tsup>esbuild": "${JSON.stringify(
-              templateAllowScripts?.['tsup>esbuild'],
-            )}"\` in \`lavamoat.allowScripts\`, but does not.`,
-          },
-        ]);
-      } else if (
-        !(
-          projectAllowScripts?.['tsup>esbuild'] ===
-          templateAllowScripts?.['tsup>esbuild']
-        )
-      ) {
-        return fail([
-          {
-            message: `\`tsup>esbuild\` is "${JSON.stringify(
-              projectAllowScripts?.['tsup>esbuild'],
-            )}", when it should be "${JSON.stringify(
-              templateAllowScripts?.['tsup>esbuild'],
-            )}".`,
-          },
-        ]);
+      if (projectAllowScripts) {
+        return dataConform(
+          templateAllowScripts,
+          projectAllowScripts,
+          'tsup>esbuild',
+          entryPath,
+        );
       }
     }
+
     return pass();
   },
 });

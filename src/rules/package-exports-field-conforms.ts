@@ -1,12 +1,15 @@
 import { buildRule } from './build-rule';
 import { RuleName } from './types';
-import { packagePropertiesConform } from '../rule-helpers';
+import { packageManifestPropertiesConform } from '../rule-helpers';
 
 export default buildRule({
-  name: RuleName.PackageExportsConform,
+  name: RuleName.PackageExportsFieldConforms,
   description: 'Do the `exports` in `package.json` conform?',
   dependencies: [RuleName.RequireValidPackageManifest],
   execute: async (ruleExecutionArguments) => {
-    return packagePropertiesConform('exports', ruleExecutionArguments);
+    return packageManifestPropertiesConform(
+      ['exports'],
+      ruleExecutionArguments,
+    );
   },
 });

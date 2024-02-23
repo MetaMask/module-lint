@@ -4,13 +4,13 @@ import path from 'path';
 import packageTypescriptScriptsConform from './package-typescript-scripts-conform';
 import {
   buildMetaMaskRepository,
-  fakePackageManifest,
+  buildPackageManifestMock,
   withinSandbox,
 } from '../../tests/helpers';
 import { fail, pass } from '../rule-helpers';
 
 describe('Rule: package-typescript-scripts-conform', () => {
-  it('passes if the project and template have the same referenced scripts and matches', async () => {
+  it('passes if the typescript related scripts in template exist in project and its value matches', async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
@@ -18,7 +18,12 @@ describe('Rule: package-typescript-scripts-conform', () => {
       });
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify(fakePackageManifest),
+        buildPackageManifestMock({
+          scripts: {
+            build: 'test build',
+            'build:types': 'test build types',
+          },
+        }),
       );
       const project = buildMetaMaskRepository({
         shortname: 'project',
@@ -26,7 +31,12 @@ describe('Rule: package-typescript-scripts-conform', () => {
       });
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify(fakePackageManifest),
+        buildPackageManifestMock({
+          scripts: {
+            build: 'test build',
+            'build:types': 'test build types',
+          },
+        }),
       );
       const result = await packageTypescriptScriptsConform.execute({
         template,
@@ -47,22 +57,25 @@ describe('Rule: package-typescript-scripts-conform', () => {
       });
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify(fakePackageManifest),
+        buildPackageManifestMock({
+          scripts: {
+            build: 'test build',
+            'build:types': 'test build types',
+          },
+        }),
       );
       const project = buildMetaMaskRepository({
         shortname: 'project',
         directoryPath: path.join(sandbox.directoryPath, 'project'),
       });
-      const fakeProjectPackageManifest = {
-        ...fakePackageManifest,
-        scripts: {
-          build: 'test',
-          'build:types': 'test build types',
-        },
-      };
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify(fakeProjectPackageManifest),
+        buildPackageManifestMock({
+          scripts: {
+            build: 'test',
+            'build:types': 'test build types',
+          },
+        }),
       );
       const result = await packageTypescriptScriptsConform.execute({
         template,
@@ -75,7 +88,8 @@ describe('Rule: package-typescript-scripts-conform', () => {
         passed: false,
         failures: [
           {
-            message: '`build` is "test", when it should be "test build".',
+            message:
+              "`scripts.[build]` is 'test', when it should be 'test build'.",
           },
         ],
       });
@@ -90,21 +104,24 @@ describe('Rule: package-typescript-scripts-conform', () => {
       });
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify(fakePackageManifest),
+        buildPackageManifestMock({
+          scripts: {
+            build: 'test build',
+            'build:types': 'test build types',
+          },
+        }),
       );
       const project = buildMetaMaskRepository({
         shortname: 'project',
         directoryPath: path.join(sandbox.directoryPath, 'project'),
       });
-      const fakeProjectPackageManifest = {
-        ...fakePackageManifest,
-        scripts: {
-          'build:types': 'test build types',
-        },
-      };
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify(fakeProjectPackageManifest),
+        buildPackageManifestMock({
+          scripts: {
+            'build:types': 'test build types',
+          },
+        }),
       );
       const result = await packageTypescriptScriptsConform.execute({
         template,
@@ -118,7 +135,7 @@ describe('Rule: package-typescript-scripts-conform', () => {
         failures: [
           {
             message:
-              '`package.json` should list `"build": "test build"`, but does not.',
+              "`package.json` should list `'scripts.[build]': 'test build'`, but does not.",
           },
         ],
       });
@@ -131,15 +148,13 @@ describe('Rule: package-typescript-scripts-conform', () => {
         shortname: 'template',
         directoryPath: path.join(sandbox.directoryPath, 'template'),
       });
-      const fakeTemplatePackageManifest = {
-        ...fakePackageManifest,
-        scripts: {
-          'build:types': 'test build types',
-        },
-      };
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify(fakeTemplatePackageManifest),
+        buildPackageManifestMock({
+          scripts: {
+            'build:types': 'test build types',
+          },
+        }),
       );
       const project = buildMetaMaskRepository({
         shortname: 'project',
@@ -147,7 +162,12 @@ describe('Rule: package-typescript-scripts-conform', () => {
       });
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify(fakePackageManifest),
+        buildPackageManifestMock({
+          scripts: {
+            build: 'test build',
+            'build:types': 'test build types',
+          },
+        }),
       );
       await expect(
         packageTypescriptScriptsConform.execute({
@@ -157,7 +177,7 @@ describe('Rule: package-typescript-scripts-conform', () => {
           fail,
         }),
       ).rejects.toThrow(
-        'Could not find "build" in template\'s package.json. This is not the fault of the project, but is rather a bug in a rule.',
+        'Could not find `scripts.[build]` in reference `package.json`. This is not the fault of the target `package.json`, but is rather a bug in a rule.',
       );
     });
   });

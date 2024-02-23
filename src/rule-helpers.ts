@@ -1,4 +1,4 @@
-import { isEqual } from 'lodash';
+import { isEqual, get, has, isMatch } from 'lodash';
 import { inspect } from 'util';
 
 import type {
@@ -195,29 +195,14 @@ export async function directoryAndContentsConform(
 }
 
 /**
- * Returns a string representation of object.
- *
- * @param input - Object to be stringified.
- * @returns String.
- */
-export function getString<Type>(input: Type): string {
-  if (!input) {
-    return '';
-  }
-  return typeof input === 'object' ? inspect(input) : input.toString();
-}
-
-/**
  * Verifies whether project has the required property name/s and with it's value equivalent to the same in template project.
  *
- * @param propertyName - Name of the property from package.json.
+ * @param propertyPaths - The array of property names to be verified.
  * @param ruleExecutionArguments - Rule execution arguments.
- * @param childPropertyNames - The array of property names to be verified.
  */
-export async function packagePropertiesConform(
-  propertyName: string,
+export async function packageManifestPropertiesConform(
+  propertyPaths: string[],
   ruleExecutionArguments: RuleExecutionArguments,
-  childPropertyNames?: string[],
 ): Promise<PartialRuleExecutionResult> {
   const { template, project } = ruleExecutionArguments;
   const entryPath = 'package.json';
@@ -231,70 +216,66 @@ export async function packagePropertiesConform(
     PackageManifestSchema,
   );
 
-  type Key = keyof typeof templateManifest;
-  const propertyKey = propertyName as Key;
-  const failures: RuleExecutionFailure[] = [];
-  if (childPropertyNames) {
-    const templateProperties = templateManifest[propertyKey];
-    const projectProperties = projectManifest[propertyKey];
-    type SubKey = keyof typeof templateProperties;
-    for (const childPropetyName of childPropertyNames) {
-      const failure = dataConform(
-        templateProperties[childPropetyName as SubKey],
-        projectProperties[childPropetyName as SubKey],
-        childPropetyName,
-      );
-      if (failure) {
-        failures.push(failure);
-      }
-    }
-  } else {
-    const failure = dataConform(
-      templateManifest[propertyKey],
-      projectManifest[propertyKey],
-      propertyName,
+  const conformsResults = propertyPaths.map((propertyPath) => {
+    return dataConform(
+      templateManifest,
+      projectManifest,
+      propertyPath,
+      entryPath,
     );
-    if (failure) {
-      failures.push(failure);
-    }
-  }
-
-  return failures.length === 0 ? pass() : fail(failures);
+  });
+  return combineRuleExecutionResults(conformsResults);
 }
 
 /**
  * Performs a deep comparison between template data and project data to determine if they are equivalent.
  * In case of equals, it returns undefined, otherwise failure message.
  *
- * @param templateProperty - Data from template.
- * @param projectProperty - Data from project.
- * @param propertyName - Name of the property.
- * @returns RuleExecutionFailure.
+ * @param referenceSchema - Reference schema.
+ * @param targetSchema - Target schema.
+ * @param propertyPath - Path of the property.
+ * @param entryPath - The path to the file from which schema is prepared.
+ * @returns PartialRuleExecutionResult.
  */
-function dataConform<Schema>(
-  templateProperty: Schema,
-  projectProperty: Schema,
-  propertyName: string,
-): RuleExecutionFailure | undefined {
-  if (!templateProperty) {
+export function dataConform<Schema>(
+  referenceSchema: Schema,
+  targetSchema: Schema,
+  propertyPath: string,
+  entryPath: string,
+): PartialRuleExecutionResult {
+  if (!has(referenceSchema, propertyPath)) {
     throw new Error(
-      `Could not find "${propertyName}" in template's package.json. This is not the fault of the project, but is rather a bug in a rule.`,
+      `Could not find \`${propertyPath}\` in reference \`${entryPath}\`. This is not the fault of the target \`${entryPath}\`, but is rather a bug in a rule.`,
     );
   }
 
-  if (!projectProperty) {
-    return {
-      message: `\`package.json\` should list \`"${propertyName}": "${getString(
-        templateProperty,
-      )}"\`, but does not.`,
-    };
-  } else if (!isEqual(projectProperty, templateProperty)) {
-    return {
-      message: `\`${propertyName}\` is "${getString(
-        projectProperty,
-      )}", when it should be "${getString(templateProperty)}".`,
+  const referenceProperty = get(referenceSchema, propertyPath);
+  let failure: RuleExecutionFailure | undefined;
+  if (has(targetSchema, propertyPath)) {
+    const targetProperty = get(targetSchema, propertyPath);
+    let isFailed = false;
+    if (typeof referenceProperty === 'object') {
+      if (!isMatch(targetProperty, referenceProperty)) {
+        isFailed = true;
+      }
+    } else if (!isEqual(targetProperty, referenceProperty)) {
+      isFailed = true;
+    }
+
+    if (isFailed) {
+      failure = {
+        message: `\`${propertyPath}\` is ${inspect(
+          targetProperty,
+        )}, when it should be ${inspect(referenceProperty)}.`,
+      };
+    }
+  } else {
+    failure = {
+      message: `\`${entryPath}\` should list \`'${propertyPath}': ${inspect(
+        referenceProperty,
+      )}\`, but does not.`,
     };
   }
 
-  return undefined;
+  return failure ? fail([failure]) : pass();
 }

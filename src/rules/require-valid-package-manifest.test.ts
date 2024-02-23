@@ -4,7 +4,7 @@ import path from 'path';
 import requireValidPackageManifest from './require-valid-package-manifest';
 import {
   buildMetaMaskRepository,
-  fakePackageManifest,
+  buildPackageManifestMock,
   withinSandbox,
 } from '../../tests/helpers';
 import { fail, pass } from '../rule-helpers';
@@ -18,7 +18,7 @@ describe('Rule: require-package-manifest', () => {
       });
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify(fakePackageManifest),
+        buildPackageManifestMock(),
       );
 
       const result = await requireValidPackageManifest.execute({

@@ -1,16 +1,16 @@
 import { writeFile } from '@metamask/utils/node';
 import path from 'path';
 
-import packageFilesConform from './package-files-conform';
+import packageModuleFieldConforms from './package-module-field-conforms';
 import {
   buildMetaMaskRepository,
-  fakePackageManifest,
+  buildPackageManifestMock,
   withinSandbox,
 } from '../../tests/helpers';
 import { fail, pass } from '../rule-helpers';
 
-describe('Rule: package-files-conforms', () => {
-  it('passes if the "files" field in the project\'s package.json matches the one in the template\'s package.json', async () => {
+describe('Rule: package-module-field-conforms', () => {
+  it('passes if the "module" field in the project\'s package.json matches the one in the template\'s package.json', async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
@@ -18,7 +18,9 @@ describe('Rule: package-files-conforms', () => {
       });
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify(fakePackageManifest),
+        buildPackageManifestMock({
+          module: 'test-module',
+        }),
       );
       const project = buildMetaMaskRepository({
         shortname: 'project',
@@ -26,10 +28,12 @@ describe('Rule: package-files-conforms', () => {
       });
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify(fakePackageManifest),
+        buildPackageManifestMock({
+          module: 'test-module',
+        }),
       );
 
-      const result = await packageFilesConform.execute({
+      const result = await packageModuleFieldConforms.execute({
         template,
         project,
         pass,
@@ -42,7 +46,7 @@ describe('Rule: package-files-conforms', () => {
     });
   });
 
-  it('fails if the "files" field in the project\'s package.json does not match the one in the template\'s package.json', async () => {
+  it('fails if the "module" field in the project\'s package.json does not match the one in the template\'s package.json', async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
@@ -50,22 +54,22 @@ describe('Rule: package-files-conforms', () => {
       });
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify(fakePackageManifest),
+        buildPackageManifestMock({
+          module: 'test-module',
+        }),
       );
       const project = buildMetaMaskRepository({
         shortname: 'project',
         directoryPath: path.join(sandbox.directoryPath, 'project'),
       });
-      const fakeProjectPackageManifest = {
-        ...fakePackageManifest,
-        files: ['test'],
-      };
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify(fakeProjectPackageManifest),
+        buildPackageManifestMock({
+          module: 'test',
+        }),
       );
 
-      const result = await packageFilesConform.execute({
+      const result = await packageModuleFieldConforms.execute({
         template,
         project,
         pass,
@@ -76,8 +80,7 @@ describe('Rule: package-files-conforms', () => {
         passed: false,
         failures: [
           {
-            message:
-              '`files` is "[ \'test\' ]", when it should be "[ \'test-files\' ]".',
+            message: "`module` is 'test', when it should be 'test-module'.",
           },
         ],
       });

@@ -1,16 +1,16 @@
 import { writeFile } from '@metamask/utils/node';
 import path from 'path';
 
-import packageMainConform from './package-main-conform';
+import packageTypesFieldConforms from './package-types-field-conforms';
 import {
   buildMetaMaskRepository,
-  fakePackageManifest,
+  buildPackageManifestMock,
   withinSandbox,
 } from '../../tests/helpers';
 import { fail, pass } from '../rule-helpers';
 
-describe('Rule: package-main-conforms', () => {
-  it('passes if the "main" field in the project\'s package.json matches the one in the template\'s package.json', async () => {
+describe('Rule: package-types-field-conforms', () => {
+  it('passes if the "types" field in the project\'s package.json matches the one in the template\'s package.json', async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
@@ -18,7 +18,7 @@ describe('Rule: package-main-conforms', () => {
       });
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify(fakePackageManifest),
+        buildPackageManifestMock({ types: 'test-types' }),
       );
       const project = buildMetaMaskRepository({
         shortname: 'project',
@@ -26,10 +26,10 @@ describe('Rule: package-main-conforms', () => {
       });
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify(fakePackageManifest),
+        buildPackageManifestMock({ types: 'test-types' }),
       );
 
-      const result = await packageMainConform.execute({
+      const result = await packageTypesFieldConforms.execute({
         template,
         project,
         pass,
@@ -42,7 +42,7 @@ describe('Rule: package-main-conforms', () => {
     });
   });
 
-  it('fails if the "main" field in the project\'s package.json does not match the one in the template\'s package.json', async () => {
+  it('fails if the "types" field in the project\'s package.json does not match the one in the template\'s package.json', async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
@@ -50,22 +50,18 @@ describe('Rule: package-main-conforms', () => {
       });
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify(fakePackageManifest),
+        buildPackageManifestMock({ types: 'test-types' }),
       );
       const project = buildMetaMaskRepository({
         shortname: 'project',
         directoryPath: path.join(sandbox.directoryPath, 'project'),
       });
-      const fakeProjectPackageManifest = {
-        ...fakePackageManifest,
-        main: 'test',
-      };
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify(fakeProjectPackageManifest),
+        buildPackageManifestMock({ types: 'test' }),
       );
 
-      const result = await packageMainConform.execute({
+      const result = await packageTypesFieldConforms.execute({
         template,
         project,
         pass,
@@ -76,7 +72,7 @@ describe('Rule: package-main-conforms', () => {
         passed: false,
         failures: [
           {
-            message: '`main` is "test", when it should be "test-main".',
+            message: "`types` is 'test', when it should be 'test-types'.",
           },
         ],
       });

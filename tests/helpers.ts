@@ -144,32 +144,28 @@ export function buildMetaMaskRepository({
   };
 }
 
-export const fakePackageManifest = {
-  packageManager: 'yarn',
-  engines: { node: '1.0.0' },
-  main: 'test-main',
-  module: 'test-module',
-  types: 'test-types',
-  files: ['test-files'],
-  exports: {
-    '.': {
-      test: 'test-pack',
+/**
+ * Provides package manifest in string format with all the required properties for testing.
+ * @param overrides - Properties to override.
+ * @returns PackageManifestMock.
+ */
+export function buildPackageManifestMock(
+  overrides?: Record<string, unknown>,
+): string {
+  const validPackageManifestMock = {
+    packageManager: 'yarn',
+    engines: { node: '1.0.0' },
+    main: 'test-main',
+    module: 'test-module',
+    types: 'test-types',
+    files: ['test-files'],
+    exports: {
+      '.': {},
+      './package.json': 'test',
     },
-    './package.json': 'test',
-  },
-  devDependencies: {
-    test: '1.0.0',
-    jest: '1.0.0',
-    'jest-it-up': '1.0.0',
-    '@types/node': '1.0.0',
-    'ts-node': '1.0.0',
-    tsup: '1.0.0',
-    typescript: '1.0.0',
-  },
-  scripts: {
-    test: 'test script',
-    'test:watch': 'test watch script',
-    build: 'test build',
-    'build:types': 'test build types',
-  },
-};
+    devDependencies: {},
+    scripts: {},
+  };
+
+  return JSON.stringify({ ...validPackageManifestMock, ...overrides });
+}

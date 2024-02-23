@@ -4,13 +4,13 @@ import path from 'path';
 import packageTypescriptDevDependenciesConform from './package-typescript-dev-dependencies-conform';
 import {
   buildMetaMaskRepository,
-  fakePackageManifest,
+  buildPackageManifestMock,
   withinSandbox,
 } from '../../tests/helpers';
 import { fail, pass } from '../rule-helpers';
 
 describe('Rule: package-typescript-dev-dependencies-conform', () => {
-  it('passes if the project and template have the same referenced package with the same version', async () => {
+  it('passes if the typescript related devDependencies of template exist in project with the version matching', async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
@@ -18,7 +18,14 @@ describe('Rule: package-typescript-dev-dependencies-conform', () => {
       });
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify(fakePackageManifest),
+        buildPackageManifestMock({
+          devDependencies: {
+            '@types/node': '1.0.0',
+            'ts-node': '1.0.0',
+            tsup: '1.0.0',
+            typescript: '1.0.0',
+          },
+        }),
       );
       const project = buildMetaMaskRepository({
         shortname: 'project',
@@ -26,7 +33,14 @@ describe('Rule: package-typescript-dev-dependencies-conform', () => {
       });
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify(fakePackageManifest),
+        buildPackageManifestMock({
+          devDependencies: {
+            '@types/node': '1.0.0',
+            'ts-node': '1.0.0',
+            tsup: '1.0.0',
+            typescript: '1.0.0',
+          },
+        }),
       );
       const result = await packageTypescriptDevDependenciesConform.execute({
         template,
@@ -47,24 +61,29 @@ describe('Rule: package-typescript-dev-dependencies-conform', () => {
       });
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify(fakePackageManifest),
+        buildPackageManifestMock({
+          devDependencies: {
+            '@types/node': '1.0.0',
+            'ts-node': '1.0.0',
+            tsup: '1.0.0',
+            typescript: '1.0.0',
+          },
+        }),
       );
       const project = buildMetaMaskRepository({
         shortname: 'project',
         directoryPath: path.join(sandbox.directoryPath, 'project'),
       });
-      const fakeProjectPackageManifest = {
-        ...fakePackageManifest,
-        devDependencies: {
-          '@types/node': '1.0.0',
-          'ts-node': '0.0.1',
-          tsup: '1.0.0',
-          typescript: '1.0.0',
-        },
-      };
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify(fakeProjectPackageManifest),
+        buildPackageManifestMock({
+          devDependencies: {
+            '@types/node': '1.0.0',
+            'ts-node': '0.0.1',
+            tsup: '1.0.0',
+            typescript: '1.0.0',
+          },
+        }),
       );
       const result = await packageTypescriptDevDependenciesConform.execute({
         template,
@@ -77,7 +96,8 @@ describe('Rule: package-typescript-dev-dependencies-conform', () => {
         passed: false,
         failures: [
           {
-            message: '`ts-node` is "0.0.1", when it should be "1.0.0".',
+            message:
+              "`devDependencies.[ts-node]` is '0.0.1', when it should be '1.0.0'.",
           },
         ],
       });
@@ -92,23 +112,28 @@ describe('Rule: package-typescript-dev-dependencies-conform', () => {
       });
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify(fakePackageManifest),
+        buildPackageManifestMock({
+          devDependencies: {
+            '@types/node': '1.0.0',
+            'ts-node': '1.0.0',
+            tsup: '1.0.0',
+            typescript: '1.0.0',
+          },
+        }),
       );
       const project = buildMetaMaskRepository({
         shortname: 'project',
         directoryPath: path.join(sandbox.directoryPath, 'project'),
       });
-      const fakeProjectPackageManifest = {
-        ...fakePackageManifest,
-        devDependencies: {
-          '@types/node': '1.0.0',
-          tsup: '1.0.0',
-          typescript: '1.0.0',
-        },
-      };
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify(fakeProjectPackageManifest),
+        buildPackageManifestMock({
+          devDependencies: {
+            '@types/node': '1.0.0',
+            tsup: '1.0.0',
+            typescript: '1.0.0',
+          },
+        }),
       );
       const result = await packageTypescriptDevDependenciesConform.execute({
         template,
@@ -122,7 +147,7 @@ describe('Rule: package-typescript-dev-dependencies-conform', () => {
         failures: [
           {
             message:
-              '`package.json` should list `"ts-node": "1.0.0"`, but does not.',
+              "`package.json` should list `'devDependencies.[ts-node]': '1.0.0'`, but does not.",
           },
         ],
       });
@@ -135,17 +160,15 @@ describe('Rule: package-typescript-dev-dependencies-conform', () => {
         shortname: 'template',
         directoryPath: path.join(sandbox.directoryPath, 'template'),
       });
-      const fakeTemplatePackageManifest = {
-        ...fakePackageManifest,
-        devDependencies: {
-          '@types/node': '1.0.0',
-          tsup: '1.0.0',
-          typescript: '1.0.0',
-        },
-      };
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify(fakeTemplatePackageManifest),
+        buildPackageManifestMock({
+          devDependencies: {
+            '@types/node': '1.0.0',
+            tsup: '1.0.0',
+            typescript: '1.0.0',
+          },
+        }),
       );
       const project = buildMetaMaskRepository({
         shortname: 'project',
@@ -153,7 +176,14 @@ describe('Rule: package-typescript-dev-dependencies-conform', () => {
       });
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify(fakePackageManifest),
+        buildPackageManifestMock({
+          devDependencies: {
+            '@types/node': '1.0.0',
+            'ts-node': '1.0.0',
+            tsup: '1.0.0',
+            typescript: '1.0.0',
+          },
+        }),
       );
       await expect(
         packageTypescriptDevDependenciesConform.execute({
@@ -163,7 +193,7 @@ describe('Rule: package-typescript-dev-dependencies-conform', () => {
           fail,
         }),
       ).rejects.toThrow(
-        'Could not find "ts-node" in template\'s package.json. This is not the fault of the project, but is rather a bug in a rule.',
+        'Could not find `devDependencies.[ts-node]` in reference `package.json`. This is not the fault of the target `package.json`, but is rather a bug in a rule.',
       );
     });
   });

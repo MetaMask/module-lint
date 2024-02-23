@@ -4,7 +4,7 @@ import path from 'path';
 import packageLintDependenciesConform from './package-lint-dependencies-conform';
 import {
   buildMetaMaskRepository,
-  fakePackageManifest,
+  buildPackageManifestMock,
   withinSandbox,
 } from '../../tests/helpers';
 import { fail, pass } from '../rule-helpers';
@@ -16,22 +16,20 @@ describe('Rule: package-lint-dependencies-conform', () => {
         shortname: 'template',
         directoryPath: path.join(sandbox.directoryPath, 'template'),
       });
-      const fakeTemplatePackageManifest = {
-        ...fakePackageManifest,
-        devDependencies: {
-          eslint: '1.0.0',
-          '@metamask/eslint-config-foo': '1.0.0',
-          '@typescript-eslint/foo': '1.0.0',
-          'eslint-plugin-foo': '1.0.0',
-          'eslint-config-foo': '1.0.0',
-          prettier: '1.0.0',
-          'prettier-plugin-foo': '1.0.0',
-          'prettier-config-foo': '1.0.0',
-        },
-      };
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify(fakeTemplatePackageManifest),
+        buildPackageManifestMock({
+          devDependencies: {
+            eslint: '1.0.0',
+            '@metamask/eslint-config-foo': '1.0.0',
+            '@typescript-eslint/foo': '1.0.0',
+            'eslint-plugin-foo': '1.0.0',
+            'eslint-config-foo': '1.0.0',
+            prettier: '1.0.0',
+            'prettier-plugin-foo': '1.0.0',
+            'prettier-config-foo': '1.0.0',
+          },
+        }),
       );
       const project = buildMetaMaskRepository({
         shortname: 'project',
@@ -39,7 +37,18 @@ describe('Rule: package-lint-dependencies-conform', () => {
       });
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify(fakeTemplatePackageManifest),
+        buildPackageManifestMock({
+          devDependencies: {
+            eslint: '1.0.0',
+            '@metamask/eslint-config-foo': '1.0.0',
+            '@typescript-eslint/foo': '1.0.0',
+            'eslint-plugin-foo': '1.0.0',
+            'eslint-config-foo': '1.0.0',
+            prettier: '1.0.0',
+            'prettier-plugin-foo': '1.0.0',
+            'prettier-config-foo': '1.0.0',
+          },
+        }),
       );
 
       const result = await packageLintDependenciesConform.execute({
@@ -61,43 +70,39 @@ describe('Rule: package-lint-dependencies-conform', () => {
         shortname: 'template',
         directoryPath: path.join(sandbox.directoryPath, 'template'),
       });
-      const fakeTemplatePackageManifest = {
-        ...fakePackageManifest,
-        devDependencies: {
-          eslint: '1.1.0',
-          '@metamask/eslint-config-foo': '1.0.0',
-          '@typescript-eslint/foo': '1.0.0',
-          'eslint-plugin-foo': '1.0.0',
-          'eslint-config-foo': '1.0.0',
-          prettier: '1.0.0',
-          'prettier-plugin-foo': '1.0.0',
-          'prettier-config-foo': '1.0.0',
-        },
-      };
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify(fakeTemplatePackageManifest),
+        buildPackageManifestMock({
+          devDependencies: {
+            eslint: '1.0.0',
+            '@metamask/eslint-config-foo': '1.0.0',
+            '@typescript-eslint/foo': '1.0.0',
+            'eslint-plugin-foo': '1.0.0',
+            'eslint-config-foo': '1.0.0',
+            prettier: '1.0.0',
+            'prettier-plugin-foo': '1.0.0',
+            'prettier-config-foo': '1.0.0',
+          },
+        }),
       );
       const project = buildMetaMaskRepository({
         shortname: 'project',
         directoryPath: path.join(sandbox.directoryPath, 'project'),
       });
-      const fakeProjectPackageManifest = {
-        ...fakePackageManifest,
-        devDependencies: {
-          eslint: '1.0.0',
-          '@metamask/eslint-config-foo': '1.0.0',
-          '@typescript-eslint/foo': '1.0.0',
-          'eslint-plugin-foo': '1.0.0',
-          'eslint-config-foo': '1.0.0',
-          prettier: '1.0.0',
-          'prettier-plugin-foo': '1.0.0',
-          'prettier-config-foo': '1.0.0',
-        },
-      };
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify(fakeProjectPackageManifest),
+        buildPackageManifestMock({
+          devDependencies: {
+            eslint: '0.0.1',
+            '@metamask/eslint-config-foo': '1.0.0',
+            '@typescript-eslint/foo': '1.0.0',
+            'eslint-plugin-foo': '1.0.0',
+            'eslint-config-foo': '1.0.0',
+            prettier: '1.0.0',
+            'prettier-plugin-foo': '1.0.0',
+            'prettier-config-foo': '1.0.0',
+          },
+        }),
       );
 
       const result = await packageLintDependenciesConform.execute({
@@ -110,7 +115,7 @@ describe('Rule: package-lint-dependencies-conform', () => {
       expect(result).toStrictEqual({
         passed: false,
         failures: [
-          { message: '`eslint` is "1.0.0", when it should be "1.1.0".' },
+          { message: '`eslint` is "0.0.1", when it should be "1.0.0".' },
         ],
       });
     });
@@ -122,42 +127,38 @@ describe('Rule: package-lint-dependencies-conform', () => {
         shortname: 'template',
         directoryPath: path.join(sandbox.directoryPath, 'template'),
       });
-      const fakeTemplatePackageManifest = {
-        ...fakePackageManifest,
-        devDependencies: {
-          eslint: '1.0.0',
-          '@metamask/eslint-config-foo': '1.0.0',
-          '@typescript-eslint/foo': '1.0.0',
-          'eslint-plugin-foo': '1.0.0',
-          'eslint-config-foo': '1.0.0',
-          prettier: '1.0.0',
-          'prettier-plugin-foo': '1.0.0',
-          'prettier-config-foo': '1.0.0',
-        },
-      };
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify(fakeTemplatePackageManifest),
+        buildPackageManifestMock({
+          devDependencies: {
+            eslint: '1.0.0',
+            '@metamask/eslint-config-foo': '1.0.0',
+            '@typescript-eslint/foo': '1.0.0',
+            'eslint-plugin-foo': '1.0.0',
+            'eslint-config-foo': '1.0.0',
+            prettier: '1.0.0',
+            'prettier-plugin-foo': '1.0.0',
+            'prettier-config-foo': '1.0.0',
+          },
+        }),
       );
       const project = buildMetaMaskRepository({
         shortname: 'project',
         directoryPath: path.join(sandbox.directoryPath, 'project'),
       });
-      const fakeProjectPackageManifest = {
-        ...fakePackageManifest,
-        devDependencies: {
-          '@metamask/eslint-config-foo': '1.0.0',
-          '@typescript-eslint/foo': '1.0.0',
-          'eslint-plugin-foo': '1.0.0',
-          'eslint-config-foo': '1.0.0',
-          prettier: '1.0.0',
-          'prettier-plugin-foo': '1.0.0',
-          'prettier-config-foo': '1.0.0',
-        },
-      };
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify(fakeProjectPackageManifest),
+        buildPackageManifestMock({
+          devDependencies: {
+            '@metamask/eslint-config-foo': '1.0.0',
+            '@typescript-eslint/foo': '1.0.0',
+            'eslint-plugin-foo': '1.0.0',
+            'eslint-config-foo': '1.0.0',
+            prettier: '1.0.0',
+            'prettier-plugin-foo': '1.0.0',
+            'prettier-config-foo': '1.0.0',
+          },
+        }),
       );
 
       const result = await packageLintDependenciesConform.execute({
@@ -187,7 +188,7 @@ describe('Rule: package-lint-dependencies-conform', () => {
       });
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify(fakePackageManifest),
+        buildPackageManifestMock(),
       );
       const project = buildMetaMaskRepository({
         shortname: 'project',
@@ -195,7 +196,18 @@ describe('Rule: package-lint-dependencies-conform', () => {
       });
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify(fakePackageManifest),
+        buildPackageManifestMock({
+          devDependencies: {
+            eslint: '1.0.0',
+            '@metamask/eslint-config-foo': '1.0.0',
+            '@typescript-eslint/foo': '1.0.0',
+            'eslint-plugin-foo': '1.0.0',
+            'eslint-config-foo': '1.0.0',
+            prettier: '1.0.0',
+            'prettier-plugin-foo': '1.0.0',
+            'prettier-config-foo': '1.0.0',
+          },
+        }),
       );
 
       const result = await packageLintDependenciesConform.execute({

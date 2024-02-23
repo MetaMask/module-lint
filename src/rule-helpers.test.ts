@@ -11,13 +11,12 @@ import {
   fail,
   fileConforms,
   fileExists,
-  getString,
-  packagePropertiesConform,
+  packageManifestPropertiesConform,
   pass,
 } from './rule-helpers';
 import {
   buildMetaMaskRepository,
-  fakePackageManifest,
+  buildPackageManifestMock,
   withinSandbox,
 } from '../tests/helpers';
 
@@ -576,8 +575,8 @@ describe('directoryAndContentsConform', () => {
   });
 });
 
-describe('packagePropertiesConform', () => {
-  it('passes if the project and template have the same referenced property with its value matching', async () => {
+describe('packageManifestPropertiesConform', () => {
+  it('passes if the project and template have the `main` with its value matching', async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
@@ -585,7 +584,7 @@ describe('packagePropertiesConform', () => {
       });
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify(fakePackageManifest),
+        buildPackageManifestMock(),
       );
       const project = buildMetaMaskRepository({
         shortname: 'project',
@@ -593,9 +592,9 @@ describe('packagePropertiesConform', () => {
       });
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify(fakePackageManifest),
+        buildPackageManifestMock(),
       );
-      const result = await packagePropertiesConform('main', {
+      const result = await packageManifestPropertiesConform(['main'], {
         template,
         project,
         pass,
@@ -606,7 +605,7 @@ describe('packagePropertiesConform', () => {
     });
   });
 
-  it('passes if the project and template have the same referenced property and its child properties', async () => {
+  it('passes if the project and template have the `devDependencies` and its child property `test` matching', async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
@@ -614,7 +613,7 @@ describe('packagePropertiesConform', () => {
       });
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify(fakePackageManifest),
+        buildPackageManifestMock({ devDependencies: { test: '1.0.0' } }),
       );
       const project = buildMetaMaskRepository({
         shortname: 'project',
@@ -622,17 +621,16 @@ describe('packagePropertiesConform', () => {
       });
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify(fakePackageManifest),
+        buildPackageManifestMock({ devDependencies: { test: '1.0.0' } }),
       );
-      const result = await packagePropertiesConform(
-        'devDependencies',
+      const result = await packageManifestPropertiesConform(
+        ["devDependencies.['test']"],
         {
           template,
           project,
           pass,
           fail,
         },
-        ['test'],
       );
 
       expect(result).toStrictEqual({ passed: true });
@@ -647,39 +645,32 @@ describe('packagePropertiesConform', () => {
       });
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify(fakePackageManifest),
+        buildPackageManifestMock({ devDependencies: { test: '1.0.0' } }),
       );
       const project = buildMetaMaskRepository({
         shortname: 'project',
         directoryPath: path.join(sandbox.directoryPath, 'project'),
       });
-      const fakeProjectPackageManifest = {
-        ...fakePackageManifest,
-        devDependencies: {
-          test: '0.0.1',
-        },
-      };
-
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify(fakeProjectPackageManifest),
+        buildPackageManifestMock({ devDependencies: { test: '0.0.1' } }),
       );
-      const result = await packagePropertiesConform(
-        'devDependencies',
+      const result = await packageManifestPropertiesConform(
+        ["devDependencies.['test']"],
         {
           template,
           project,
           pass,
           fail,
         },
-        ['test'],
       );
 
       expect(result).toStrictEqual({
         passed: false,
         failures: [
           {
-            message: '`test` is "0.0.1", when it should be "1.0.0".',
+            message:
+              "`devDependencies.['test']` is '0.0.1', when it should be '1.0.0'.",
           },
         ],
       });
@@ -692,16 +683,14 @@ describe('packagePropertiesConform', () => {
         shortname: 'template',
         directoryPath: path.join(sandbox.directoryPath, 'template'),
       });
-      const fakeTemplatePackageManifest = {
-        ...fakePackageManifest,
-        devDependencies: {
-          test: '1.0.0',
-          'new-pack': '1.0.0',
-        },
-      };
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify(fakeTemplatePackageManifest),
+        buildPackageManifestMock({
+          devDependencies: {
+            test: '1.0.0',
+            'new-pack': '1.0.0',
+          },
+        }),
       );
       const project = buildMetaMaskRepository({
         shortname: 'project',
@@ -710,18 +699,17 @@ describe('packagePropertiesConform', () => {
 
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify(fakePackageManifest),
+        buildPackageManifestMock(),
       );
 
-      const result = await packagePropertiesConform(
-        'devDependencies',
+      const result = await packageManifestPropertiesConform(
+        ["devDependencies.['new-pack']"],
         {
           template,
           project,
           pass,
           fail,
         },
-        ['new-pack'],
       );
 
       expect(result).toStrictEqual({
@@ -729,7 +717,7 @@ describe('packagePropertiesConform', () => {
         failures: [
           {
             message:
-              '`package.json` should list `"new-pack": "1.0.0"`, but does not.',
+              "`package.json` should list `'devDependencies.['new-pack']': '1.0.0'`, but does not.",
           },
         ],
       });
@@ -744,7 +732,7 @@ describe('packagePropertiesConform', () => {
       });
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify(fakePackageManifest),
+        buildPackageManifestMock(),
       );
       const project = buildMetaMaskRepository({
         shortname: 'project',
@@ -752,37 +740,19 @@ describe('packagePropertiesConform', () => {
       });
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify(fakePackageManifest),
+        buildPackageManifestMock(),
       );
 
       await expect(
-        packagePropertiesConform(
-          'devDependencies',
-          {
-            template,
-            project,
-            pass,
-            fail,
-          },
-          ['new-pack'],
-        ),
+        packageManifestPropertiesConform(["devDependencies.['new-pack']"], {
+          template,
+          project,
+          pass,
+          fail,
+        }),
       ).rejects.toThrow(
-        'Could not find "new-pack" in template\'s package.json. This is not the fault of the project, but is rather a bug in a rule.',
+        "Could not find `devDependencies.['new-pack']` in reference `package.json`. This is not the fault of the target `package.json`, but is rather a bug in a rule.",
       );
     });
-  });
-});
-
-describe('getString', () => {
-  it('returns empty string when the input is undefined', async () => {
-    expect(getString(undefined)).toBe('');
-  });
-
-  it('returns same string when the input is string', async () => {
-    expect(getString('test')).toBe('test');
-  });
-
-  it('returns stringified object when the input is json object', async () => {
-    expect(getString({ test: 'test' })).toBe("{ test: 'test' }");
   });
 });

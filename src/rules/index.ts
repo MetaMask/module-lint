@@ -1,16 +1,16 @@
 import allYarnModernFilesConform from './all-yarn-modern-files-conform';
 import classicYarnConfigFileAbsent from './classic-yarn-config-file-absent';
 import packageEnginesNodeFieldConforms from './package-engines-node-field-conforms';
-import packageExportsConform from './package-exports-conform';
-import packageFilesConform from './package-files-conform';
+import packageExportsFieldConforms from './package-exports-field-conforms';
+import packageFilesFieldConforms from './package-files-field-conforms';
 import packageJestDependenciesConform from './package-jest-dependencies-conform';
 import packageLavamoatTsupConforms from './package-lavamoat-tsup-conforms';
 import packageLintDependenciesConform from './package-lint-dependencies-conform';
-import packageMainConform from './package-main-conform';
-import packageModuleConform from './package-module-conform';
+import packageMainFieldConforms from './package-main-field-conforms';
+import packageModuleFieldConforms from './package-module-field-conforms';
 import packagePackageManagerFieldConforms from './package-package-manager-field-conforms';
 import packageTestScriptsConform from './package-test-scripts-conform';
-import packageTypesConform from './package-types-conform';
+import packageTypesFieldConforms from './package-types-field-conforms';
 import packageTypescriptDevDependenciesConform from './package-typescript-dev-dependencies-conform';
 import packageTypescriptScriptsConform from './package-typescript-scripts-conform';
 import readmeListsCorrectYarnVersion from './readme-lists-correct-yarn-version';
@@ -44,10 +44,10 @@ export const rules = [
   requireTsupConfig,
   packageTypescriptDevDependenciesConform,
   packageTypescriptScriptsConform,
-  packageExportsConform,
-  packageMainConform,
-  packageModuleConform,
-  packageTypesConform,
-  packageFilesConform,
+  packageExportsFieldConforms,
+  packageMainFieldConforms,
+  packageModuleFieldConforms,
+  packageTypesFieldConforms,
+  packageFilesFieldConforms,
   packageLavamoatTsupConforms,
 ] as const;
