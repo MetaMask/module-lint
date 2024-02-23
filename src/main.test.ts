@@ -144,11 +144,11 @@ repo-1
   - Do the test-related \`scripts\` in \`package.json\` conform? ✅
   - Do the typescript-related \`devDependencies\` in \`package.json\` conform? ✅
   - Do the typescript-related \`scripts\` in \`package.json\` conform? ✅
-  - Do the \`exports\` in \`package.json\` conform? ✅
-  - Does the \`main\` in \`package.json\` conform? ✅
-  - Does the \`module\` in \`package.json\` conform? ✅
-  - Do the \`types\` in \`package.json\` conform? ✅
-  - Do the \`files\` in \`package.json\` conform? ✅
+  - Do the \`exports\` field in \`package.json\` conform? ✅
+  - Does the \`main\` field in \`package.json\` conform? ✅
+  - Does the \`module\` field in \`package.json\` conform? ✅
+  - Do the \`types\` field in \`package.json\` conform? ✅
+  - Do the \`files\` field in \`package.json\` conform? ✅
   - Does the \`lavamoat.allowscripts\` field in \`package.json\` conform? ✅
 - Is \`README.md\` present? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
@@ -178,11 +178,11 @@ repo-2
   - Do the test-related \`scripts\` in \`package.json\` conform? ✅
   - Do the typescript-related \`devDependencies\` in \`package.json\` conform? ✅
   - Do the typescript-related \`scripts\` in \`package.json\` conform? ✅
-  - Do the \`exports\` in \`package.json\` conform? ✅
-  - Does the \`main\` in \`package.json\` conform? ✅
-  - Does the \`module\` in \`package.json\` conform? ✅
-  - Do the \`types\` in \`package.json\` conform? ✅
-  - Do the \`files\` in \`package.json\` conform? ✅
+  - Do the \`exports\` field in \`package.json\` conform? ✅
+  - Does the \`main\` field in \`package.json\` conform? ✅
+  - Does the \`module\` field in \`package.json\` conform? ✅
+  - Do the \`types\` field in \`package.json\` conform? ✅
+  - Do the \`files\` field in \`package.json\` conform? ✅
   - Does the \`lavamoat.allowscripts\` field in \`package.json\` conform? ✅
 - Is \`README.md\` present? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
@@ -491,11 +491,11 @@ repo-1
   - Do the test-related \`scripts\` in \`package.json\` conform? ✅
   - Do the typescript-related \`devDependencies\` in \`package.json\` conform? ✅
   - Do the typescript-related \`scripts\` in \`package.json\` conform? ✅
-  - Do the \`exports\` in \`package.json\` conform? ✅
-  - Does the \`main\` in \`package.json\` conform? ✅
-  - Does the \`module\` in \`package.json\` conform? ✅
-  - Do the \`types\` in \`package.json\` conform? ✅
-  - Do the \`files\` in \`package.json\` conform? ✅
+  - Do the \`exports\` field in \`package.json\` conform? ✅
+  - Does the \`main\` field in \`package.json\` conform? ✅
+  - Does the \`module\` field in \`package.json\` conform? ✅
+  - Do the \`types\` field in \`package.json\` conform? ✅
+  - Do the \`files\` field in \`package.json\` conform? ✅
   - Does the \`lavamoat.allowscripts\` field in \`package.json\` conform? ✅
 - Is \`README.md\` present? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
@@ -525,11 +525,11 @@ repo-2
   - Do the test-related \`scripts\` in \`package.json\` conform? ✅
   - Do the typescript-related \`devDependencies\` in \`package.json\` conform? ✅
   - Do the typescript-related \`scripts\` in \`package.json\` conform? ✅
-  - Do the \`exports\` in \`package.json\` conform? ✅
-  - Does the \`main\` in \`package.json\` conform? ✅
-  - Does the \`module\` in \`package.json\` conform? ✅
-  - Do the \`types\` in \`package.json\` conform? ✅
-  - Do the \`files\` in \`package.json\` conform? ✅
+  - Do the \`exports\` field in \`package.json\` conform? ✅
+  - Does the \`main\` field in \`package.json\` conform? ✅
+  - Does the \`module\` field in \`package.json\` conform? ✅
+  - Do the \`types\` field in \`package.json\` conform? ✅
+  - Do the \`files\` field in \`package.json\` conform? ✅
   - Does the \`lavamoat.allowscripts\` field in \`package.json\` conform? ✅
 - Is \`README.md\` present? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
