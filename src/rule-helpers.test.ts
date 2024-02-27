@@ -893,6 +893,31 @@ describe('dataConform', () => {
       ],
     });
   });
+  it('fails if the target is null', () => {
+    const referenceObject = {
+      firstLevel: 'first level',
+      deeperLevel: {
+        test: 'test',
+      },
+    };
+
+    const result = dataConform(
+      referenceObject,
+      null,
+      'firstLevel',
+      'test.json',
+    );
+
+    expect(result).toStrictEqual({
+      passed: false,
+      failures: [
+        {
+          message:
+            "`test.json` should list `'firstLevel': 'first level'`, but does not.",
+        },
+      ],
+    });
+  });
 
   it('fails if the reference has a property at the first level that the target does not have', () => {
     const referenceObject = {
