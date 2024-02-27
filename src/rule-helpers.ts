@@ -1,4 +1,4 @@
-import { isEqual, get, has, isMatch } from 'lodash';
+import { isEqual, get, has, isMatch, isObject } from 'lodash';
 import { inspect } from 'util';
 
 import type {
@@ -231,48 +231,44 @@ export async function packageManifestPropertiesConform(
  * Performs a deep comparison between template data and project data to determine if they are equivalent.
  * In case of equals, it returns undefined, otherwise failure message.
  *
- * @param referenceSchema - Reference schema.
- * @param targetSchema - Target schema.
+ * @param referenceObject - Reference object.
+ * @param targetObject - The object to be compared with reference object.
  * @param propertyPath - Path of the property.
  * @param entryPath - The path to the file from which schema is prepared.
  * @returns PartialRuleExecutionResult.
  */
 export function dataConform<Schema>(
-  referenceSchema: Schema,
-  targetSchema: Schema,
+  referenceObject: Schema,
+  targetObject: Schema,
   propertyPath: string,
   entryPath: string,
 ): PartialRuleExecutionResult {
-  if (!has(referenceSchema, propertyPath)) {
+  if (!has(referenceObject, propertyPath)) {
     throw new Error(
       `Could not find \`${propertyPath}\` in reference \`${entryPath}\`. This is not the fault of the target \`${entryPath}\`, but is rather a bug in a rule.`,
     );
   }
 
-  const referenceProperty = get(referenceSchema, propertyPath);
+  const referenceValue = get(referenceObject, propertyPath);
   let failure: RuleExecutionFailure | undefined;
-  if (has(targetSchema, propertyPath)) {
-    const targetProperty = get(targetSchema, propertyPath);
-    let isFailed = false;
-    if (typeof referenceProperty === 'object') {
-      if (!isMatch(targetProperty, referenceProperty)) {
-        isFailed = true;
-      }
-    } else if (!isEqual(targetProperty, referenceProperty)) {
-      isFailed = true;
-    }
+  if (has(targetObject, propertyPath)) {
+    const targetValue = get(targetObject, propertyPath);
+    const isPassed =
+      isObject(targetValue) && isObject(referenceValue)
+        ? isMatch(targetValue, referenceValue)
+        : isEqual(targetValue, referenceValue);
 
-    if (isFailed) {
+    if (!isPassed) {
       failure = {
         message: `\`${propertyPath}\` is ${inspect(
-          targetProperty,
-        )}, when it should be ${inspect(referenceProperty)}.`,
+          targetValue,
+        )}, when it should be ${inspect(referenceValue)}.`,
       };
     }
   } else {
     failure = {
       message: `\`${entryPath}\` should list \`'${propertyPath}': ${inspect(
-        referenceProperty,
+        referenceValue,
       )}\`, but does not.`,
     };
   }

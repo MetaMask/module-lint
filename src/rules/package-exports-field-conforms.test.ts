@@ -39,6 +39,7 @@ describe('Rule: package-exports-field-conforms', () => {
               test: 'test-pack',
             },
             './package.json': 'test',
+            extra: 'export',
           },
         }),
       );

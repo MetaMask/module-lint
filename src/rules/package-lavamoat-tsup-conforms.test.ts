@@ -9,8 +9,8 @@ import {
 } from '../../tests/helpers';
 import { fail, pass } from '../rule-helpers';
 
-describe('Rule: package-lavamoat-tsup-conform', () => {
-  it('passes if the project and template have the same referenced scripts and matches', async () => {
+describe('Rule: package-lavamoat-tsup-conforms', () => {
+  it('passes if the project\'s and template\'s package manifests list "tsup>esbuild" in lavamoat.allowScripts and the values match', async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
@@ -36,6 +36,7 @@ describe('Rule: package-lavamoat-tsup-conform', () => {
           lavamoat: {
             allowScripts: {
               'tsup>esbuild': true,
+              'another-package': false,
             },
           },
         }),
@@ -51,7 +52,7 @@ describe('Rule: package-lavamoat-tsup-conform', () => {
     });
   });
 
-  it('fails if the project has the same referenced scripts as the template, but its value does not match', async () => {
+  it('fails if the project\'s and template\'s package manifests list "tsup>esbuild" in lavamoat.allowScripts, but the values do not match', async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
@@ -100,7 +101,7 @@ describe('Rule: package-lavamoat-tsup-conform', () => {
     });
   });
 
-  it('fails if the project has lavamoat and allowScripts, but does not contain tsup>ebuild', async () => {
+  it("fails if the project's package manifest has lavamoat and allowScripts, but does not contain tsup>ebuild", async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
