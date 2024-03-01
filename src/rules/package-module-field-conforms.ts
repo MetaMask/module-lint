@@ -3,13 +3,10 @@ import { RuleName } from './types';
 import { packageManifestPropertiesConform } from '../rule-helpers';
 
 export default buildRule({
-  name: RuleName.PackageTestScriptsConform,
-  description: 'Do the test-related `scripts` in `package.json` conform?',
+  name: RuleName.PackageModuleFieldConforms,
+  description: 'Does the `module` field in `package.json` conform?',
   dependencies: [RuleName.RequireValidPackageManifest],
   execute: async (ruleExecutionArguments) => {
-    return packageManifestPropertiesConform(
-      ['scripts.[test]', 'scripts.[test:watch]'],
-      ruleExecutionArguments,
-    );
+    return packageManifestPropertiesConform(['module'], ruleExecutionArguments);
   },
 });

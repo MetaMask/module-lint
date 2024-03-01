@@ -2,7 +2,11 @@ import { writeFile } from '@metamask/utils/node';
 import path from 'path';
 
 import packageJestDependenciesConform from './package-jest-dependencies-conform';
-import { buildMetaMaskRepository, withinSandbox } from '../../tests/helpers';
+import {
+  buildMetaMaskRepository,
+  buildPackageManifestMock,
+  withinSandbox,
+} from '../../tests/helpers';
 import { fail, pass } from '../rule-helpers';
 
 describe('Rule: package-jest-dependencies-conform', () => {
@@ -14,16 +18,8 @@ describe('Rule: package-jest-dependencies-conform', () => {
       });
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify({
-          packageManager: 'a',
-          engines: { node: 'test' },
-          devDependencies: {
-            jest: '1.0.0',
-            'jest-it-up': '1.0.0',
-          },
-          scripts: {
-            test: '',
-          },
+        buildPackageManifestMock({
+          devDependencies: { jest: '1.0.0', 'jest-it-up': '1.0.0' },
         }),
       );
       const project = buildMetaMaskRepository({
@@ -32,16 +28,8 @@ describe('Rule: package-jest-dependencies-conform', () => {
       });
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify({
-          packageManager: 'a',
-          engines: { node: 'test' },
-          devDependencies: {
-            jest: '1.0.0',
-            'jest-it-up': '1.0.0',
-          },
-          scripts: {
-            test: '',
-          },
+        buildPackageManifestMock({
+          devDependencies: { jest: '1.0.0', 'jest-it-up': '1.0.0' },
         }),
       );
 
@@ -66,16 +54,8 @@ describe('Rule: package-jest-dependencies-conform', () => {
       });
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify({
-          packageManager: 'a',
-          engines: { node: 'test' },
-          devDependencies: {
-            jest: '1.1.0',
-            'jest-it-up': '1.0.0',
-          },
-          scripts: {
-            test: '',
-          },
+        buildPackageManifestMock({
+          devDependencies: { jest: '1.0.0', 'jest-it-up': '1.0.0' },
         }),
       );
       const project = buildMetaMaskRepository({
@@ -84,16 +64,8 @@ describe('Rule: package-jest-dependencies-conform', () => {
       });
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify({
-          packageManager: 'a',
-          engines: { node: 'test' },
-          devDependencies: {
-            jest: '1.0.0',
-            'jest-it-up': '1.0.0',
-          },
-          scripts: {
-            test: '',
-          },
+        buildPackageManifestMock({
+          devDependencies: { jest: '0.0.1', 'jest-it-up': '1.0.0' },
         }),
       );
 
@@ -107,7 +79,7 @@ describe('Rule: package-jest-dependencies-conform', () => {
       expect(result).toStrictEqual({
         passed: false,
         failures: [
-          { message: '`jest` is "1.0.0", when it should be "1.1.0".' },
+          { message: '`jest` is "0.0.1", when it should be "1.0.0".' },
         ],
       });
     });
@@ -121,16 +93,8 @@ describe('Rule: package-jest-dependencies-conform', () => {
       });
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify({
-          packageManager: 'a',
-          engines: { node: 'test' },
-          devDependencies: {
-            jest: '1.1.0',
-            'jest-it-up': '1.0.0',
-          },
-          scripts: {
-            test: '',
-          },
+        buildPackageManifestMock({
+          devDependencies: { jest: '1.0.0', 'jest-it-up': '1.0.0' },
         }),
       );
       const project = buildMetaMaskRepository({
@@ -139,15 +103,8 @@ describe('Rule: package-jest-dependencies-conform', () => {
       });
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify({
-          packageManager: 'a',
-          engines: { node: 'test' },
-          devDependencies: {
-            'jest-it-up': '1.0.0',
-          },
-          scripts: {
-            test: '',
-          },
+        buildPackageManifestMock({
+          devDependencies: { 'jest-it-up': '1.0.0' },
         }),
       );
 
@@ -163,7 +120,7 @@ describe('Rule: package-jest-dependencies-conform', () => {
         failures: [
           {
             message:
-              '`package.json` should list `"jest": "1.1.0"` in `devDependencies`, but does not.',
+              '`package.json` should list `"jest": "1.0.0"` in `devDependencies`, but does not.',
           },
         ],
       });
@@ -178,15 +135,8 @@ describe('Rule: package-jest-dependencies-conform', () => {
       });
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        JSON.stringify({
-          packageManager: 'a',
-          engines: { node: 'test' },
-          devDependencies: {
-            'jest-it-up': '1.0.0',
-          },
-          scripts: {
-            test: '',
-          },
+        buildPackageManifestMock({
+          devDependencies: { 'jest-it-up': '1.0.0' },
         }),
       );
       const project = buildMetaMaskRepository({
@@ -195,16 +145,8 @@ describe('Rule: package-jest-dependencies-conform', () => {
       });
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify({
-          packageManager: 'a',
-          engines: { node: 'test' },
-          devDependencies: {
-            jest: '1.0.0',
-            'jest-it-up': '1.0.0',
-          },
-          scripts: {
-            test: '',
-          },
+        buildPackageManifestMock({
+          devDependencies: { jest: '1.0.0', 'jest-it-up': '1.0.0' },
         }),
       );
 

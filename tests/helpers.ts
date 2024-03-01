@@ -143,3 +143,29 @@ export function buildMetaMaskRepository({
     fs,
   };
 }
+
+/**
+ * Provides package manifest in string format with all the required properties for testing.
+ * @param overrides - Properties to override.
+ * @returns PackageManifestMock.
+ */
+export function buildPackageManifestMock(
+  overrides?: Record<string, unknown>,
+): string {
+  const validPackageManifestMock = {
+    packageManager: 'yarn',
+    engines: { node: '1.0.0' },
+    main: 'test-main',
+    module: 'test-module',
+    types: 'test-types',
+    files: ['test-files'],
+    exports: {
+      '.': {},
+      './package.json': 'test',
+    },
+    devDependencies: {},
+    scripts: {},
+  };
+
+  return JSON.stringify({ ...validPackageManifestMock, ...overrides });
+}

@@ -10,7 +10,11 @@ import stripAnsi from 'strip-ansi';
 import { main } from './main';
 import { FakeOutputLogger } from '../tests/fake-output-logger';
 import type { PrimaryExecaFunction } from '../tests/helpers';
-import { fakeDateOnly, withinSandbox } from '../tests/helpers';
+import {
+  buildPackageManifestMock,
+  fakeDateOnly,
+  withinSandbox,
+} from '../tests/helpers';
 import { setupToolWithMockRepositories } from '../tests/setup-tool-with-mock-repositories';
 
 jest.mock('execa');
@@ -70,17 +74,21 @@ describe('main', () => {
           );
           await writeFile(
             path.join(repository.directoryPath, 'package.json'),
-            JSON.stringify({
-              packageManager: 'yarn',
-              engines: { node: 'test' },
+            buildPackageManifestMock({
               devDependencies: {
-                eslint: '1.1.0',
+                test: '1.0.0',
                 jest: '1.0.0',
                 'jest-it-up': '1.0.0',
+                '@types/node': '1.0.0',
+                'ts-node': '1.0.0',
+                tsup: '1.0.0',
+                typescript: '1.0.0',
               },
               scripts: {
                 test: 'test script',
                 'test:watch': 'test watch script',
+                build: 'test build',
+                'build:types': 'test build types',
               },
             }),
           );
@@ -95,6 +103,18 @@ describe('main', () => {
           await writeFile(
             path.join(repository.directoryPath, 'jest.config.js'),
             'content for jest.config.js',
+          );
+          await writeFile(
+            path.join(repository.directoryPath, 'tsconfig.json'),
+            'content for tsconfig.json',
+          );
+          await writeFile(
+            path.join(repository.directoryPath, 'tsconfig.build.json'),
+            'content for tsconfig.build.json',
+          );
+          await writeFile(
+            path.join(repository.directoryPath, 'tsup.config.ts'),
+            'content for tsup.config.ts',
           );
         }
         const outputLogger = new FakeOutputLogger();
@@ -122,6 +142,14 @@ repo-1
   - Do the lint-related \`devDependencies\` in \`package.json\` conform? ✅
   - Do the jest-related \`devDependencies\` in \`package.json\` conform? ✅
   - Do the test-related \`scripts\` in \`package.json\` conform? ✅
+  - Do the typescript-related \`devDependencies\` in \`package.json\` conform? ✅
+  - Do the typescript-related \`scripts\` in \`package.json\` conform? ✅
+  - Does the \`exports\` field in \`package.json\` conform? ✅
+  - Does the \`main\` field in \`package.json\` conform? ✅
+  - Does the \`module\` field in \`package.json\` conform? ✅
+  - Does the \`types\` field in \`package.json\` conform? ✅
+  - Does the \`files\` field in \`package.json\` conform? ✅
+  - Does LavaMoat allow scripts for \`tsup>esbuild\`? ✅
 - Is \`README.md\` present? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
   - Does the README conform by recommending node install from nodejs.org? ✅
@@ -130,8 +158,11 @@ repo-1
 - Does the \`src/\` directory exist? ✅
 - Is \`.nvmrc\` present, and does it conform? ✅
 - Is \`jest.config.js\` present, and does it conform? ✅
+- Is \`tsconfig.json\` present, and does it conform? ✅
+- Is \`tsconfig.build.json\` present, and does it conform? ✅
+- Is \`tsup.config.ts\` present, and does it conform? ✅
 
-Results:       15 passed, 0 failed, 15 total
+Results:       26 passed, 0 failed, 26 total
 Elapsed time:  0 ms
 
 
@@ -145,6 +176,14 @@ repo-2
   - Do the lint-related \`devDependencies\` in \`package.json\` conform? ✅
   - Do the jest-related \`devDependencies\` in \`package.json\` conform? ✅
   - Do the test-related \`scripts\` in \`package.json\` conform? ✅
+  - Do the typescript-related \`devDependencies\` in \`package.json\` conform? ✅
+  - Do the typescript-related \`scripts\` in \`package.json\` conform? ✅
+  - Does the \`exports\` field in \`package.json\` conform? ✅
+  - Does the \`main\` field in \`package.json\` conform? ✅
+  - Does the \`module\` field in \`package.json\` conform? ✅
+  - Does the \`types\` field in \`package.json\` conform? ✅
+  - Does the \`files\` field in \`package.json\` conform? ✅
+  - Does LavaMoat allow scripts for \`tsup>esbuild\`? ✅
 - Is \`README.md\` present? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
   - Does the README conform by recommending node install from nodejs.org? ✅
@@ -153,8 +192,11 @@ repo-2
 - Does the \`src/\` directory exist? ✅
 - Is \`.nvmrc\` present, and does it conform? ✅
 - Is \`jest.config.js\` present, and does it conform? ✅
+- Is \`tsconfig.json\` present, and does it conform? ✅
+- Is \`tsconfig.build.json\` present, and does it conform? ✅
+- Is \`tsup.config.ts\` present, and does it conform? ✅
 
-Results:       15 passed, 0 failed, 15 total
+Results:       26 passed, 0 failed, 26 total
 Elapsed time:  0 ms
 
 `,
@@ -215,8 +257,14 @@ repo-1
   - \`.nvmrc\` does not exist in this project.
 - Is \`jest.config.js\` present, and does it conform? ❌
   - \`jest.config.js\` does not exist in this project.
+- Is \`tsconfig.json\` present, and does it conform? ❌
+  - \`tsconfig.json\` does not exist in this project.
+- Is \`tsconfig.build.json\` present, and does it conform? ❌
+  - \`tsconfig.build.json\` does not exist in this project.
+- Is \`tsup.config.ts\` present, and does it conform? ❌
+  - \`tsup.config.ts\` does not exist in this project.
 
-Results:       0 passed, 7 failed, 7 total
+Results:       0 passed, 10 failed, 10 total
 Elapsed time:  0 ms
 
 
@@ -239,8 +287,14 @@ repo-2
   - \`.nvmrc\` does not exist in this project.
 - Is \`jest.config.js\` present, and does it conform? ❌
   - \`jest.config.js\` does not exist in this project.
+- Is \`tsconfig.json\` present, and does it conform? ❌
+  - \`tsconfig.json\` does not exist in this project.
+- Is \`tsconfig.build.json\` present, and does it conform? ❌
+  - \`tsconfig.build.json\` does not exist in this project.
+- Is \`tsup.config.ts\` present, and does it conform? ❌
+  - \`tsup.config.ts\` does not exist in this project.
 
-Results:       0 passed, 7 failed, 7 total
+Results:       0 passed, 10 failed, 10 total
 Elapsed time:  0 ms
 
 `,
@@ -307,8 +361,14 @@ repo-2
   - \`.nvmrc\` does not exist in this project.
 - Is \`jest.config.js\` present, and does it conform? ❌
   - \`jest.config.js\` does not exist in this project.
+- Is \`tsconfig.json\` present, and does it conform? ❌
+  - \`tsconfig.json\` does not exist in this project.
+- Is \`tsconfig.build.json\` present, and does it conform? ❌
+  - \`tsconfig.build.json\` does not exist in this project.
+- Is \`tsup.config.ts\` present, and does it conform? ❌
+  - \`tsup.config.ts\` does not exist in this project.
 
-Results:       1 passed, 6 failed, 7 total
+Results:       1 passed, 9 failed, 10 total
 Elapsed time:  0 ms
 
 `.trimStart(),
@@ -361,17 +421,21 @@ Elapsed time:  0 ms
           );
           await writeFile(
             path.join(repository.directoryPath, 'package.json'),
-            JSON.stringify({
-              packageManager: 'yarn',
-              engines: { node: 'test' },
+            buildPackageManifestMock({
               devDependencies: {
-                eslint: '1.1.0',
+                test: '1.0.0',
                 jest: '1.0.0',
                 'jest-it-up': '1.0.0',
+                '@types/node': '1.0.0',
+                'ts-node': '1.0.0',
+                tsup: '1.0.0',
+                typescript: '1.0.0',
               },
               scripts: {
                 test: 'test script',
                 'test:watch': 'test watch script',
+                build: 'test build',
+                'build:types': 'test build types',
               },
             }),
           );
@@ -386,6 +450,18 @@ Elapsed time:  0 ms
           await writeFile(
             path.join(repository.directoryPath, 'jest.config.js'),
             'content for jest.config.js',
+          );
+          await writeFile(
+            path.join(repository.directoryPath, 'tsconfig.json'),
+            'content for tsconfig.json',
+          );
+          await writeFile(
+            path.join(repository.directoryPath, 'tsconfig.build.json'),
+            'content for tsconfig.build.json',
+          );
+          await writeFile(
+            path.join(repository.directoryPath, 'tsup.config.ts'),
+            'content for tsup.config.ts',
           );
         }
         const outputLogger = new FakeOutputLogger();
@@ -413,6 +489,14 @@ repo-1
   - Do the lint-related \`devDependencies\` in \`package.json\` conform? ✅
   - Do the jest-related \`devDependencies\` in \`package.json\` conform? ✅
   - Do the test-related \`scripts\` in \`package.json\` conform? ✅
+  - Do the typescript-related \`devDependencies\` in \`package.json\` conform? ✅
+  - Do the typescript-related \`scripts\` in \`package.json\` conform? ✅
+  - Does the \`exports\` field in \`package.json\` conform? ✅
+  - Does the \`main\` field in \`package.json\` conform? ✅
+  - Does the \`module\` field in \`package.json\` conform? ✅
+  - Does the \`types\` field in \`package.json\` conform? ✅
+  - Does the \`files\` field in \`package.json\` conform? ✅
+  - Does LavaMoat allow scripts for \`tsup>esbuild\`? ✅
 - Is \`README.md\` present? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
   - Does the README conform by recommending node install from nodejs.org? ✅
@@ -421,8 +505,11 @@ repo-1
 - Does the \`src/\` directory exist? ✅
 - Is \`.nvmrc\` present, and does it conform? ✅
 - Is \`jest.config.js\` present, and does it conform? ✅
+- Is \`tsconfig.json\` present, and does it conform? ✅
+- Is \`tsconfig.build.json\` present, and does it conform? ✅
+- Is \`tsup.config.ts\` present, and does it conform? ✅
 
-Results:       15 passed, 0 failed, 15 total
+Results:       26 passed, 0 failed, 26 total
 Elapsed time:  0 ms
 
 
@@ -436,6 +523,14 @@ repo-2
   - Do the lint-related \`devDependencies\` in \`package.json\` conform? ✅
   - Do the jest-related \`devDependencies\` in \`package.json\` conform? ✅
   - Do the test-related \`scripts\` in \`package.json\` conform? ✅
+  - Do the typescript-related \`devDependencies\` in \`package.json\` conform? ✅
+  - Do the typescript-related \`scripts\` in \`package.json\` conform? ✅
+  - Does the \`exports\` field in \`package.json\` conform? ✅
+  - Does the \`main\` field in \`package.json\` conform? ✅
+  - Does the \`module\` field in \`package.json\` conform? ✅
+  - Does the \`types\` field in \`package.json\` conform? ✅
+  - Does the \`files\` field in \`package.json\` conform? ✅
+  - Does LavaMoat allow scripts for \`tsup>esbuild\`? ✅
 - Is \`README.md\` present? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
   - Does the README conform by recommending node install from nodejs.org? ✅
@@ -444,8 +539,11 @@ repo-2
 - Does the \`src/\` directory exist? ✅
 - Is \`.nvmrc\` present, and does it conform? ✅
 - Is \`jest.config.js\` present, and does it conform? ✅
+- Is \`tsconfig.json\` present, and does it conform? ✅
+- Is \`tsconfig.build.json\` present, and does it conform? ✅
+- Is \`tsup.config.ts\` present, and does it conform? ✅
 
-Results:       15 passed, 0 failed, 15 total
+Results:       26 passed, 0 failed, 26 total
 Elapsed time:  0 ms
 
 `,
@@ -506,8 +604,14 @@ repo-1
   - \`.nvmrc\` does not exist in this project.
 - Is \`jest.config.js\` present, and does it conform? ❌
   - \`jest.config.js\` does not exist in this project.
+- Is \`tsconfig.json\` present, and does it conform? ❌
+  - \`tsconfig.json\` does not exist in this project.
+- Is \`tsconfig.build.json\` present, and does it conform? ❌
+  - \`tsconfig.build.json\` does not exist in this project.
+- Is \`tsup.config.ts\` present, and does it conform? ❌
+  - \`tsup.config.ts\` does not exist in this project.
 
-Results:       0 passed, 7 failed, 7 total
+Results:       0 passed, 10 failed, 10 total
 Elapsed time:  0 ms
 
 
@@ -530,8 +634,14 @@ repo-2
   - \`.nvmrc\` does not exist in this project.
 - Is \`jest.config.js\` present, and does it conform? ❌
   - \`jest.config.js\` does not exist in this project.
+- Is \`tsconfig.json\` present, and does it conform? ❌
+  - \`tsconfig.json\` does not exist in this project.
+- Is \`tsconfig.build.json\` present, and does it conform? ❌
+  - \`tsconfig.build.json\` does not exist in this project.
+- Is \`tsup.config.ts\` present, and does it conform? ❌
+  - \`tsup.config.ts\` does not exist in this project.
 
-Results:       0 passed, 7 failed, 7 total
+Results:       0 passed, 10 failed, 10 total
 Elapsed time:  0 ms
 
 `,
@@ -597,8 +707,14 @@ repo-2
   - \`.nvmrc\` does not exist in this project.
 - Is \`jest.config.js\` present, and does it conform? ❌
   - \`jest.config.js\` does not exist in this project.
+- Is \`tsconfig.json\` present, and does it conform? ❌
+  - \`tsconfig.json\` does not exist in this project.
+- Is \`tsconfig.build.json\` present, and does it conform? ❌
+  - \`tsconfig.build.json\` does not exist in this project.
+- Is \`tsup.config.ts\` present, and does it conform? ❌
+  - \`tsup.config.ts\` does not exist in this project.
 
-Results:       1 passed, 6 failed, 7 total
+Results:       1 passed, 9 failed, 10 total
 Elapsed time:  0 ms
 
 `,

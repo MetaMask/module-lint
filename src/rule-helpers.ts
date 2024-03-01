@@ -1,9 +1,14 @@
+import { isEqual, get, has, isMatch, isObject } from 'lodash';
+import { inspect } from 'util';
+
 import type {
   SuccessfulPartialRuleExecutionResult,
   FailedPartialRuleExecutionResult,
   PartialRuleExecutionResult,
   RuleExecutionArguments,
+  RuleExecutionFailure,
 } from './execute-rules';
+import { PackageManifestSchema } from './rules/types';
 
 /**
  * A utility for a rule which is intended to end its execution by marking it as
@@ -187,4 +192,86 @@ export async function directoryAndContentsConform(
     }),
   );
   return combineRuleExecutionResults(fileConformsResults);
+}
+
+/**
+ * Verifies whether project has the required property name/s and with it's value equivalent to the same in template project.
+ *
+ * @param propertyPaths - The array of property names to be verified.
+ * @param ruleExecutionArguments - Rule execution arguments.
+ */
+export async function packageManifestPropertiesConform(
+  propertyPaths: string[],
+  ruleExecutionArguments: RuleExecutionArguments,
+): Promise<PartialRuleExecutionResult> {
+  const { template, project } = ruleExecutionArguments;
+  const entryPath = 'package.json';
+  const templateManifest = await template.fs.readJsonFileAs(
+    entryPath,
+    PackageManifestSchema,
+  );
+
+  const projectManifest = await project.fs.readJsonFileAs(
+    entryPath,
+    PackageManifestSchema,
+  );
+
+  const conformsResults = propertyPaths.map((propertyPath) => {
+    return dataConform(
+      templateManifest,
+      projectManifest,
+      propertyPath,
+      entryPath,
+    );
+  });
+  return combineRuleExecutionResults(conformsResults);
+}
+
+/**
+ * Performs a deep comparison between template data and project data to determine if they are equivalent.
+ * In case of equals, it returns undefined, otherwise failure message.
+ *
+ * @param referenceObject - Reference object.
+ * @param targetObject - The object to be compared with reference object.
+ * @param propertyPath - Path of the property.
+ * @param entryPath - The path to the file from which schema is prepared.
+ * @returns PartialRuleExecutionResult.
+ */
+export function dataConform<Schema>(
+  referenceObject: Schema,
+  targetObject: Schema,
+  propertyPath: string,
+  entryPath: string,
+): PartialRuleExecutionResult {
+  if (!has(referenceObject, propertyPath)) {
+    throw new Error(
+      `Could not find \`${propertyPath}\` in reference \`${entryPath}\`. This is not the fault of the target \`${entryPath}\`, but is rather a bug in a rule.`,
+    );
+  }
+
+  const referenceValue = get(referenceObject, propertyPath);
+  let failure: RuleExecutionFailure | undefined;
+  if (has(targetObject, propertyPath)) {
+    const targetValue = get(targetObject, propertyPath);
+    const isPassed =
+      isObject(targetValue) && isObject(referenceValue)
+        ? isMatch(targetValue, referenceValue)
+        : isEqual(targetValue, referenceValue);
+
+    if (!isPassed) {
+      failure = {
+        message: `\`${propertyPath}\` is ${inspect(
+          targetValue,
+        )}, when it should be ${inspect(referenceValue)}.`,
+      };
+    }
+  } else {
+    failure = {
+      message: `\`${entryPath}\` should list \`'${propertyPath}': ${inspect(
+        referenceValue,
+      )}\`, but does not.`,
+    };
+  }
+
+  return failure ? fail([failure]) : pass();
 }

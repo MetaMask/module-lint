@@ -1,7 +1,7 @@
 import { writeFile } from '@metamask/utils/node';
 import path from 'path';
 
-import packageManagerFieldConforms from './package-package-manager-field-conforms';
+import packageTypesFieldConforms from './package-types-field-conforms';
 import {
   buildMetaMaskRepository,
   buildPackageManifestMock,
@@ -9,8 +9,8 @@ import {
 } from '../../tests/helpers';
 import { fail, pass } from '../rule-helpers';
 
-describe('Rule: package-manager-field-conforms', () => {
-  it('passes if the "packageManager" field in the project\'s package.json matches the one in the template\'s package.json', async () => {
+describe('Rule: package-types-field-conforms', () => {
+  it('passes if the "types" field in the project\'s package.json matches the one in the template\'s package.json', async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
@@ -18,9 +18,7 @@ describe('Rule: package-manager-field-conforms', () => {
       });
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        buildPackageManifestMock({
-          packageManager: 'yarn',
-        }),
+        buildPackageManifestMock({ types: 'test-types' }),
       );
       const project = buildMetaMaskRepository({
         shortname: 'project',
@@ -28,12 +26,10 @@ describe('Rule: package-manager-field-conforms', () => {
       });
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        buildPackageManifestMock({
-          packageManager: 'yarn',
-        }),
+        buildPackageManifestMock({ types: 'test-types' }),
       );
 
-      const result = await packageManagerFieldConforms.execute({
+      const result = await packageTypesFieldConforms.execute({
         template,
         project,
         pass,
@@ -46,7 +42,7 @@ describe('Rule: package-manager-field-conforms', () => {
     });
   });
 
-  it('fails if the "packageManager" field in the project\'s package.json does not match the one in the template\'s package.json', async () => {
+  it('fails if the "types" field in the project\'s package.json does not match the one in the template\'s package.json', async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
@@ -54,9 +50,7 @@ describe('Rule: package-manager-field-conforms', () => {
       });
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
-        buildPackageManifestMock({
-          packageManager: 'yarn',
-        }),
+        buildPackageManifestMock({ types: 'test-types' }),
       );
       const project = buildMetaMaskRepository({
         shortname: 'project',
@@ -64,12 +58,10 @@ describe('Rule: package-manager-field-conforms', () => {
       });
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        buildPackageManifestMock({
-          packageManager: 'test',
-        }),
+        buildPackageManifestMock({ types: 'test' }),
       );
 
-      const result = await packageManagerFieldConforms.execute({
+      const result = await packageTypesFieldConforms.execute({
         template,
         project,
         pass,
@@ -79,7 +71,9 @@ describe('Rule: package-manager-field-conforms', () => {
       expect(result).toStrictEqual({
         passed: false,
         failures: [
-          { message: '`packageManager` is "test", when it should be "yarn".' },
+          {
+            message: "`types` is 'test', when it should be 'test-types'.",
+          },
         ],
       });
     });

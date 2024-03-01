@@ -6,14 +6,20 @@ import path from 'path';
 
 import {
   combineRuleExecutionResults,
+  dataConform,
   directoryAndContentsConform,
   directoryExists,
   fail,
   fileConforms,
   fileExists,
+  packageManifestPropertiesConform,
   pass,
 } from './rule-helpers';
-import { buildMetaMaskRepository, withinSandbox } from '../tests/helpers';
+import {
+  buildMetaMaskRepository,
+  buildPackageManifestMock,
+  withinSandbox,
+} from '../tests/helpers';
 
 describe('pass', () => {
   it('returns a result that represents a passing rule', () => {
@@ -567,5 +573,399 @@ describe('directoryAndContentsConform', () => {
         ],
       });
     });
+  });
+});
+
+describe('packageManifestPropertiesConform', () => {
+  it('passes if the project and template have the same properties at the first level of the package manifest and their values match', async () => {
+    await withinSandbox(async (sandbox) => {
+      const template = buildMetaMaskRepository({
+        shortname: 'template',
+        directoryPath: path.join(sandbox.directoryPath, 'template'),
+      });
+      await writeFile(
+        path.join(template.directoryPath, 'package.json'),
+        buildPackageManifestMock(),
+      );
+      const project = buildMetaMaskRepository({
+        shortname: 'project',
+        directoryPath: path.join(sandbox.directoryPath, 'project'),
+      });
+      await writeFile(
+        path.join(project.directoryPath, 'package.json'),
+        buildPackageManifestMock(),
+      );
+      const result = await packageManifestPropertiesConform(
+        ['main', 'module'],
+        {
+          template,
+          project,
+          pass,
+          fail,
+        },
+      );
+
+      expect(result).toStrictEqual({ passed: true });
+    });
+  });
+
+  it('passes if the project and template have the same property at a deeper level of the package manifest and its value matches', async () => {
+    await withinSandbox(async (sandbox) => {
+      const template = buildMetaMaskRepository({
+        shortname: 'template',
+        directoryPath: path.join(sandbox.directoryPath, 'template'),
+      });
+      await writeFile(
+        path.join(template.directoryPath, 'package.json'),
+        buildPackageManifestMock({
+          devDependencies: { test: '1.0.0', 'test-pack': '1.0.0' },
+        }),
+      );
+      const project = buildMetaMaskRepository({
+        shortname: 'project',
+        directoryPath: path.join(sandbox.directoryPath, 'project'),
+      });
+      await writeFile(
+        path.join(project.directoryPath, 'package.json'),
+        buildPackageManifestMock({
+          devDependencies: { test: '1.0.0', 'test-pack': '1.0.0' },
+        }),
+      );
+      const result = await packageManifestPropertiesConform(
+        ["devDependencies.['test']", "devDependencies.['test-pack']"],
+        {
+          template,
+          project,
+          pass,
+          fail,
+        },
+      );
+
+      expect(result).toStrictEqual({ passed: true });
+    });
+  });
+
+  it('fails if the project and template have the same properties, but one or more of their values do not match', async () => {
+    await withinSandbox(async (sandbox) => {
+      const template = buildMetaMaskRepository({
+        shortname: 'template',
+        directoryPath: path.join(sandbox.directoryPath, 'template'),
+      });
+      await writeFile(
+        path.join(template.directoryPath, 'package.json'),
+        buildPackageManifestMock({
+          devDependencies: { test: '1.0.0', 'test-pack': '1.0.0' },
+        }),
+      );
+      const project = buildMetaMaskRepository({
+        shortname: 'project',
+        directoryPath: path.join(sandbox.directoryPath, 'project'),
+      });
+      await writeFile(
+        path.join(project.directoryPath, 'package.json'),
+        buildPackageManifestMock({
+          devDependencies: { test: '0.0.1', 'test-pack': '1.0.0' },
+        }),
+      );
+      const result = await packageManifestPropertiesConform(
+        ["devDependencies.['test']", "devDependencies.['test-pack']"],
+        {
+          template,
+          project,
+          pass,
+          fail,
+        },
+      );
+
+      expect(result).toStrictEqual({
+        passed: false,
+        failures: [
+          {
+            message:
+              "`devDependencies.['test']` is '0.0.1', when it should be '1.0.0'.",
+          },
+        ],
+      });
+    });
+  });
+
+  it('fails if the template has a property that the project does not have', async () => {
+    await withinSandbox(async (sandbox) => {
+      const template = buildMetaMaskRepository({
+        shortname: 'template',
+        directoryPath: path.join(sandbox.directoryPath, 'template'),
+      });
+      await writeFile(
+        path.join(template.directoryPath, 'package.json'),
+        buildPackageManifestMock({
+          devDependencies: {
+            test: '1.0.0',
+            'new-pack': '1.0.0',
+          },
+        }),
+      );
+      const project = buildMetaMaskRepository({
+        shortname: 'project',
+        directoryPath: path.join(sandbox.directoryPath, 'project'),
+      });
+
+      await writeFile(
+        path.join(project.directoryPath, 'package.json'),
+        buildPackageManifestMock(),
+      );
+
+      const result = await packageManifestPropertiesConform(
+        ["devDependencies.['new-pack']"],
+        {
+          template,
+          project,
+          pass,
+          fail,
+        },
+      );
+
+      expect(result).toStrictEqual({
+        passed: false,
+        failures: [
+          {
+            message:
+              "`package.json` should list `'devDependencies.['new-pack']': '1.0.0'`, but does not.",
+          },
+        ],
+      });
+    });
+  });
+
+  it("throws error if a property does not exist in the template's package manifest", async () => {
+    await withinSandbox(async (sandbox) => {
+      const template = buildMetaMaskRepository({
+        shortname: 'template',
+        directoryPath: path.join(sandbox.directoryPath, 'template'),
+      });
+      await writeFile(
+        path.join(template.directoryPath, 'package.json'),
+        buildPackageManifestMock(),
+      );
+      const project = buildMetaMaskRepository({
+        shortname: 'project',
+        directoryPath: path.join(sandbox.directoryPath, 'project'),
+      });
+      await writeFile(
+        path.join(project.directoryPath, 'package.json'),
+        buildPackageManifestMock(),
+      );
+
+      await expect(
+        packageManifestPropertiesConform(["devDependencies.['new-pack']"], {
+          template,
+          project,
+          pass,
+          fail,
+        }),
+      ).rejects.toThrow(
+        "Could not find `devDependencies.['new-pack']` in reference `package.json`. This is not the fault of the target `package.json`, but is rather a bug in a rule.",
+      );
+    });
+  });
+});
+
+describe('dataConform', () => {
+  it('passes if the reference and target have the same properties at the first level and their values match', () => {
+    const referenceObject = {
+      firstLevel: 'test',
+    };
+    const targetObject = {
+      firstLevel: 'test',
+    };
+    const result = dataConform(
+      referenceObject,
+      targetObject,
+      'firstLevel',
+      'test.json',
+    );
+
+    expect(result).toStrictEqual({ passed: true });
+  });
+  it('passes if the reference and target have the same property at a deeper level and its value matches', () => {
+    const referenceObject = {
+      firstLevel: 'test',
+      deeperLevel: {
+        test: 'test',
+      },
+    };
+    const targetObject = {
+      firstLevel: 'test',
+      deeperLevel: {
+        test: 'test',
+      },
+    };
+    const result = dataConform(
+      referenceObject,
+      targetObject,
+      "deeperLevel.['test']",
+      'test.json',
+    );
+
+    expect(result).toStrictEqual({ passed: true });
+  });
+  it('passes if the target has same properties as reference with additional properties', () => {
+    const referenceObject = {
+      firstLevel: 'test',
+      deeperLevel: {
+        test: 'test',
+      },
+    };
+    const targetObject = {
+      firstLevel: 'test',
+      deeperLevel: {
+        test: 'test',
+        'new-pack': 'new pack',
+      },
+    };
+    const result = dataConform(
+      referenceObject,
+      targetObject,
+      'deeperLevel',
+      'test.json',
+    );
+
+    expect(result).toStrictEqual({ passed: true });
+  });
+  it('fails if the reference and target does not match at the first level', () => {
+    const referenceObject = {
+      firstLevel: 'first level',
+      deeperLevel: {
+        test: 'test',
+      },
+    };
+    const targetObject = {
+      firstLevel: 'test',
+      deeperLevel: {
+        test: 'test',
+      },
+    };
+
+    const result = dataConform(
+      referenceObject,
+      targetObject,
+      'firstLevel',
+      'test.json',
+    );
+
+    expect(result).toStrictEqual({
+      passed: false,
+      failures: [
+        {
+          message: "`firstLevel` is 'test', when it should be 'first level'.",
+        },
+      ],
+    });
+  });
+
+  it('fails if the reference and target does not match at the deeper level', () => {
+    const referenceObject = {
+      firstLevel: 'first level',
+      deeperLevel: {
+        test: 'deeper level',
+      },
+    };
+    const targetObject = {
+      firstLevel: 'test',
+      deeperLevel: {
+        test: 'test',
+      },
+    };
+
+    const result = dataConform(
+      referenceObject,
+      targetObject,
+      "deeperLevel.['test']",
+      'test.json',
+    );
+
+    expect(result).toStrictEqual({
+      passed: false,
+      failures: [
+        {
+          message:
+            "`deeperLevel.['test']` is 'test', when it should be 'deeper level'.",
+        },
+      ],
+    });
+  });
+  it('fails if the target is null', () => {
+    const referenceObject = {
+      firstLevel: 'first level',
+      deeperLevel: {
+        test: 'test',
+      },
+    };
+
+    const result = dataConform(
+      referenceObject,
+      null,
+      'firstLevel',
+      'test.json',
+    );
+
+    expect(result).toStrictEqual({
+      passed: false,
+      failures: [
+        {
+          message:
+            "`test.json` should list `'firstLevel': 'first level'`, but does not.",
+        },
+      ],
+    });
+  });
+
+  it('fails if the reference has a property at the first level that the target does not have', () => {
+    const referenceObject = {
+      firstLevel: 'first level',
+      deeperLevel: {
+        test: 'deeper level',
+      },
+    };
+    const targetObject = {
+      deeperLevel: {
+        test: 'test',
+      },
+    };
+
+    const result = dataConform(
+      referenceObject,
+      targetObject,
+      'firstLevel',
+      'test.json',
+    );
+
+    expect(result).toStrictEqual({
+      passed: false,
+      failures: [
+        {
+          message:
+            "`test.json` should list `'firstLevel': 'first level'`, but does not.",
+        },
+      ],
+    });
+  });
+  it('throws error if a propertyPath does not exist in the reference object', () => {
+    const referenceObject = {
+      deeperLevel: {
+        test: 'deeper level',
+      },
+    };
+    const targetObject = {
+      firstLevel: 'first level',
+      deeperLevel: {
+        test: 'deeper level',
+      },
+    };
+
+    expect(() =>
+      dataConform(referenceObject, targetObject, 'firstLevel', 'test.json'),
+    ).toThrow(
+      'Could not find `firstLevel` in reference `test.json`. This is not the fault of the target `test.json`, but is rather a bug in a rule.',
+    );
   });
 });
