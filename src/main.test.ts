@@ -70,11 +70,31 @@ describe('main', () => {
           );
           await writeFile(
             path.join(repository.directoryPath, 'package.json'),
-            JSON.stringify({ packageManager: 'yarn' }),
+            JSON.stringify({
+              packageManager: 'yarn',
+              engines: { node: 'test' },
+              devDependencies: {
+                eslint: '1.1.0',
+                jest: '1.0.0',
+                'jest-it-up': '1.0.0',
+              },
+              scripts: {
+                test: 'test script',
+                'test:watch': 'test watch script',
+              },
+            }),
           );
           await writeFile(
             path.join(repository.directoryPath, 'README.md'),
-            'Install [Yarn whatever](...)',
+            'Install [Yarn whatever](...) Install the current LTS version of [Node.js](https://nodejs.org)',
+          );
+          await writeFile(
+            path.join(repository.directoryPath, '.nvmrc'),
+            'content for .nvmrc',
+          );
+          await writeFile(
+            path.join(repository.directoryPath, 'jest.config.js'),
+            'content for jest.config.js',
           );
         }
         const outputLogger = new FakeOutputLogger();
@@ -98,13 +118,20 @@ repo-1
 - Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
 - Does the package have a well-formed manifest (\`package.json\`)? ✅
 - Does the \`packageManager\` field in \`package.json\` conform? ✅
+- Does the \`engines.node\` field in \`package.json\` conform? ✅
+- Do the lint-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the jest-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the test-related \`scripts\` in \`package.json\` conform? ✅
 - Is \`README.md\` present? ✅
 - Does the README conform by recommending the correct Yarn version to install? ✅
+- Does the README conform by recommending node install from nodejs.org? ✅
 - Are all of the files for Yarn Modern present, and do they conform? ✅
 - Does the README conform by recommending the correct Yarn version to install? ✅
 - Does the \`src/\` directory exist? ✅
+- Is \`.nvmrc\` present, and does it conform? ✅
+- Is \`jest.config.js\` present, and does it conform? ✅
 
-Results:       8 passed, 0 failed, 8 total
+Results:       15 passed, 0 failed, 15 total
 Elapsed time:  0 ms
 
 
@@ -114,13 +141,20 @@ repo-2
 - Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
 - Does the package have a well-formed manifest (\`package.json\`)? ✅
 - Does the \`packageManager\` field in \`package.json\` conform? ✅
+- Does the \`engines.node\` field in \`package.json\` conform? ✅
+- Do the lint-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the jest-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the test-related \`scripts\` in \`package.json\` conform? ✅
 - Is \`README.md\` present? ✅
 - Does the README conform by recommending the correct Yarn version to install? ✅
+- Does the README conform by recommending node install from nodejs.org? ✅
 - Are all of the files for Yarn Modern present, and do they conform? ✅
 - Does the README conform by recommending the correct Yarn version to install? ✅
 - Does the \`src/\` directory exist? ✅
+- Is \`.nvmrc\` present, and does it conform? ✅
+- Is \`jest.config.js\` present, and does it conform? ✅
 
-Results:       8 passed, 0 failed, 8 total
+Results:       15 passed, 0 failed, 15 total
 Elapsed time:  0 ms
 
 `,
@@ -177,8 +211,12 @@ repo-1
   - \`.yarn/plugins/\` does not exist in this project.
 - Does the \`src/\` directory exist? ❌
   - \`src/\` does not exist in this project.
+- Is \`.nvmrc\` present, and does it conform? ❌
+  - \`.nvmrc\` does not exist in this project.
+- Is \`jest.config.js\` present, and does it conform? ❌
+  - \`jest.config.js\` does not exist in this project.
 
-Results:       0 passed, 5 failed, 5 total
+Results:       0 passed, 7 failed, 7 total
 Elapsed time:  0 ms
 
 
@@ -197,8 +235,12 @@ repo-2
   - \`.yarn/plugins/\` does not exist in this project.
 - Does the \`src/\` directory exist? ❌
   - \`src/\` does not exist in this project.
+- Is \`.nvmrc\` present, and does it conform? ❌
+  - \`.nvmrc\` does not exist in this project.
+- Is \`jest.config.js\` present, and does it conform? ❌
+  - \`jest.config.js\` does not exist in this project.
 
-Results:       0 passed, 5 failed, 5 total
+Results:       0 passed, 7 failed, 7 total
 Elapsed time:  0 ms
 
 `,
@@ -261,8 +303,12 @@ repo-2
   - \`.yarn/plugins/\` does not exist in this project.
 - Does the \`src/\` directory exist? ❌
   - \`src/\` does not exist in this project.
+- Is \`.nvmrc\` present, and does it conform? ❌
+  - \`.nvmrc\` does not exist in this project.
+- Is \`jest.config.js\` present, and does it conform? ❌
+  - \`jest.config.js\` does not exist in this project.
 
-Results:       1 passed, 4 failed, 5 total
+Results:       1 passed, 6 failed, 7 total
 Elapsed time:  0 ms
 
 `.trimStart(),
@@ -315,11 +361,31 @@ Elapsed time:  0 ms
           );
           await writeFile(
             path.join(repository.directoryPath, 'package.json'),
-            JSON.stringify({ packageManager: 'yarn' }),
+            JSON.stringify({
+              packageManager: 'yarn',
+              engines: { node: 'test' },
+              devDependencies: {
+                eslint: '1.1.0',
+                jest: '1.0.0',
+                'jest-it-up': '1.0.0',
+              },
+              scripts: {
+                test: 'test script',
+                'test:watch': 'test watch script',
+              },
+            }),
           );
           await writeFile(
             path.join(repository.directoryPath, 'README.md'),
-            'Install [Yarn whatever](...)',
+            'Install [Yarn whatever](...) Install the current LTS version of [Node.js](https://nodejs.org)',
+          );
+          await writeFile(
+            path.join(repository.directoryPath, '.nvmrc'),
+            'content for .nvmrc',
+          );
+          await writeFile(
+            path.join(repository.directoryPath, 'jest.config.js'),
+            'content for jest.config.js',
           );
         }
         const outputLogger = new FakeOutputLogger();
@@ -343,13 +409,20 @@ repo-1
 - Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
 - Does the package have a well-formed manifest (\`package.json\`)? ✅
 - Does the \`packageManager\` field in \`package.json\` conform? ✅
+- Does the \`engines.node\` field in \`package.json\` conform? ✅
+- Do the lint-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the jest-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the test-related \`scripts\` in \`package.json\` conform? ✅
 - Is \`README.md\` present? ✅
 - Does the README conform by recommending the correct Yarn version to install? ✅
+- Does the README conform by recommending node install from nodejs.org? ✅
 - Are all of the files for Yarn Modern present, and do they conform? ✅
 - Does the README conform by recommending the correct Yarn version to install? ✅
 - Does the \`src/\` directory exist? ✅
+- Is \`.nvmrc\` present, and does it conform? ✅
+- Is \`jest.config.js\` present, and does it conform? ✅
 
-Results:       8 passed, 0 failed, 8 total
+Results:       15 passed, 0 failed, 15 total
 Elapsed time:  0 ms
 
 
@@ -359,13 +432,20 @@ repo-2
 - Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
 - Does the package have a well-formed manifest (\`package.json\`)? ✅
 - Does the \`packageManager\` field in \`package.json\` conform? ✅
+- Does the \`engines.node\` field in \`package.json\` conform? ✅
+- Do the lint-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the jest-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the test-related \`scripts\` in \`package.json\` conform? ✅
 - Is \`README.md\` present? ✅
 - Does the README conform by recommending the correct Yarn version to install? ✅
+- Does the README conform by recommending node install from nodejs.org? ✅
 - Are all of the files for Yarn Modern present, and do they conform? ✅
 - Does the README conform by recommending the correct Yarn version to install? ✅
 - Does the \`src/\` directory exist? ✅
+- Is \`.nvmrc\` present, and does it conform? ✅
+- Is \`jest.config.js\` present, and does it conform? ✅
 
-Results:       8 passed, 0 failed, 8 total
+Results:       15 passed, 0 failed, 15 total
 Elapsed time:  0 ms
 
 `,
@@ -422,8 +502,12 @@ repo-1
   - \`.yarn/plugins/\` does not exist in this project.
 - Does the \`src/\` directory exist? ❌
   - \`src/\` does not exist in this project.
+- Is \`.nvmrc\` present, and does it conform? ❌
+  - \`.nvmrc\` does not exist in this project.
+- Is \`jest.config.js\` present, and does it conform? ❌
+  - \`jest.config.js\` does not exist in this project.
 
-Results:       0 passed, 5 failed, 5 total
+Results:       0 passed, 7 failed, 7 total
 Elapsed time:  0 ms
 
 
@@ -442,8 +526,12 @@ repo-2
   - \`.yarn/plugins/\` does not exist in this project.
 - Does the \`src/\` directory exist? ❌
   - \`src/\` does not exist in this project.
+- Is \`.nvmrc\` present, and does it conform? ❌
+  - \`.nvmrc\` does not exist in this project.
+- Is \`jest.config.js\` present, and does it conform? ❌
+  - \`jest.config.js\` does not exist in this project.
 
-Results:       0 passed, 5 failed, 5 total
+Results:       0 passed, 7 failed, 7 total
 Elapsed time:  0 ms
 
 `,
@@ -505,8 +593,12 @@ repo-2
   - \`.yarn/plugins/\` does not exist in this project.
 - Does the \`src/\` directory exist? ❌
   - \`src/\` does not exist in this project.
+- Is \`.nvmrc\` present, and does it conform? ❌
+  - \`.nvmrc\` does not exist in this project.
+- Is \`jest.config.js\` present, and does it conform? ❌
+  - \`jest.config.js\` does not exist in this project.
 
-Results:       1 passed, 4 failed, 5 total
+Results:       1 passed, 6 failed, 7 total
 Elapsed time:  0 ms
 
 `,

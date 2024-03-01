@@ -14,7 +14,12 @@ describe('Rule: require-package-manifest', () => {
       });
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify({ packageManager: 'foo' }),
+        JSON.stringify({
+          packageManager: 'foo',
+          engines: { node: 'test' },
+          devDependencies: { eslint: '1.0.0' },
+          scripts: { test: 'test script' },
+        }),
       );
 
       const result = await requireValidPackageManifest.execute({
@@ -76,7 +81,10 @@ describe('Rule: require-package-manifest', () => {
       expect(result).toStrictEqual({
         passed: false,
         failures: [
-          { message: 'Invalid `package.json`: Missing `packageManager`.' },
+          {
+            message:
+              'Invalid `package.json`: Missing `packageManager`; Missing `engines`; Missing `scripts`; Missing `devDependencies`.',
+          },
         ],
       });
     });
