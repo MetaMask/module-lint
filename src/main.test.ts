@@ -149,7 +149,7 @@ repo-1
   - Does the \`module\` field in \`package.json\` conform? ✅
   - Does the \`types\` field in \`package.json\` conform? ✅
   - Does the \`files\` field in \`package.json\` conform? ✅
-  - Does the \`lavamoat.allowscripts\` field in \`package.json\` conform? ✅
+  - Does LavaMoat allow scripts for \`tsup>esbuild\`? ✅
 - Is \`README.md\` present? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
   - Does the README conform by recommending node install from nodejs.org? ✅
@@ -183,7 +183,7 @@ repo-2
   - Does the \`module\` field in \`package.json\` conform? ✅
   - Does the \`types\` field in \`package.json\` conform? ✅
   - Does the \`files\` field in \`package.json\` conform? ✅
-  - Does the \`lavamoat.allowscripts\` field in \`package.json\` conform? ✅
+  - Does LavaMoat allow scripts for \`tsup>esbuild\`? ✅
 - Is \`README.md\` present? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
   - Does the README conform by recommending node install from nodejs.org? ✅
@@ -496,7 +496,7 @@ repo-1
   - Does the \`module\` field in \`package.json\` conform? ✅
   - Does the \`types\` field in \`package.json\` conform? ✅
   - Does the \`files\` field in \`package.json\` conform? ✅
-  - Does the \`lavamoat.allowscripts\` field in \`package.json\` conform? ✅
+  - Does LavaMoat allow scripts for \`tsup>esbuild\`? ✅
 - Is \`README.md\` present? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
   - Does the README conform by recommending node install from nodejs.org? ✅
@@ -530,7 +530,7 @@ repo-2
   - Does the \`module\` field in \`package.json\` conform? ✅
   - Does the \`types\` field in \`package.json\` conform? ✅
   - Does the \`files\` field in \`package.json\` conform? ✅
-  - Does the \`lavamoat.allowscripts\` field in \`package.json\` conform? ✅
+  - Does LavaMoat allow scripts for \`tsup>esbuild\`? ✅
 - Is \`README.md\` present? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
   - Does the README conform by recommending node install from nodejs.org? ✅

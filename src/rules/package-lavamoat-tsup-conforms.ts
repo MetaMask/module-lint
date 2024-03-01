@@ -4,8 +4,7 @@ import { dataConform } from '../rule-helpers';
 
 export default buildRule({
   name: RuleName.PackageLavamoatTsupConforms,
-  description:
-    'Does the `lavamoat.allowscripts` field in `package.json` conform?',
+  description: 'Does LavaMoat allow scripts for `tsup>esbuild`?',
   dependencies: [RuleName.RequireValidPackageManifest],
   execute: async ({ project, template, pass }) => {
     const entryPath = 'package.json';
