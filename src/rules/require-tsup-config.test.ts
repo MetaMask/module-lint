@@ -1,35 +1,31 @@
 import { writeFile } from '@metamask/utils/node';
 import path from 'path';
 
-import packageEnginesNodeFieldConforms from './package-engines-node-field-conforms';
-import {
-  buildMetaMaskRepository,
-  buildPackageManifestMock,
-  withinSandbox,
-} from '../../tests/helpers';
+import requireTsupConfig from './require-tsup-config';
+import { buildMetaMaskRepository, withinSandbox } from '../../tests/helpers';
 import { fail, pass } from '../rule-helpers';
 
-describe('Rule: package-engines-node-field-conforms', () => {
-  it('passes if the "engines.node" field in the project\'s package.json matches the one in the template\'s package.json', async () => {
+describe('Rule: require-tsup-config', () => {
+  it('passes if the project has a tsup.config.ts', async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
         directoryPath: path.join(sandbox.directoryPath, 'template'),
       });
       await writeFile(
-        path.join(template.directoryPath, 'package.json'),
-        buildPackageManifestMock({ engines: { node: '1.0.0' } }),
+        path.join(template.directoryPath, 'tsup.config.ts'),
+        'contents of tsup-config',
       );
       const project = buildMetaMaskRepository({
         shortname: 'project',
         directoryPath: path.join(sandbox.directoryPath, 'project'),
       });
       await writeFile(
-        path.join(project.directoryPath, 'package.json'),
-        buildPackageManifestMock({ engines: { node: '1.0.0' } }),
+        path.join(project.directoryPath, 'tsup.config.ts'),
+        'contents of tsup-config',
       );
 
-      const result = await packageEnginesNodeFieldConforms.execute({
+      const result = await requireTsupConfig.execute({
         template,
         project,
         pass,
@@ -42,26 +38,22 @@ describe('Rule: package-engines-node-field-conforms', () => {
     });
   });
 
-  it('fails if the "engines.node" field in the project\'s package.json does not match the one in the template\'s package.json', async () => {
+  it('fails with failure message when tsup.config.ts does not exist', async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
         directoryPath: path.join(sandbox.directoryPath, 'template'),
       });
       await writeFile(
-        path.join(template.directoryPath, 'package.json'),
-        buildPackageManifestMock({ engines: { node: '1.0.0' } }),
+        path.join(template.directoryPath, 'tsup.config.ts'),
+        'contents of tsup-config',
       );
       const project = buildMetaMaskRepository({
         shortname: 'project',
         directoryPath: path.join(sandbox.directoryPath, 'project'),
       });
-      await writeFile(
-        path.join(project.directoryPath, 'package.json'),
-        buildPackageManifestMock({ engines: { node: 'wrong version' } }),
-      );
 
-      const result = await packageEnginesNodeFieldConforms.execute({
+      const result = await requireTsupConfig.execute({
         template,
         project,
         pass,
@@ -72,8 +64,7 @@ describe('Rule: package-engines-node-field-conforms', () => {
         passed: false,
         failures: [
           {
-            message:
-              '`engines.node` is "wrong version", when it should be "1.0.0".',
+            message: '`tsup.config.ts` does not exist in this project.',
           },
         ],
       });

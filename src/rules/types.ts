@@ -1,4 +1,4 @@
-import { type, string, record } from 'superstruct';
+import { type, string, record, array } from 'superstruct';
 
 /**
  * All of the known rules.
@@ -18,6 +18,17 @@ export enum RuleName {
   PackageJestDependenciesConform = 'package-jest-dependencies-conform',
   RequireJestConfig = 'require-jest-config',
   PackageTestScriptsConform = 'package-test-scripts-conform',
+  RequireTsConfig = 'require-tsconfig',
+  RequireTsConfigBuild = 'require-tsconfig-build',
+  RequireTsupConfig = 'require-tsup-config',
+  PackageTypescriptDependenciesConform = 'package-typescript-dependencies-conform',
+  PackageTypescriptScriptsConform = 'package-typescript-scripts-conform',
+  PackageExportsFieldConforms = 'package-exports-field-conforms',
+  PackageMainFieldConforms = 'package-main-field-conforms',
+  PackageModuleFieldConforms = 'package-module-field-conforms',
+  PackageTypesFieldConforms = 'package-types-field-conforms',
+  PackageFilesFieldConforms = 'package-files-field-conforms',
+  PackageLavamoatTsupConforms = 'package-lavamoat-tsup-conforms',
 }
 
 export const PackageManifestSchema = type({
@@ -25,6 +36,14 @@ export const PackageManifestSchema = type({
   engines: type({
     node: string(),
   }),
+  exports: type({
+    '.': record(string(), string()),
+    './package.json': string(),
+  }),
+  main: string(),
+  module: string(),
+  types: string(),
+  files: array(string()),
   scripts: record(string(), string()),
   devDependencies: record(string(), string()),
 });
