@@ -4,7 +4,7 @@ import { packageManifestPropertiesConform } from '../rule-helpers';
 
 export default buildRule({
   name: RuleName.PackageTypesFieldConforms,
-  description: 'Do the `types` field in `package.json` conform?',
+  description: 'Does the `types` field in `package.json` conform?',
   dependencies: [RuleName.RequireValidPackageManifest],
   execute: async (ruleExecutionArguments) => {
     return packageManifestPropertiesConform(['types'], ruleExecutionArguments);
