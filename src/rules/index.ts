@@ -10,6 +10,8 @@ import packageMainFieldConforms from './package-main-field-conforms';
 import packageModuleFieldConforms from './package-module-field-conforms';
 import packagePackageManagerFieldConforms from './package-package-manager-field-conforms';
 import packageTestScriptsConform from './package-test-scripts-conform';
+import packageTypedocDevDependenciesConform from './package-typedoc-dev-dependencies-conform';
+import packageTypedocScriptsConform from './package-typedoc-scripts-conform';
 import packageTypesFieldConforms from './package-types-field-conforms';
 import packageTypescriptDevDependenciesConform from './package-typescript-dev-dependencies-conform';
 import packageTypescriptScriptsConform from './package-typescript-scripts-conform';
@@ -22,6 +24,7 @@ import requireSourceDirectory from './require-source-directory';
 import requireTsconfig from './require-tsconfig';
 import requireTsconfigBuild from './require-tsconfig-build';
 import requireTsupConfig from './require-tsup-config';
+import requireTypedoc from './require-typedoc';
 import requireValidPackageManifest from './require-valid-package-manifest';
 
 export const rules = [
@@ -50,4 +53,7 @@ export const rules = [
   packageTypesFieldConforms,
   packageFilesFieldConforms,
   packageLavamoatTsupConforms,
+  packageTypedocDevDependenciesConform,
+  packageTypedocScriptsConform,
+  requireTypedoc,
 ] as const;
