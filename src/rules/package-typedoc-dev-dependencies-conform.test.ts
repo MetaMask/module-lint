@@ -1,7 +1,7 @@
 import { writeFile } from '@metamask/utils/node';
 import path from 'path';
 
-import packageTestScriptsConform from './package-test-scripts-conform';
+import packageTypedocDevDependenciesConform from './package-typedoc-dev-dependencies-conform';
 import {
   buildMetaMaskRepository,
   buildPackageManifestMock,
@@ -9,8 +9,8 @@ import {
 } from '../../tests/helpers';
 import { fail, pass } from '../rule-helpers';
 
-describe('Rule: package-test-scripts-conform', () => {
-  it("passes if the test related scripts in the project's package.json match the ones in the template's package.json", async () => {
+describe('Rule: package-typedoc-dev-dependencies-conform', () => {
+  it('passes if the typedoc related devDependencies of template exist in project with the version matching', async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
@@ -19,7 +19,9 @@ describe('Rule: package-test-scripts-conform', () => {
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
         buildPackageManifestMock({
-          scripts: { test: 'test script', 'test:watch': 'test watch script' },
+          devDependencies: {
+            typedoc: '1.0.0',
+          },
         }),
       );
       const project = buildMetaMaskRepository({
@@ -29,24 +31,23 @@ describe('Rule: package-test-scripts-conform', () => {
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
         buildPackageManifestMock({
-          scripts: { test: 'test script', 'test:watch': 'test watch script' },
+          devDependencies: {
+            typedoc: '1.0.0',
+          },
         }),
       );
-
-      const result = await packageTestScriptsConform.execute({
+      const result = await packageTypedocDevDependenciesConform.execute({
         template,
         project,
         pass,
         fail,
       });
 
-      expect(result).toStrictEqual({
-        passed: true,
-      });
+      expect(result).toStrictEqual({ passed: true });
     });
   });
 
-  it("fails if a test related script in the project's package.json does not match the same one in the template's package.json", async () => {
+  it('fails if the typedoc related devDependencies of template exist in project, but its version does not match', async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
@@ -55,7 +56,9 @@ describe('Rule: package-test-scripts-conform', () => {
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
         buildPackageManifestMock({
-          scripts: { test: 'test script', 'test:watch': 'test watch script' },
+          devDependencies: {
+            typedoc: '1.0.0',
+          },
         }),
       );
       const project = buildMetaMaskRepository({
@@ -65,11 +68,12 @@ describe('Rule: package-test-scripts-conform', () => {
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
         buildPackageManifestMock({
-          scripts: { test: 'test', 'test:watch': 'test watch script' },
+          devDependencies: {
+            typedoc: '0.0.1',
+          },
         }),
       );
-
-      const result = await packageTestScriptsConform.execute({
+      const result = await packageTypedocDevDependenciesConform.execute({
         template,
         project,
         pass,
@@ -81,14 +85,14 @@ describe('Rule: package-test-scripts-conform', () => {
         failures: [
           {
             message:
-              "`scripts.[test]` is 'test', when it should be 'test script'.",
+              "`devDependencies.[typedoc]` is '0.0.1', when it should be '1.0.0'.",
           },
         ],
       });
     });
   });
 
-  it("fails if a test related script exists in the template's package.json, but not in the project's package.json", async () => {
+  it('fails if the typedoc related devDependencies does not exist in project', async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
@@ -97,7 +101,9 @@ describe('Rule: package-test-scripts-conform', () => {
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
         buildPackageManifestMock({
-          scripts: { test: 'test script', 'test:watch': 'test watch script' },
+          devDependencies: {
+            typedoc: '1.0.0',
+          },
         }),
       );
       const project = buildMetaMaskRepository({
@@ -107,11 +113,12 @@ describe('Rule: package-test-scripts-conform', () => {
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
         buildPackageManifestMock({
-          scripts: { 'test:watch': 'test watch script' },
+          devDependencies: {
+            test: '1.0.0',
+          },
         }),
       );
-
-      const result = await packageTestScriptsConform.execute({
+      const result = await packageTypedocDevDependenciesConform.execute({
         template,
         project,
         pass,
@@ -123,14 +130,14 @@ describe('Rule: package-test-scripts-conform', () => {
         failures: [
           {
             message:
-              "`package.json` should list `'scripts.[test]': 'test script'`, but does not.",
+              "`package.json` should list `'devDependencies.[typedoc]': '1.0.0'`, but does not.",
           },
         ],
       });
     });
   });
 
-  it("throws error if there are no test related scripts in the template's package.json", async () => {
+  it('throws error if the typedoc related devDependencies does not exist in the template', async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
         shortname: 'template',
@@ -139,7 +146,9 @@ describe('Rule: package-test-scripts-conform', () => {
       await writeFile(
         path.join(template.directoryPath, 'package.json'),
         buildPackageManifestMock({
-          scripts: { 'test:watch': 'test watch script' },
+          devDependencies: {
+            test: '1.0.0',
+          },
         }),
       );
       const project = buildMetaMaskRepository({
@@ -149,19 +158,20 @@ describe('Rule: package-test-scripts-conform', () => {
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
         buildPackageManifestMock({
-          scripts: { test: 'test script', 'test:watch': 'test watch script' },
+          devDependencies: {
+            typedoc: '1.0.0',
+          },
         }),
       );
-
       await expect(
-        packageTestScriptsConform.execute({
+        packageTypedocDevDependenciesConform.execute({
           template,
           project,
           pass,
           fail,
         }),
       ).rejects.toThrow(
-        'Could not find `scripts.[test]` in reference `package.json`. This is not the fault of the target `package.json`, but is rather a bug in a rule.',
+        'Could not find `devDependencies.[typedoc]` in reference `package.json`. This is not the fault of the target `package.json`, but is rather a bug in a rule.',
       );
     });
   });

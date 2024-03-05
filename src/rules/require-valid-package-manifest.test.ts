@@ -2,7 +2,11 @@ import { writeFile } from '@metamask/utils/node';
 import path from 'path';
 
 import requireValidPackageManifest from './require-valid-package-manifest';
-import { buildMetaMaskRepository, withinSandbox } from '../../tests/helpers';
+import {
+  buildMetaMaskRepository,
+  buildPackageManifestMock,
+  withinSandbox,
+} from '../../tests/helpers';
 import { fail, pass } from '../rule-helpers';
 
 describe('Rule: require-package-manifest', () => {
@@ -14,12 +18,7 @@ describe('Rule: require-package-manifest', () => {
       });
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify({
-          packageManager: 'foo',
-          engines: { node: 'test' },
-          devDependencies: { eslint: '1.0.0' },
-          scripts: { test: 'test script' },
-        }),
+        buildPackageManifestMock(),
       );
 
       const result = await requireValidPackageManifest.execute({
@@ -83,7 +82,7 @@ describe('Rule: require-package-manifest', () => {
         failures: [
           {
             message:
-              'Invalid `package.json`: Missing `packageManager`; Missing `engines`; Missing `scripts`; Missing `devDependencies`.',
+              'Invalid `package.json`: Missing `packageManager`; Missing `engines`; Missing `exports`; Missing `main`; Missing `module`; Missing `types`; Missing `files`; Missing `scripts`; Missing `devDependencies`.',
           },
         ],
       });
