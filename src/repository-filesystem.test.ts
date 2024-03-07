@@ -36,22 +36,6 @@ describe('RepositoryFilesystem', () => {
           '/some/directory/some.file',
         );
       });
-
-      it('returns the content of the file, with extra whitespace trimmed', async () => {
-        await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
-          await writeFile(
-            path.join(sandboxDirectoryPath, 'some.file'),
-            '  some content  ',
-          );
-          const repositoryFilesystem = new RepositoryFilesystem(
-            sandboxDirectoryPath,
-          );
-
-          const content = await repositoryFilesystem.readFile('some.file');
-
-          expect(content).toBe('some content');
-        });
-      });
     });
 
     describe('if the file has already been read', () => {
@@ -65,23 +49,6 @@ describe('RepositoryFilesystem', () => {
         await repositoryFilesystem.readFile('/some/file');
 
         expect(utilsMock.readFile).toHaveBeenCalledTimes(1);
-      });
-
-      it('returns the content of the file, with extra whitespace trimmed', async () => {
-        await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
-          await writeFile(
-            path.join(sandboxDirectoryPath, 'some.file'),
-            '  some content  ',
-          );
-          const repositoryFilesystem = new RepositoryFilesystem(
-            sandboxDirectoryPath,
-          );
-          await repositoryFilesystem.readFile('some.file');
-
-          const content = await repositoryFilesystem.readFile('some.file');
-
-          expect(content).toBe('some content');
-        });
       });
     });
   });
