@@ -1,5 +1,8 @@
-import { validateChangelog } from '@metamask/auto-changelog';
-import { isErrorWithCode } from '@metamask/utils/node';
+import {
+  ChangelogFormattingError,
+  validateChangelog,
+} from '@metamask/auto-changelog';
+import { getErrorMessage, isErrorWithCode } from '@metamask/utils/node';
 
 import { buildRule } from './build-rule';
 import { PackageManifestSchema, RuleName } from './types';
@@ -31,12 +34,18 @@ export default buildRule({
             message: `The package does not have a well-formed manifest. This is not the fault of the changelog, but this rule requires a valid package manifest.`,
           },
         ]);
+      } else if (error instanceof ChangelogFormattingError) {
+        return fail([
+          {
+            message: 'Changelog is not well-formatted.',
+          },
+        ]);
       }
-      return fail([
-        {
-          message: 'Changelog is not well-formatted.',
-        },
-      ]);
+      throw new Error(
+        `Encountered an error validating the changelog: ${getErrorMessage(
+          error,
+        )}.`,
+      );
     }
   },
 });

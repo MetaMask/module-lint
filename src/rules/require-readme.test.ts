@@ -30,7 +30,7 @@ describe('Rule: require-readme', () => {
     });
   });
 
-  it('passes if the project does not have a README.md', async () => {
+  it('fails if the project does not have a README.md', async () => {
     await withinSandbox(async (sandbox) => {
       const project = buildMetaMaskRepository({
         shortname: 'project',

@@ -1,4 +1,4 @@
-import { writeFile } from '@metamask/utils/node';
+import { getErrorMessage, writeFile } from '@metamask/utils/node';
 import path from 'path';
 
 import validateChangelog from './validate-changelog';
@@ -141,6 +141,38 @@ describe('Rule: validate-changelog', () => {
           },
         ],
       });
+    });
+  });
+
+  it('re-throws a unknown error where there is no error code or it is not an instance of ChangelogFormattingError', async () => {
+    await withinSandbox(async (sandbox) => {
+      const project = buildMetaMaskRepository({
+        shortname: 'project',
+        directoryPath: path.join(sandbox.directoryPath, 'project'),
+      });
+      await writeFile(
+        path.join(project.directoryPath, 'package.json'),
+        JSON.stringify({ foo: 'bar' }),
+      );
+      await writeFile(
+        path.join(project.directoryPath, 'CHANGELOG.md'),
+        wellFormattedChangelog,
+      );
+      const error = new Error('unknown error');
+      jest.spyOn(project.fs, 'readJsonFileAs').mockRejectedValueOnce(error);
+
+      await expect(
+        validateChangelog.execute({
+          template: buildMetaMaskRepository(),
+          project,
+          pass,
+          fail,
+        }),
+      ).rejects.toThrow(
+        `Encountered an error validating the changelog: ${getErrorMessage(
+          error,
+        )}.`,
+      );
     });
   });
 });

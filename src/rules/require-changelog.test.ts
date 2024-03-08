@@ -5,7 +5,7 @@ import requireChangelog from './require-changelog';
 import { buildMetaMaskRepository, withinSandbox } from '../../tests/helpers';
 import { fail, pass } from '../rule-helpers';
 
-describe('Rule: require-changelo', () => {
+describe('Rule: require-changelog', () => {
   it('passes if the project has a CHANGELOG.md', async () => {
     await withinSandbox(async (sandbox) => {
       const project = buildMetaMaskRepository({
@@ -30,7 +30,7 @@ describe('Rule: require-changelo', () => {
     });
   });
 
-  it('passes if the project does not have a CHANGELOG.md', async () => {
+  it('fails if the project does not have a CHANGELOG.md', async () => {
     await withinSandbox(async (sandbox) => {
       const project = buildMetaMaskRepository({
         shortname: 'project',
