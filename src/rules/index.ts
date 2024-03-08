@@ -1,7 +1,6 @@
 import allYarnModernFilesConform from './all-yarn-modern-files-conform';
 import classicYarnConfigFileAbsent from './classic-yarn-config-file-absent';
 import packageChangelogDevDependenciesConform from './package-changelog-dev-dependencies-conform';
-import packageChangelogModuleLintDevDependenciesConform from './package-changelog-module-lint-dev-dependencies-conform';
 import packageChangelogScriptsConform from './package-changelog-scripts-conform';
 import packageEnginesNodeFieldConforms from './package-engines-node-field-conforms';
 import packageExportsFieldConforms from './package-exports-field-conforms';
@@ -65,5 +64,4 @@ export const rules = [
   validateChangelog,
   packageChangelogDevDependenciesConform,
   packageChangelogScriptsConform,
-  packageChangelogModuleLintDevDependenciesConform,
 ] as const;
