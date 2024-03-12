@@ -17,6 +17,9 @@ import packageTypescriptDevDependenciesConform from './package-typescript-dev-de
 import packageTypescriptScriptsConform from './package-typescript-scripts-conform';
 import readmeListsCorrectYarnVersion from './readme-lists-correct-yarn-version';
 import readmeListsNodejsWebsite from './readme-recommends-node-install';
+import requireEditorconfig from './require-editorconfig';
+import requireGitattributes from './require-gitattributes';
+import requireGitignore from './require-gitignore';
 import requireJestConfig from './require-jest-config';
 import requireNvmrc from './require-nvmrc';
 import requireReadme from './require-readme';
@@ -56,4 +59,7 @@ export const rules = [
   packageTypedocDevDependenciesConform,
   packageTypedocScriptsConform,
   requireTypedoc,
+  requireEditorconfig,
+  requireGitattributes,
+  requireGitignore,
 ] as const;

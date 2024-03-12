@@ -122,6 +122,18 @@ describe('main', () => {
             path.join(repository.directoryPath, 'typedoc.json'),
             'content for typedoc.json',
           );
+          await writeFile(
+            path.join(repository.directoryPath, '.editorconfig'),
+            'content for .editorconfig',
+          );
+          await writeFile(
+            path.join(repository.directoryPath, '.gitattributes'),
+            'content for .gitattributes',
+          );
+          await writeFile(
+            path.join(repository.directoryPath, '.gitignore'),
+            'content for .gitignore',
+          );
         }
         const outputLogger = new FakeOutputLogger();
 
@@ -170,8 +182,11 @@ repo-1
 - Is \`tsconfig.build.json\` present, and does it conform? ✅
 - Is \`tsup.config.ts\` present, and does it conform? ✅
 - Is \`typedoc.json\` present, and does it conform? ✅
+- Is \`.editorconfig\` present, and does it conform? ✅
+- Is \`.gitattributes\` present, and does it conform? ✅
+- Is \`.gitignore\` present, and does it conform? ✅
 
-Results:       29 passed, 0 failed, 29 total
+Results:       32 passed, 0 failed, 32 total
 Elapsed time:  0 ms
 
 
@@ -207,8 +222,11 @@ repo-2
 - Is \`tsconfig.build.json\` present, and does it conform? ✅
 - Is \`tsup.config.ts\` present, and does it conform? ✅
 - Is \`typedoc.json\` present, and does it conform? ✅
+- Is \`.editorconfig\` present, and does it conform? ✅
+- Is \`.gitattributes\` present, and does it conform? ✅
+- Is \`.gitignore\` present, and does it conform? ✅
 
-Results:       29 passed, 0 failed, 29 total
+Results:       32 passed, 0 failed, 32 total
 Elapsed time:  0 ms
 
 `,
@@ -277,8 +295,14 @@ repo-1
   - \`tsup.config.ts\` does not exist in this project.
 - Is \`typedoc.json\` present, and does it conform? ❌
   - \`typedoc.json\` does not exist in this project.
+- Is \`.editorconfig\` present, and does it conform? ❌
+  - \`.editorconfig\` does not exist in this project.
+- Is \`.gitattributes\` present, and does it conform? ❌
+  - \`.gitattributes\` does not exist in this project.
+- Is \`.gitignore\` present, and does it conform? ❌
+  - \`.gitignore\` does not exist in this project.
 
-Results:       0 passed, 11 failed, 11 total
+Results:       0 passed, 14 failed, 14 total
 Elapsed time:  0 ms
 
 
@@ -309,8 +333,14 @@ repo-2
   - \`tsup.config.ts\` does not exist in this project.
 - Is \`typedoc.json\` present, and does it conform? ❌
   - \`typedoc.json\` does not exist in this project.
+- Is \`.editorconfig\` present, and does it conform? ❌
+  - \`.editorconfig\` does not exist in this project.
+- Is \`.gitattributes\` present, and does it conform? ❌
+  - \`.gitattributes\` does not exist in this project.
+- Is \`.gitignore\` present, and does it conform? ❌
+  - \`.gitignore\` does not exist in this project.
 
-Results:       0 passed, 11 failed, 11 total
+Results:       0 passed, 14 failed, 14 total
 Elapsed time:  0 ms
 
 `,
@@ -385,8 +415,14 @@ repo-2
   - \`tsup.config.ts\` does not exist in this project.
 - Is \`typedoc.json\` present, and does it conform? ❌
   - \`typedoc.json\` does not exist in this project.
+- Is \`.editorconfig\` present, and does it conform? ❌
+  - \`.editorconfig\` does not exist in this project.
+- Is \`.gitattributes\` present, and does it conform? ❌
+  - \`.gitattributes\` does not exist in this project.
+- Is \`.gitignore\` present, and does it conform? ❌
+  - \`.gitignore\` does not exist in this project.
 
-Results:       1 passed, 10 failed, 11 total
+Results:       1 passed, 13 failed, 14 total
 Elapsed time:  0 ms
 
 `.trimStart(),
@@ -487,6 +523,18 @@ Elapsed time:  0 ms
             path.join(repository.directoryPath, 'typedoc.json'),
             'content for typedoc.json',
           );
+          await writeFile(
+            path.join(repository.directoryPath, '.editorconfig'),
+            'content for .editorconfig',
+          );
+          await writeFile(
+            path.join(repository.directoryPath, '.gitattributes'),
+            'content for .gitattributes',
+          );
+          await writeFile(
+            path.join(repository.directoryPath, '.gitignore'),
+            'content for .gitignore',
+          );
         }
         const outputLogger = new FakeOutputLogger();
 
@@ -535,8 +583,11 @@ repo-1
 - Is \`tsconfig.build.json\` present, and does it conform? ✅
 - Is \`tsup.config.ts\` present, and does it conform? ✅
 - Is \`typedoc.json\` present, and does it conform? ✅
+- Is \`.editorconfig\` present, and does it conform? ✅
+- Is \`.gitattributes\` present, and does it conform? ✅
+- Is \`.gitignore\` present, and does it conform? ✅
 
-Results:       29 passed, 0 failed, 29 total
+Results:       32 passed, 0 failed, 32 total
 Elapsed time:  0 ms
 
 
@@ -572,8 +623,11 @@ repo-2
 - Is \`tsconfig.build.json\` present, and does it conform? ✅
 - Is \`tsup.config.ts\` present, and does it conform? ✅
 - Is \`typedoc.json\` present, and does it conform? ✅
+- Is \`.editorconfig\` present, and does it conform? ✅
+- Is \`.gitattributes\` present, and does it conform? ✅
+- Is \`.gitignore\` present, and does it conform? ✅
 
-Results:       29 passed, 0 failed, 29 total
+Results:       32 passed, 0 failed, 32 total
 Elapsed time:  0 ms
 
 `,
@@ -642,8 +696,14 @@ repo-1
   - \`tsup.config.ts\` does not exist in this project.
 - Is \`typedoc.json\` present, and does it conform? ❌
   - \`typedoc.json\` does not exist in this project.
+- Is \`.editorconfig\` present, and does it conform? ❌
+  - \`.editorconfig\` does not exist in this project.
+- Is \`.gitattributes\` present, and does it conform? ❌
+  - \`.gitattributes\` does not exist in this project.
+- Is \`.gitignore\` present, and does it conform? ❌
+  - \`.gitignore\` does not exist in this project.
 
-Results:       0 passed, 11 failed, 11 total
+Results:       0 passed, 14 failed, 14 total
 Elapsed time:  0 ms
 
 
@@ -674,8 +734,14 @@ repo-2
   - \`tsup.config.ts\` does not exist in this project.
 - Is \`typedoc.json\` present, and does it conform? ❌
   - \`typedoc.json\` does not exist in this project.
+- Is \`.editorconfig\` present, and does it conform? ❌
+  - \`.editorconfig\` does not exist in this project.
+- Is \`.gitattributes\` present, and does it conform? ❌
+  - \`.gitattributes\` does not exist in this project.
+- Is \`.gitignore\` present, and does it conform? ❌
+  - \`.gitignore\` does not exist in this project.
 
-Results:       0 passed, 11 failed, 11 total
+Results:       0 passed, 14 failed, 14 total
 Elapsed time:  0 ms
 
 `,
@@ -749,8 +815,14 @@ repo-2
   - \`tsup.config.ts\` does not exist in this project.
 - Is \`typedoc.json\` present, and does it conform? ❌
   - \`typedoc.json\` does not exist in this project.
+- Is \`.editorconfig\` present, and does it conform? ❌
+  - \`.editorconfig\` does not exist in this project.
+- Is \`.gitattributes\` present, and does it conform? ❌
+  - \`.gitattributes\` does not exist in this project.
+- Is \`.gitignore\` present, and does it conform? ❌
+  - \`.gitignore\` does not exist in this project.
 
-Results:       1 passed, 10 failed, 11 total
+Results:       1 passed, 13 failed, 14 total
 Elapsed time:  0 ms
 
 `,

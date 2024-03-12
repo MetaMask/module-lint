@@ -32,6 +32,9 @@ export enum RuleName {
   PackageTypedocDependenciesConform = 'package-typedoc-dependencies-conform',
   RequireTypedoc = 'require-typedoc',
   PackageTypedocScriptsConform = 'package-typedoc-scripts-conform',
+  RequireEditorConfig = 'require-editorconfig',
+  RequireGitAttributes = 'require-gitattributes',
+  RequireGitIgnore = 'require-gitignore',
 }
 
 export const PackageManifestSchema = type({
