@@ -28,8 +28,8 @@ import requireTsconfig from './require-tsconfig';
 import requireTsconfigBuild from './require-tsconfig-build';
 import requireTsupConfig from './require-tsup-config';
 import requireTypedoc from './require-typedoc';
+import requireValidChangelog from './require-valid-changelog';
 import requireValidPackageManifest from './require-valid-package-manifest';
-import validateChangelog from './validate-changelog';
 
 export const rules = [
   allYarnModernFilesConform,
@@ -61,7 +61,7 @@ export const rules = [
   packageTypedocScriptsConform,
   requireTypedoc,
   requireChangelog,
-  validateChangelog,
+  requireValidChangelog,
   packageChangelogDevDependenciesConform,
   packageChangelogScriptsConform,
 ] as const;

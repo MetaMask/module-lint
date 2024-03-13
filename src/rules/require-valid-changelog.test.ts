@@ -1,7 +1,7 @@
 import { getErrorMessage, writeFile } from '@metamask/utils/node';
 import path from 'path';
 
-import validateChangelog from './validate-changelog';
+import validateChangelog from './require-valid-changelog';
 import {
   buildMetaMaskRepository,
   buildPackageManifestMock,
@@ -30,7 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [Unreleased]: https://github.com/MetaMask/module-lint/`;
 
-describe('Rule: validate-changelog', () => {
+describe('Rule: require-valid-changelog', () => {
   it('passes if the changelog.md is well formatted', async () => {
     await withinSandbox(async (sandbox) => {
       const template = buildMetaMaskRepository({
@@ -108,10 +108,6 @@ describe('Rule: validate-changelog', () => {
 
   it('fails if the package manifest is not well formed', async () => {
     await withinSandbox(async (sandbox) => {
-      const template = buildMetaMaskRepository({
-        shortname: 'template',
-        directoryPath: path.join(sandbox.directoryPath, 'template'),
-      });
       const project = buildMetaMaskRepository({
         shortname: 'project',
         directoryPath: path.join(sandbox.directoryPath, 'project'),
@@ -125,22 +121,16 @@ describe('Rule: validate-changelog', () => {
         invalidChangelog,
       );
 
-      const result = await validateChangelog.execute({
-        template,
-        project,
-        pass,
-        fail,
-      });
-
-      expect(result).toStrictEqual({
-        passed: false,
-        failures: [
-          {
-            message:
-              'The package does not have a well-formed manifest. This is not the fault of the changelog, but this rule requires a valid package manifest.',
-          },
-        ],
-      });
+      await expect(
+        validateChangelog.execute({
+          template: buildMetaMaskRepository(),
+          project,
+          pass,
+          fail,
+        }),
+      ).rejects.toThrow(
+        'The package does not have a well-formed manifest. This is not the fault of the changelog, but this rule requires a valid package manifest.',
+      );
     });
   });
 

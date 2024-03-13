@@ -8,7 +8,7 @@ import { buildRule } from './build-rule';
 import { PackageManifestSchema, RuleName } from './types';
 
 export default buildRule({
-  name: RuleName.ValidateChangelog,
+  name: RuleName.RequireValidChangelog,
   description: 'Is `CHANGELOG.md` well-formatted?',
   dependencies: [RuleName.RequireChangelog],
   execute: async (ruleExecutionArguments) => {
@@ -29,11 +29,9 @@ export default buildRule({
       return pass();
     } catch (error) {
       if (isErrorWithCode(error) && error.code === 'ERR_INVALID_JSON_FILE') {
-        return fail([
-          {
-            message: `The package does not have a well-formed manifest. This is not the fault of the changelog, but this rule requires a valid package manifest.`,
-          },
-        ]);
+        throw new Error(
+          'The package does not have a well-formed manifest. This is not the fault of the changelog, but this rule requires a valid package manifest.',
+        );
       } else if (error instanceof ChangelogFormattingError) {
         return fail([
           {

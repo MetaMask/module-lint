@@ -33,7 +33,7 @@ export enum RuleName {
   RequireTypedoc = 'require-typedoc',
   PackageTypedocScriptsConform = 'package-typedoc-scripts-conform',
   RequireChangelog = 'require-changelog',
-  ValidateChangelog = 'validate-changelog',
+  RequireValidChangelog = 'require-valid-changelog',
   PackageChangelogDependenciesConform = 'package-changelog-dependencies-conform',
   PackageChangelogScriptsConform = 'package-changelog-scripts-conform',
   PackageChangelogModuleLintDependenciesConform = 'package-changelog-module-lint-dependencies-conform',

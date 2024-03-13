@@ -260,7 +260,7 @@ describe('Rule: package-changelog-scripts-conform', () => {
         failures: [
           {
             message:
-              '`scripts.[lint]` exists, but it does not exactly match `yarn lint:changelog`.',
+              '`scripts.[lint]` exists, but it does not include `yarn lint:changelog`.',
           },
         ],
       });
