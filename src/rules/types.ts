@@ -32,9 +32,15 @@ export enum RuleName {
   PackageTypedocDependenciesConform = 'package-typedoc-dependencies-conform',
   RequireTypedoc = 'require-typedoc',
   PackageTypedocScriptsConform = 'package-typedoc-scripts-conform',
+  RequireChangelog = 'require-changelog',
+  RequireValidChangelog = 'require-valid-changelog',
+  PackageChangelogDependenciesConform = 'package-changelog-dependencies-conform',
+  PackageChangelogScriptsConform = 'package-changelog-scripts-conform',
+  PackageChangelogModuleLintDependenciesConform = 'package-changelog-module-lint-dependencies-conform',
 }
 
 export const PackageManifestSchema = type({
+  version: string(),
   packageManager: string(),
   engines: type({
     node: string(),
@@ -49,4 +55,7 @@ export const PackageManifestSchema = type({
   files: array(string()),
   scripts: record(string(), string()),
   devDependencies: record(string(), string()),
+  repository: type({
+    url: string(),
+  }),
 });

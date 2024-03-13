@@ -153,6 +153,7 @@ export function buildPackageManifestMock(
   overrides?: Record<string, unknown>,
 ): string {
   const validPackageManifestMock = {
+    version: '0.0.0',
     packageManager: 'yarn',
     engines: { node: '1.0.0' },
     main: 'test-main',
@@ -162,6 +163,9 @@ export function buildPackageManifestMock(
     exports: {
       '.': {},
       './package.json': 'test',
+    },
+    repository: {
+      url: 'http://',
     },
     devDependencies: {},
     scripts: {},

@@ -1,23 +1,23 @@
 import { writeFile } from '@metamask/utils/node';
 import path from 'path';
 
-import requireReadme from './require-readme';
+import requireChangelog from './require-changelog';
 import { buildMetaMaskRepository, withinSandbox } from '../../tests/helpers';
 import { fail, pass } from '../rule-helpers';
 
-describe('Rule: require-readme', () => {
-  it('passes if the project has a README.md', async () => {
+describe('Rule: require-changelog', () => {
+  it('passes if the project has a CHANGELOG.md', async () => {
     await withinSandbox(async (sandbox) => {
       const project = buildMetaMaskRepository({
         shortname: 'project',
         directoryPath: path.join(sandbox.directoryPath, 'project'),
       });
       await writeFile(
-        path.join(project.directoryPath, 'README.md'),
-        'content for README',
+        path.join(project.directoryPath, 'CHANGELOG.md'),
+        'content for CHANGELOG',
       );
 
-      const result = await requireReadme.execute({
+      const result = await requireChangelog.execute({
         template: buildMetaMaskRepository(),
         project,
         pass,
@@ -30,14 +30,14 @@ describe('Rule: require-readme', () => {
     });
   });
 
-  it('fails if the project does not have a README.md', async () => {
+  it('fails if the project does not have a CHANGELOG.md', async () => {
     await withinSandbox(async (sandbox) => {
       const project = buildMetaMaskRepository({
         shortname: 'project',
         directoryPath: path.join(sandbox.directoryPath, 'project'),
       });
 
-      const result = await requireReadme.execute({
+      const result = await requireChangelog.execute({
         template: buildMetaMaskRepository(),
         project,
         pass,
@@ -48,7 +48,7 @@ describe('Rule: require-readme', () => {
         passed: false,
         failures: [
           {
-            message: '`README.md` does not exist in this project.',
+            message: '`CHANGELOG.md` does not exist in this project.',
           },
         ],
       });

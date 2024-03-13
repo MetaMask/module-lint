@@ -21,6 +21,17 @@ jest.mock('execa');
 
 const execaMock = jest.mocked<PrimaryExecaFunction>(execa);
 
+const wellFormattedChangelog = `# Changelog
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+[Unreleased]: https://github.com/MetaMask/module-lint/
+`;
+
 describe('main', () => {
   beforeEach(() => {
     fakeDateOnly();
@@ -84,6 +95,7 @@ describe('main', () => {
                 tsup: '1.0.0',
                 typescript: '1.0.0',
                 typedoc: '1.0.0',
+                '@metamask/auto-changelog': '1.0.0',
               },
               scripts: {
                 test: 'test script',
@@ -91,6 +103,11 @@ describe('main', () => {
                 build: 'test build',
                 'build:types': 'test build types',
                 'build:docs': 'test build docs',
+                'lint:changelog': 'test changelog',
+                lint: 'test build types && yarn lint:changelog',
+              },
+              repository: {
+                url: 'https://github.com/MetaMask/module-lint.git',
               },
             }),
           );
@@ -121,6 +138,10 @@ describe('main', () => {
           await writeFile(
             path.join(repository.directoryPath, 'typedoc.json'),
             'content for typedoc.json',
+          );
+          await writeFile(
+            path.join(repository.directoryPath, 'CHANGELOG.md'),
+            wellFormattedChangelog,
           );
         }
         const outputLogger = new FakeOutputLogger();
@@ -158,6 +179,8 @@ repo-1
   - Does LavaMoat allow scripts for \`tsup>esbuild\`? ✅
   - Do the typedoc-related \`devDependencies\` in \`package.json\` conform? ✅
   - Do the typedoc-related \`scripts\` in \`package.json\` conform? ✅
+  - Do the changelog-related \`devDependencies\` in \`package.json\` conform? ✅
+  - Do the changelog-related \`scripts\` in \`package.json\` conform? ✅
 - Is \`README.md\` present? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
   - Does the README conform by recommending node install from nodejs.org? ✅
@@ -170,8 +193,10 @@ repo-1
 - Is \`tsconfig.build.json\` present, and does it conform? ✅
 - Is \`tsup.config.ts\` present, and does it conform? ✅
 - Is \`typedoc.json\` present, and does it conform? ✅
+- Is \`CHANGELOG.md\` present? ✅
+  - Is \`CHANGELOG.md\` well-formatted? ✅
 
-Results:       29 passed, 0 failed, 29 total
+Results:       33 passed, 0 failed, 33 total
 Elapsed time:  0 ms
 
 
@@ -195,6 +220,8 @@ repo-2
   - Does LavaMoat allow scripts for \`tsup>esbuild\`? ✅
   - Do the typedoc-related \`devDependencies\` in \`package.json\` conform? ✅
   - Do the typedoc-related \`scripts\` in \`package.json\` conform? ✅
+  - Do the changelog-related \`devDependencies\` in \`package.json\` conform? ✅
+  - Do the changelog-related \`scripts\` in \`package.json\` conform? ✅
 - Is \`README.md\` present? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
   - Does the README conform by recommending node install from nodejs.org? ✅
@@ -207,8 +234,10 @@ repo-2
 - Is \`tsconfig.build.json\` present, and does it conform? ✅
 - Is \`tsup.config.ts\` present, and does it conform? ✅
 - Is \`typedoc.json\` present, and does it conform? ✅
+- Is \`CHANGELOG.md\` present? ✅
+  - Is \`CHANGELOG.md\` well-formatted? ✅
 
-Results:       29 passed, 0 failed, 29 total
+Results:       33 passed, 0 failed, 33 total
 Elapsed time:  0 ms
 
 `,
@@ -277,8 +306,10 @@ repo-1
   - \`tsup.config.ts\` does not exist in this project.
 - Is \`typedoc.json\` present, and does it conform? ❌
   - \`typedoc.json\` does not exist in this project.
+- Is \`CHANGELOG.md\` present? ❌
+  - \`CHANGELOG.md\` does not exist in this project.
 
-Results:       0 passed, 11 failed, 11 total
+Results:       0 passed, 12 failed, 12 total
 Elapsed time:  0 ms
 
 
@@ -309,8 +340,10 @@ repo-2
   - \`tsup.config.ts\` does not exist in this project.
 - Is \`typedoc.json\` present, and does it conform? ❌
   - \`typedoc.json\` does not exist in this project.
+- Is \`CHANGELOG.md\` present? ❌
+  - \`CHANGELOG.md\` does not exist in this project.
 
-Results:       0 passed, 11 failed, 11 total
+Results:       0 passed, 12 failed, 12 total
 Elapsed time:  0 ms
 
 `,
@@ -385,8 +418,10 @@ repo-2
   - \`tsup.config.ts\` does not exist in this project.
 - Is \`typedoc.json\` present, and does it conform? ❌
   - \`typedoc.json\` does not exist in this project.
+- Is \`CHANGELOG.md\` present? ❌
+  - \`CHANGELOG.md\` does not exist in this project.
 
-Results:       1 passed, 10 failed, 11 total
+Results:       1 passed, 11 failed, 12 total
 Elapsed time:  0 ms
 
 `.trimStart(),
@@ -449,6 +484,7 @@ Elapsed time:  0 ms
                 tsup: '1.0.0',
                 typescript: '1.0.0',
                 typedoc: '1.0.0',
+                '@metamask/auto-changelog': '1.0.0',
               },
               scripts: {
                 test: 'test script',
@@ -456,6 +492,11 @@ Elapsed time:  0 ms
                 build: 'test build',
                 'build:types': 'test build types',
                 'build:docs': 'test build docs',
+                'lint:changelog': 'test changelog',
+                lint: 'test build types && yarn lint:changelog',
+              },
+              repository: {
+                url: 'https://github.com/MetaMask/module-lint.git',
               },
             }),
           );
@@ -486,6 +527,10 @@ Elapsed time:  0 ms
           await writeFile(
             path.join(repository.directoryPath, 'typedoc.json'),
             'content for typedoc.json',
+          );
+          await writeFile(
+            path.join(repository.directoryPath, 'CHANGELOG.md'),
+            wellFormattedChangelog,
           );
         }
         const outputLogger = new FakeOutputLogger();
@@ -523,6 +568,8 @@ repo-1
   - Does LavaMoat allow scripts for \`tsup>esbuild\`? ✅
   - Do the typedoc-related \`devDependencies\` in \`package.json\` conform? ✅
   - Do the typedoc-related \`scripts\` in \`package.json\` conform? ✅
+  - Do the changelog-related \`devDependencies\` in \`package.json\` conform? ✅
+  - Do the changelog-related \`scripts\` in \`package.json\` conform? ✅
 - Is \`README.md\` present? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
   - Does the README conform by recommending node install from nodejs.org? ✅
@@ -535,8 +582,10 @@ repo-1
 - Is \`tsconfig.build.json\` present, and does it conform? ✅
 - Is \`tsup.config.ts\` present, and does it conform? ✅
 - Is \`typedoc.json\` present, and does it conform? ✅
+- Is \`CHANGELOG.md\` present? ✅
+  - Is \`CHANGELOG.md\` well-formatted? ✅
 
-Results:       29 passed, 0 failed, 29 total
+Results:       33 passed, 0 failed, 33 total
 Elapsed time:  0 ms
 
 
@@ -560,6 +609,8 @@ repo-2
   - Does LavaMoat allow scripts for \`tsup>esbuild\`? ✅
   - Do the typedoc-related \`devDependencies\` in \`package.json\` conform? ✅
   - Do the typedoc-related \`scripts\` in \`package.json\` conform? ✅
+  - Do the changelog-related \`devDependencies\` in \`package.json\` conform? ✅
+  - Do the changelog-related \`scripts\` in \`package.json\` conform? ✅
 - Is \`README.md\` present? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
   - Does the README conform by recommending node install from nodejs.org? ✅
@@ -572,8 +623,10 @@ repo-2
 - Is \`tsconfig.build.json\` present, and does it conform? ✅
 - Is \`tsup.config.ts\` present, and does it conform? ✅
 - Is \`typedoc.json\` present, and does it conform? ✅
+- Is \`CHANGELOG.md\` present? ✅
+  - Is \`CHANGELOG.md\` well-formatted? ✅
 
-Results:       29 passed, 0 failed, 29 total
+Results:       33 passed, 0 failed, 33 total
 Elapsed time:  0 ms
 
 `,
@@ -642,8 +695,10 @@ repo-1
   - \`tsup.config.ts\` does not exist in this project.
 - Is \`typedoc.json\` present, and does it conform? ❌
   - \`typedoc.json\` does not exist in this project.
+- Is \`CHANGELOG.md\` present? ❌
+  - \`CHANGELOG.md\` does not exist in this project.
 
-Results:       0 passed, 11 failed, 11 total
+Results:       0 passed, 12 failed, 12 total
 Elapsed time:  0 ms
 
 
@@ -674,8 +729,10 @@ repo-2
   - \`tsup.config.ts\` does not exist in this project.
 - Is \`typedoc.json\` present, and does it conform? ❌
   - \`typedoc.json\` does not exist in this project.
+- Is \`CHANGELOG.md\` present? ❌
+  - \`CHANGELOG.md\` does not exist in this project.
 
-Results:       0 passed, 11 failed, 11 total
+Results:       0 passed, 12 failed, 12 total
 Elapsed time:  0 ms
 
 `,
@@ -749,8 +806,10 @@ repo-2
   - \`tsup.config.ts\` does not exist in this project.
 - Is \`typedoc.json\` present, and does it conform? ❌
   - \`typedoc.json\` does not exist in this project.
+- Is \`CHANGELOG.md\` present? ❌
+  - \`CHANGELOG.md\` does not exist in this project.
 
-Results:       1 passed, 10 failed, 11 total
+Results:       1 passed, 11 failed, 12 total
 Elapsed time:  0 ms
 
 `,
