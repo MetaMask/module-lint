@@ -2,7 +2,11 @@ import {
   ChangelogFormattingError,
   validateChangelog,
 } from '@metamask/auto-changelog';
-import { getErrorMessage, isErrorWithCode } from '@metamask/utils/node';
+import {
+  getErrorMessage,
+  isErrorWithCode,
+  isErrorWithMessage,
+} from '@metamask/utils/node';
 
 import { buildRule } from './build-rule';
 import { PackageManifestSchema, RuleName } from './types';
@@ -28,9 +32,13 @@ export default buildRule({
       });
       return pass();
     } catch (error) {
-      if (isErrorWithCode(error) && error.code === 'ERR_INVALID_JSON_FILE') {
+      if (
+        isErrorWithCode(error) &&
+        isErrorWithMessage(error) &&
+        error.code === 'ERR_INVALID_JSON_FILE'
+      ) {
         throw new Error(
-          'The package does not have a well-formed manifest. This is not the fault of the changelog, but this rule requires a valid package manifest.',
+          `${error.message}\n The package does not have a well-formed manifest. This is not the fault of the changelog, but this rule requires a valid package manifest.`,
         );
       } else if (error instanceof ChangelogFormattingError) {
         return fail([
