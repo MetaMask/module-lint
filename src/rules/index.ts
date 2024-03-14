@@ -20,6 +20,9 @@ import packageTypescriptScriptsConform from './package-typescript-scripts-confor
 import readmeListsCorrectYarnVersion from './readme-lists-correct-yarn-version';
 import readmeListsNodejsWebsite from './readme-recommends-node-install';
 import requireChangelog from './require-changelog';
+import requireEditorconfig from './require-editorconfig';
+import requireGitattributes from './require-gitattributes';
+import requireGitignore from './require-gitignore';
 import requireJestConfig from './require-jest-config';
 import requireNvmrc from './require-nvmrc';
 import requireReadme from './require-readme';
@@ -64,4 +67,7 @@ export const rules = [
   requireValidChangelog,
   packageChangelogDevDependenciesConform,
   packageChangelogScriptsConform,
+  requireEditorconfig,
+  requireGitattributes,
+  requireGitignore,
 ] as const;

@@ -143,6 +143,18 @@ describe('main', () => {
             path.join(repository.directoryPath, 'CHANGELOG.md'),
             wellFormattedChangelog,
           );
+          await writeFile(
+            path.join(repository.directoryPath, '.editorconfig'),
+            'content for .editorconfig',
+          );
+          await writeFile(
+            path.join(repository.directoryPath, '.gitattributes'),
+            'content for .gitattributes',
+          );
+          await writeFile(
+            path.join(repository.directoryPath, '.gitignore'),
+            'content for .gitignore',
+          );
         }
         const outputLogger = new FakeOutputLogger();
 
@@ -195,8 +207,11 @@ repo-1
 - Is \`typedoc.json\` present, and does it conform? ✅
 - Is \`CHANGELOG.md\` present? ✅
 - Is \`CHANGELOG.md\` well-formatted? ✅
+- Is \`.editorconfig\` present, and does it conform? ✅
+- Is \`.gitattributes\` present, and does it conform? ✅
+- Is \`.gitignore\` present, and does it conform? ✅
 
-Results:       33 passed, 0 failed, 33 total
+Results:       36 passed, 0 failed, 36 total
 Elapsed time:  0 ms
 
 
@@ -236,8 +251,11 @@ repo-2
 - Is \`typedoc.json\` present, and does it conform? ✅
 - Is \`CHANGELOG.md\` present? ✅
 - Is \`CHANGELOG.md\` well-formatted? ✅
+- Is \`.editorconfig\` present, and does it conform? ✅
+- Is \`.gitattributes\` present, and does it conform? ✅
+- Is \`.gitignore\` present, and does it conform? ✅
 
-Results:       33 passed, 0 failed, 33 total
+Results:       36 passed, 0 failed, 36 total
 Elapsed time:  0 ms
 
 `,
@@ -308,8 +326,14 @@ repo-1
   - \`typedoc.json\` does not exist in this project.
 - Is \`CHANGELOG.md\` present? ❌
   - \`CHANGELOG.md\` does not exist in this project.
+- Is \`.editorconfig\` present, and does it conform? ❌
+  - \`.editorconfig\` does not exist in this project.
+- Is \`.gitattributes\` present, and does it conform? ❌
+  - \`.gitattributes\` does not exist in this project.
+- Is \`.gitignore\` present, and does it conform? ❌
+  - \`.gitignore\` does not exist in this project.
 
-Results:       0 passed, 12 failed, 12 total
+Results:       0 passed, 15 failed, 15 total
 Elapsed time:  0 ms
 
 
@@ -342,8 +366,14 @@ repo-2
   - \`typedoc.json\` does not exist in this project.
 - Is \`CHANGELOG.md\` present? ❌
   - \`CHANGELOG.md\` does not exist in this project.
+- Is \`.editorconfig\` present, and does it conform? ❌
+  - \`.editorconfig\` does not exist in this project.
+- Is \`.gitattributes\` present, and does it conform? ❌
+  - \`.gitattributes\` does not exist in this project.
+- Is \`.gitignore\` present, and does it conform? ❌
+  - \`.gitignore\` does not exist in this project.
 
-Results:       0 passed, 12 failed, 12 total
+Results:       0 passed, 15 failed, 15 total
 Elapsed time:  0 ms
 
 `,
@@ -420,8 +450,14 @@ repo-2
   - \`typedoc.json\` does not exist in this project.
 - Is \`CHANGELOG.md\` present? ❌
   - \`CHANGELOG.md\` does not exist in this project.
+- Is \`.editorconfig\` present, and does it conform? ❌
+  - \`.editorconfig\` does not exist in this project.
+- Is \`.gitattributes\` present, and does it conform? ❌
+  - \`.gitattributes\` does not exist in this project.
+- Is \`.gitignore\` present, and does it conform? ❌
+  - \`.gitignore\` does not exist in this project.
 
-Results:       1 passed, 11 failed, 12 total
+Results:       1 passed, 14 failed, 15 total
 Elapsed time:  0 ms
 
 `.trimStart(),
@@ -532,6 +568,18 @@ Elapsed time:  0 ms
             path.join(repository.directoryPath, 'CHANGELOG.md'),
             wellFormattedChangelog,
           );
+          await writeFile(
+            path.join(repository.directoryPath, '.editorconfig'),
+            'content for .editorconfig',
+          );
+          await writeFile(
+            path.join(repository.directoryPath, '.gitattributes'),
+            'content for .gitattributes',
+          );
+          await writeFile(
+            path.join(repository.directoryPath, '.gitignore'),
+            'content for .gitignore',
+          );
         }
         const outputLogger = new FakeOutputLogger();
 
@@ -584,8 +632,11 @@ repo-1
 - Is \`typedoc.json\` present, and does it conform? ✅
 - Is \`CHANGELOG.md\` present? ✅
 - Is \`CHANGELOG.md\` well-formatted? ✅
+- Is \`.editorconfig\` present, and does it conform? ✅
+- Is \`.gitattributes\` present, and does it conform? ✅
+- Is \`.gitignore\` present, and does it conform? ✅
 
-Results:       33 passed, 0 failed, 33 total
+Results:       36 passed, 0 failed, 36 total
 Elapsed time:  0 ms
 
 
@@ -625,8 +676,11 @@ repo-2
 - Is \`typedoc.json\` present, and does it conform? ✅
 - Is \`CHANGELOG.md\` present? ✅
 - Is \`CHANGELOG.md\` well-formatted? ✅
+- Is \`.editorconfig\` present, and does it conform? ✅
+- Is \`.gitattributes\` present, and does it conform? ✅
+- Is \`.gitignore\` present, and does it conform? ✅
 
-Results:       33 passed, 0 failed, 33 total
+Results:       36 passed, 0 failed, 36 total
 Elapsed time:  0 ms
 
 `,
@@ -697,8 +751,14 @@ repo-1
   - \`typedoc.json\` does not exist in this project.
 - Is \`CHANGELOG.md\` present? ❌
   - \`CHANGELOG.md\` does not exist in this project.
+- Is \`.editorconfig\` present, and does it conform? ❌
+  - \`.editorconfig\` does not exist in this project.
+- Is \`.gitattributes\` present, and does it conform? ❌
+  - \`.gitattributes\` does not exist in this project.
+- Is \`.gitignore\` present, and does it conform? ❌
+  - \`.gitignore\` does not exist in this project.
 
-Results:       0 passed, 12 failed, 12 total
+Results:       0 passed, 15 failed, 15 total
 Elapsed time:  0 ms
 
 
@@ -731,8 +791,14 @@ repo-2
   - \`typedoc.json\` does not exist in this project.
 - Is \`CHANGELOG.md\` present? ❌
   - \`CHANGELOG.md\` does not exist in this project.
+- Is \`.editorconfig\` present, and does it conform? ❌
+  - \`.editorconfig\` does not exist in this project.
+- Is \`.gitattributes\` present, and does it conform? ❌
+  - \`.gitattributes\` does not exist in this project.
+- Is \`.gitignore\` present, and does it conform? ❌
+  - \`.gitignore\` does not exist in this project.
 
-Results:       0 passed, 12 failed, 12 total
+Results:       0 passed, 15 failed, 15 total
 Elapsed time:  0 ms
 
 `,
@@ -808,8 +874,14 @@ repo-2
   - \`typedoc.json\` does not exist in this project.
 - Is \`CHANGELOG.md\` present? ❌
   - \`CHANGELOG.md\` does not exist in this project.
+- Is \`.editorconfig\` present, and does it conform? ❌
+  - \`.editorconfig\` does not exist in this project.
+- Is \`.gitattributes\` present, and does it conform? ❌
+  - \`.gitattributes\` does not exist in this project.
+- Is \`.gitignore\` present, and does it conform? ❌
+  - \`.gitignore\` does not exist in this project.
 
-Results:       1 passed, 11 failed, 12 total
+Results:       1 passed, 14 failed, 15 total
 Elapsed time:  0 ms
 
 `,
