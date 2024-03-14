@@ -48,7 +48,7 @@ export class RepositoryFilesystem {
   async readFile(filePath: string): Promise<string> {
     const cachedContent = this.#fileContents[filePath];
     const content =
-      cachedContent ?? (await readFile(this.#getFullPath(filePath))).trim();
+      cachedContent ?? (await readFile(this.#getFullPath(filePath)));
     this.#fileContents[filePath] = content;
     return content;
   }

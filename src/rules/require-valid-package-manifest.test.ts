@@ -82,7 +82,7 @@ describe('Rule: require-package-manifest', () => {
         failures: [
           {
             message:
-              'Invalid `package.json`: Missing `packageManager`; Missing `engines`; Missing `exports`; Missing `main`; Missing `module`; Missing `types`; Missing `files`; Missing `scripts`; Missing `devDependencies`.',
+              'Invalid `package.json`: Missing `version`; Missing `packageManager`; Missing `engines`; Missing `exports`; Missing `main`; Missing `module`; Missing `types`; Missing `files`; Missing `scripts`; Missing `devDependencies`; Missing `repository`.',
           },
         ],
       });

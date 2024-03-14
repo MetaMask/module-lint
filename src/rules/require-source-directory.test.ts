@@ -32,7 +32,7 @@ describe('Rule: require-source-directory', () => {
     });
   });
 
-  it('passes if the project does not have a src/ directory', async () => {
+  it('fails if the project does not have a src/ directory', async () => {
     await withinSandbox(async (sandbox) => {
       const project = buildMetaMaskRepository({
         shortname: 'project',
