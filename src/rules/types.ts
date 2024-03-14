@@ -36,7 +36,9 @@ export enum RuleName {
   RequireValidChangelog = 'require-valid-changelog',
   PackageChangelogDependenciesConform = 'package-changelog-dependencies-conform',
   PackageChangelogScriptsConform = 'package-changelog-scripts-conform',
-  PackageChangelogModuleLintDependenciesConform = 'package-changelog-module-lint-dependencies-conform',
+  RequireEditorConfig = 'require-editorconfig',
+  RequireGitAttributes = 'require-gitattributes',
+  RequireGitIgnore = 'require-gitignore',
 }
 
 export const PackageManifestSchema = type({
