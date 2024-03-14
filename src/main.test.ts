@@ -194,7 +194,7 @@ repo-1
 - Is \`tsup.config.ts\` present, and does it conform? ✅
 - Is \`typedoc.json\` present, and does it conform? ✅
 - Is \`CHANGELOG.md\` present? ✅
-  - Is \`CHANGELOG.md\` well-formatted? ✅
+- Is \`CHANGELOG.md\` well-formatted? ✅
 
 Results:       33 passed, 0 failed, 33 total
 Elapsed time:  0 ms
@@ -235,7 +235,7 @@ repo-2
 - Is \`tsup.config.ts\` present, and does it conform? ✅
 - Is \`typedoc.json\` present, and does it conform? ✅
 - Is \`CHANGELOG.md\` present? ✅
-  - Is \`CHANGELOG.md\` well-formatted? ✅
+- Is \`CHANGELOG.md\` well-formatted? ✅
 
 Results:       33 passed, 0 failed, 33 total
 Elapsed time:  0 ms
@@ -583,7 +583,7 @@ repo-1
 - Is \`tsup.config.ts\` present, and does it conform? ✅
 - Is \`typedoc.json\` present, and does it conform? ✅
 - Is \`CHANGELOG.md\` present? ✅
-  - Is \`CHANGELOG.md\` well-formatted? ✅
+- Is \`CHANGELOG.md\` well-formatted? ✅
 
 Results:       33 passed, 0 failed, 33 total
 Elapsed time:  0 ms
@@ -624,7 +624,7 @@ repo-2
 - Is \`tsup.config.ts\` present, and does it conform? ✅
 - Is \`typedoc.json\` present, and does it conform? ✅
 - Is \`CHANGELOG.md\` present? ✅
-  - Is \`CHANGELOG.md\` well-formatted? ✅
+- Is \`CHANGELOG.md\` well-formatted? ✅
 
 Results:       33 passed, 0 failed, 33 total
 Elapsed time:  0 ms
