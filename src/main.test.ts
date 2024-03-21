@@ -6,6 +6,7 @@ import execa from 'execa';
 import path from 'path';
 import { MockWritable } from 'stdio-mock';
 import stripAnsi from 'strip-ansi';
+import { stringify } from 'yaml';
 
 import { main } from './main';
 import { FakeOutputLogger } from '../tests/fake-output-logger';
@@ -62,10 +63,6 @@ describe('main', () => {
             path.join(repository.directoryPath, 'src'),
           );
           await writeFile(
-            path.join(repository.directoryPath, '.yarnrc.yml'),
-            '',
-          );
-          await writeFile(
             path.join(
               repository.directoryPath,
               '.yarn',
@@ -96,6 +93,8 @@ describe('main', () => {
                 typescript: '1.0.0',
                 typedoc: '1.0.0',
                 '@metamask/auto-changelog': '1.0.0',
+                '@lavamoat/allow-scripts': '1.0.0',
+                '@lavamoat/preinstall-always-fail': '1.0.0',
               },
               scripts: {
                 test: 'test script',
@@ -108,6 +107,12 @@ describe('main', () => {
               },
               repository: {
                 url: 'https://github.com/MetaMask/module-lint.git',
+              },
+              lavamoat: {
+                allowScripts: {
+                  'tsup>esbuild': true,
+                  '@lavamoat/preinstall-always-fail': false,
+                },
               },
             }),
           );
@@ -155,6 +160,25 @@ describe('main', () => {
             path.join(repository.directoryPath, '.gitignore'),
             'content for .gitignore',
           );
+          await writeFile(
+            path.join(repository.directoryPath, '.yarnrc.yml'),
+            stringify({
+              enableScripts: false,
+              plugins: [
+                {
+                  path: '.yarn/plugins/@yarnpkg/plugin-allow-scripts.cjs',
+                  spec: 'https://raw.githubusercontent.com/LavaMoat/LavaMoat/main/packages/yarn-plugin-allow-scripts/bundles/@yarnpkg/plugin-allow-scripts.js',
+                },
+              ],
+            }),
+          );
+          await writeFile(
+            path.join(
+              repository.directoryPath,
+              '.yarn/plugins/@yarnpkg/plugin-allow-scripts.cjs',
+            ),
+            'test scripts',
+          );
         }
         const outputLogger = new FakeOutputLogger();
 
@@ -193,6 +217,8 @@ repo-1
   - Do the typedoc-related \`scripts\` in \`package.json\` conform? ✅
   - Do the changelog-related \`devDependencies\` in \`package.json\` conform? ✅
   - Do the changelog-related \`scripts\` in \`package.json\` conform? ✅
+  - Do the lavamoat-related \`devDependencies\` in \`package.json\` conform? ✅
+  - Does lavamoat lists \`@lavamoat/preinstall-always-fail: false\` in allow scripts? ✅
 - Is \`README.md\` present? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
   - Does the README conform by recommending node install from nodejs.org? ✅
@@ -210,8 +236,10 @@ repo-1
 - Is \`.editorconfig\` present, and does it conform? ✅
 - Is \`.gitattributes\` present, and does it conform? ✅
 - Is \`.gitignore\` present, and does it conform? ✅
+- Does allow scripts conforms to yarn? ✅
+- Does yarn plugins conforms to allow scripts? ✅
 
-Results:       36 passed, 0 failed, 36 total
+Results:       40 passed, 0 failed, 40 total
 Elapsed time:  0 ms
 
 
@@ -237,6 +265,8 @@ repo-2
   - Do the typedoc-related \`scripts\` in \`package.json\` conform? ✅
   - Do the changelog-related \`devDependencies\` in \`package.json\` conform? ✅
   - Do the changelog-related \`scripts\` in \`package.json\` conform? ✅
+  - Do the lavamoat-related \`devDependencies\` in \`package.json\` conform? ✅
+  - Does lavamoat lists \`@lavamoat/preinstall-always-fail: false\` in allow scripts? ✅
 - Is \`README.md\` present? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
   - Does the README conform by recommending node install from nodejs.org? ✅
@@ -254,8 +284,10 @@ repo-2
 - Is \`.editorconfig\` present, and does it conform? ✅
 - Is \`.gitattributes\` present, and does it conform? ✅
 - Is \`.gitignore\` present, and does it conform? ✅
+- Does allow scripts conforms to yarn? ✅
+- Does yarn plugins conforms to allow scripts? ✅
 
-Results:       36 passed, 0 failed, 36 total
+Results:       40 passed, 0 failed, 40 total
 Elapsed time:  0 ms
 
 `,
@@ -332,8 +364,10 @@ repo-1
   - \`.gitattributes\` does not exist in this project.
 - Is \`.gitignore\` present, and does it conform? ❌
   - \`.gitignore\` does not exist in this project.
+- Does allow scripts conforms to yarn? ✅
+- Does yarn plugins conforms to allow scripts? ✅
 
-Results:       0 passed, 15 failed, 15 total
+Results:       2 passed, 15 failed, 17 total
 Elapsed time:  0 ms
 
 
@@ -372,8 +406,10 @@ repo-2
   - \`.gitattributes\` does not exist in this project.
 - Is \`.gitignore\` present, and does it conform? ❌
   - \`.gitignore\` does not exist in this project.
+- Does allow scripts conforms to yarn? ✅
+- Does yarn plugins conforms to allow scripts? ✅
 
-Results:       0 passed, 15 failed, 15 total
+Results:       2 passed, 15 failed, 17 total
 Elapsed time:  0 ms
 
 `,
@@ -456,8 +492,10 @@ repo-2
   - \`.gitattributes\` does not exist in this project.
 - Is \`.gitignore\` present, and does it conform? ❌
   - \`.gitignore\` does not exist in this project.
+- Does allow scripts conforms to yarn? ✅
+- Does yarn plugins conforms to allow scripts? ✅
 
-Results:       1 passed, 14 failed, 15 total
+Results:       3 passed, 14 failed, 17 total
 Elapsed time:  0 ms
 
 `.trimStart(),
@@ -485,10 +523,6 @@ Elapsed time:  0 ms
         for (const repository of repositories) {
           await ensureDirectoryStructureExists(
             path.join(repository.directoryPath, 'src'),
-          );
-          await writeFile(
-            path.join(repository.directoryPath, '.yarnrc.yml'),
-            '',
           );
           await writeFile(
             path.join(
@@ -521,6 +555,8 @@ Elapsed time:  0 ms
                 typescript: '1.0.0',
                 typedoc: '1.0.0',
                 '@metamask/auto-changelog': '1.0.0',
+                '@lavamoat/allow-scripts': '1.0.0',
+                '@lavamoat/preinstall-always-fail': '1.0.0',
               },
               scripts: {
                 test: 'test script',
@@ -533,6 +569,12 @@ Elapsed time:  0 ms
               },
               repository: {
                 url: 'https://github.com/MetaMask/module-lint.git',
+              },
+              lavamoat: {
+                allowScripts: {
+                  'tsup>esbuild': true,
+                  '@lavamoat/preinstall-always-fail': false,
+                },
               },
             }),
           );
@@ -580,6 +622,26 @@ Elapsed time:  0 ms
             path.join(repository.directoryPath, '.gitignore'),
             'content for .gitignore',
           );
+          await writeFile(
+            path.join(repository.directoryPath, '.yarnrc.yml'),
+            stringify({
+              enableScripts: false,
+              plugins: [
+                {
+                  path: '.yarn/plugins/@yarnpkg/plugin-allow-scripts.cjs',
+                  spec: 'https://raw.githubusercontent.com/LavaMoat/LavaMoat/main/packages/yarn-plugin-allow-scripts/bundles/@yarnpkg/plugin-allow-scripts.js',
+                },
+              ],
+            }),
+          );
+
+          await writeFile(
+            path.join(
+              repository.directoryPath,
+              '.yarn/plugins/@yarnpkg/plugin-allow-scripts.cjs',
+            ),
+            'test scripts',
+          );
         }
         const outputLogger = new FakeOutputLogger();
 
@@ -618,6 +680,8 @@ repo-1
   - Do the typedoc-related \`scripts\` in \`package.json\` conform? ✅
   - Do the changelog-related \`devDependencies\` in \`package.json\` conform? ✅
   - Do the changelog-related \`scripts\` in \`package.json\` conform? ✅
+  - Do the lavamoat-related \`devDependencies\` in \`package.json\` conform? ✅
+  - Does lavamoat lists \`@lavamoat/preinstall-always-fail: false\` in allow scripts? ✅
 - Is \`README.md\` present? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
   - Does the README conform by recommending node install from nodejs.org? ✅
@@ -635,8 +699,10 @@ repo-1
 - Is \`.editorconfig\` present, and does it conform? ✅
 - Is \`.gitattributes\` present, and does it conform? ✅
 - Is \`.gitignore\` present, and does it conform? ✅
+- Does allow scripts conforms to yarn? ✅
+- Does yarn plugins conforms to allow scripts? ✅
 
-Results:       36 passed, 0 failed, 36 total
+Results:       40 passed, 0 failed, 40 total
 Elapsed time:  0 ms
 
 
@@ -662,6 +728,8 @@ repo-2
   - Do the typedoc-related \`scripts\` in \`package.json\` conform? ✅
   - Do the changelog-related \`devDependencies\` in \`package.json\` conform? ✅
   - Do the changelog-related \`scripts\` in \`package.json\` conform? ✅
+  - Do the lavamoat-related \`devDependencies\` in \`package.json\` conform? ✅
+  - Does lavamoat lists \`@lavamoat/preinstall-always-fail: false\` in allow scripts? ✅
 - Is \`README.md\` present? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
   - Does the README conform by recommending node install from nodejs.org? ✅
@@ -679,8 +747,10 @@ repo-2
 - Is \`.editorconfig\` present, and does it conform? ✅
 - Is \`.gitattributes\` present, and does it conform? ✅
 - Is \`.gitignore\` present, and does it conform? ✅
+- Does allow scripts conforms to yarn? ✅
+- Does yarn plugins conforms to allow scripts? ✅
 
-Results:       36 passed, 0 failed, 36 total
+Results:       40 passed, 0 failed, 40 total
 Elapsed time:  0 ms
 
 `,
@@ -757,8 +827,10 @@ repo-1
   - \`.gitattributes\` does not exist in this project.
 - Is \`.gitignore\` present, and does it conform? ❌
   - \`.gitignore\` does not exist in this project.
+- Does allow scripts conforms to yarn? ✅
+- Does yarn plugins conforms to allow scripts? ✅
 
-Results:       0 passed, 15 failed, 15 total
+Results:       2 passed, 15 failed, 17 total
 Elapsed time:  0 ms
 
 
@@ -797,8 +869,10 @@ repo-2
   - \`.gitattributes\` does not exist in this project.
 - Is \`.gitignore\` present, and does it conform? ❌
   - \`.gitignore\` does not exist in this project.
+- Does allow scripts conforms to yarn? ✅
+- Does yarn plugins conforms to allow scripts? ✅
 
-Results:       0 passed, 15 failed, 15 total
+Results:       2 passed, 15 failed, 17 total
 Elapsed time:  0 ms
 
 `,
@@ -880,8 +954,10 @@ repo-2
   - \`.gitattributes\` does not exist in this project.
 - Is \`.gitignore\` present, and does it conform? ❌
   - \`.gitignore\` does not exist in this project.
+- Does allow scripts conforms to yarn? ✅
+- Does yarn plugins conforms to allow scripts? ✅
 
-Results:       1 passed, 14 failed, 15 total
+Results:       3 passed, 14 failed, 17 total
 Elapsed time:  0 ms
 
 `,

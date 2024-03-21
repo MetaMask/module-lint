@@ -4,6 +4,7 @@ import type fs from 'fs';
 import path from 'path';
 import type { Struct } from 'superstruct';
 import type { ObjectSchema } from 'superstruct/dist/utils';
+import { parse } from 'yaml';
 
 import type { DirectoryEntry } from './misc-utils';
 import {
@@ -83,6 +84,25 @@ export class RepositoryFilesystem {
     const content = await this.readJsonFile(filePath);
     assertJsonMatchesStruct(content, struct);
     return content;
+  }
+
+  /**
+   * Reads a YAML file within the repository, ensuring that it matches the
+   * given Superstruct struct.
+   *
+   * @param filePath - The path to the file relative to the repository root.
+   * @param struct - The Superstruct object struct that you want to match
+   * against the content of the file.
+   * @returns The contents of the file as a JSON object.
+   */
+  async readYamlFileAs<Value extends Json, Schema extends ObjectSchema>(
+    filePath: string,
+    struct: Struct<Value, Schema>,
+  ): Promise<Value> {
+    const content = await this.readFile(filePath);
+    const parsedYaml = parse(content);
+    assertJsonMatchesStruct(parsedYaml, struct);
+    return parsedYaml;
   }
 
   /**
