@@ -3,7 +3,7 @@ import { reportProjectLintResult } from './report-project-lint-result';
 import { FakeOutputLogger } from '../tests/fake-output-logger';
 
 describe('reportProjectLintResult', () => {
-  it('outputs the rules executed against a project, in the same hierarchy as they were run, and whether they passed or failed, along with a summary', () => {
+  it('outputs the rules executed against a project and whether they passed or failed, along with a summary', () => {
     const projectLintResult: ProjectLintResult = {
       projectName: 'some-project',
       elapsedTimeIncludingLinting: 30,
@@ -61,9 +61,9 @@ some-project
 ------------
 
 - Description for rule 1 ✅
-  - Description for rule 2 ❌
-    - Failure 1
-    - Failure 2
+- Description for rule 2 ❌
+  - Failure 1
+  - Failure 2
 - Description for rule 3 ✅
 
 Results:       2 passed, 1 failed, 3 total
