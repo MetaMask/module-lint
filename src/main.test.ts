@@ -200,32 +200,32 @@ repo-1
 
 - Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
 - Does the package have a well-formed manifest (\`package.json\`)? ✅
-  - Does the \`packageManager\` field in \`package.json\` conform? ✅
-  - Does the \`engines.node\` field in \`package.json\` conform? ✅
-  - Do the lint-related \`devDependencies\` in \`package.json\` conform? ✅
-  - Do the jest-related \`devDependencies\` in \`package.json\` conform? ✅
-  - Do the test-related \`scripts\` in \`package.json\` conform? ✅
-  - Do the typescript-related \`devDependencies\` in \`package.json\` conform? ✅
-  - Do the typescript-related \`scripts\` in \`package.json\` conform? ✅
-  - Does the \`exports\` field in \`package.json\` conform? ✅
-  - Does the \`main\` field in \`package.json\` conform? ✅
-  - Does the \`module\` field in \`package.json\` conform? ✅
-  - Does the \`types\` field in \`package.json\` conform? ✅
-  - Does the \`files\` field in \`package.json\` conform? ✅
-  - Does LavaMoat allow scripts for \`tsup>esbuild\`? ✅
-  - Do the typedoc-related \`devDependencies\` in \`package.json\` conform? ✅
-  - Do the typedoc-related \`scripts\` in \`package.json\` conform? ✅
-  - Do the changelog-related \`devDependencies\` in \`package.json\` conform? ✅
-  - Do the changelog-related \`scripts\` in \`package.json\` conform? ✅
-  - Do the lavamoat-related \`devDependencies\` in \`package.json\` conform? ✅
-  - Does lavamoat lists \`@lavamoat/preinstall-always-fail: false\` in allow scripts? ✅
+- Does the \`packageManager\` field in \`package.json\` conform? ✅
+- Does the \`engines.node\` field in \`package.json\` conform? ✅
+- Do the lint-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the jest-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the test-related \`scripts\` in \`package.json\` conform? ✅
+- Do the typescript-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the typescript-related \`scripts\` in \`package.json\` conform? ✅
+- Does the \`exports\` field in \`package.json\` conform? ✅
+- Does the \`main\` field in \`package.json\` conform? ✅
+- Does the \`module\` field in \`package.json\` conform? ✅
+- Does the \`types\` field in \`package.json\` conform? ✅
+- Does the \`files\` field in \`package.json\` conform? ✅
+- Does LavaMoat allow scripts for \`tsup>esbuild\`? ✅
+- Do the typedoc-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the typedoc-related \`scripts\` in \`package.json\` conform? ✅
+- Do the changelog-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the changelog-related \`scripts\` in \`package.json\` conform? ✅
+- Do the lavamoat-related \`devDependencies\` in \`package.json\` conform? ✅
+- Does lavamoat lists \`@lavamoat/preinstall-always-fail: false\` in allow scripts? ✅
 - Is \`README.md\` present? ✅
-  - Does the README conform by recommending the correct Yarn version to install? ✅
-  - Does the README conform by recommending node install from nodejs.org? ✅
+- Does the README conform by recommending the correct Yarn version to install? ✅
+- Does the README conform by recommending node install from nodejs.org? ✅
 - Are all of the files for Yarn Modern present, and do they conform? ✅
-  - Does the README conform by recommending the correct Yarn version to install? ✅
-  - Does allow scripts conforms to yarn? ✅
-  - Is the allow-scripts Yarn plugin installed? ✅
+- Does the README conform by recommending the correct Yarn version to install? ✅
+- Does allow scripts conforms to yarn? ✅
+- Is the allow-scripts Yarn plugin installed? ✅
 - Does the \`src/\` directory exist? ✅
 - Is \`.nvmrc\` present, and does it conform? ✅
 - Is \`jest.config.js\` present, and does it conform? ✅
@@ -234,7 +234,7 @@ repo-1
 - Is \`tsup.config.ts\` present, and does it conform? ✅
 - Is \`typedoc.json\` present, and does it conform? ✅
 - Is \`CHANGELOG.md\` present? ✅
-  - Is \`CHANGELOG.md\` well-formatted? ✅
+- Is \`CHANGELOG.md\` well-formatted? ✅
 - Is \`.editorconfig\` present, and does it conform? ✅
 - Is \`.gitattributes\` present, and does it conform? ✅
 - Is \`.gitignore\` present, and does it conform? ✅
@@ -248,32 +248,32 @@ repo-2
 
 - Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
 - Does the package have a well-formed manifest (\`package.json\`)? ✅
-  - Does the \`packageManager\` field in \`package.json\` conform? ✅
-  - Does the \`engines.node\` field in \`package.json\` conform? ✅
-  - Do the lint-related \`devDependencies\` in \`package.json\` conform? ✅
-  - Do the jest-related \`devDependencies\` in \`package.json\` conform? ✅
-  - Do the test-related \`scripts\` in \`package.json\` conform? ✅
-  - Do the typescript-related \`devDependencies\` in \`package.json\` conform? ✅
-  - Do the typescript-related \`scripts\` in \`package.json\` conform? ✅
-  - Does the \`exports\` field in \`package.json\` conform? ✅
-  - Does the \`main\` field in \`package.json\` conform? ✅
-  - Does the \`module\` field in \`package.json\` conform? ✅
-  - Does the \`types\` field in \`package.json\` conform? ✅
-  - Does the \`files\` field in \`package.json\` conform? ✅
-  - Does LavaMoat allow scripts for \`tsup>esbuild\`? ✅
-  - Do the typedoc-related \`devDependencies\` in \`package.json\` conform? ✅
-  - Do the typedoc-related \`scripts\` in \`package.json\` conform? ✅
-  - Do the changelog-related \`devDependencies\` in \`package.json\` conform? ✅
-  - Do the changelog-related \`scripts\` in \`package.json\` conform? ✅
-  - Do the lavamoat-related \`devDependencies\` in \`package.json\` conform? ✅
-  - Does lavamoat lists \`@lavamoat/preinstall-always-fail: false\` in allow scripts? ✅
+- Does the \`packageManager\` field in \`package.json\` conform? ✅
+- Does the \`engines.node\` field in \`package.json\` conform? ✅
+- Do the lint-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the jest-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the test-related \`scripts\` in \`package.json\` conform? ✅
+- Do the typescript-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the typescript-related \`scripts\` in \`package.json\` conform? ✅
+- Does the \`exports\` field in \`package.json\` conform? ✅
+- Does the \`main\` field in \`package.json\` conform? ✅
+- Does the \`module\` field in \`package.json\` conform? ✅
+- Does the \`types\` field in \`package.json\` conform? ✅
+- Does the \`files\` field in \`package.json\` conform? ✅
+- Does LavaMoat allow scripts for \`tsup>esbuild\`? ✅
+- Do the typedoc-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the typedoc-related \`scripts\` in \`package.json\` conform? ✅
+- Do the changelog-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the changelog-related \`scripts\` in \`package.json\` conform? ✅
+- Do the lavamoat-related \`devDependencies\` in \`package.json\` conform? ✅
+- Does lavamoat lists \`@lavamoat/preinstall-always-fail: false\` in allow scripts? ✅
 - Is \`README.md\` present? ✅
-  - Does the README conform by recommending the correct Yarn version to install? ✅
-  - Does the README conform by recommending node install from nodejs.org? ✅
+- Does the README conform by recommending the correct Yarn version to install? ✅
+- Does the README conform by recommending node install from nodejs.org? ✅
 - Are all of the files for Yarn Modern present, and do they conform? ✅
-  - Does the README conform by recommending the correct Yarn version to install? ✅
-  - Does allow scripts conforms to yarn? ✅
-  - Is the allow-scripts Yarn plugin installed? ✅
+- Does the README conform by recommending the correct Yarn version to install? ✅
+- Does allow scripts conforms to yarn? ✅
+- Is the allow-scripts Yarn plugin installed? ✅
 - Does the \`src/\` directory exist? ✅
 - Is \`.nvmrc\` present, and does it conform? ✅
 - Is \`jest.config.js\` present, and does it conform? ✅
@@ -282,7 +282,7 @@ repo-2
 - Is \`tsup.config.ts\` present, and does it conform? ✅
 - Is \`typedoc.json\` present, and does it conform? ✅
 - Is \`CHANGELOG.md\` present? ✅
-  - Is \`CHANGELOG.md\` well-formatted? ✅
+- Is \`CHANGELOG.md\` well-formatted? ✅
 - Is \`.editorconfig\` present, and does it conform? ✅
 - Is \`.gitattributes\` present, and does it conform? ✅
 - Is \`.gitignore\` present, and does it conform? ✅
@@ -657,32 +657,32 @@ repo-1
 
 - Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
 - Does the package have a well-formed manifest (\`package.json\`)? ✅
-  - Does the \`packageManager\` field in \`package.json\` conform? ✅
-  - Does the \`engines.node\` field in \`package.json\` conform? ✅
-  - Do the lint-related \`devDependencies\` in \`package.json\` conform? ✅
-  - Do the jest-related \`devDependencies\` in \`package.json\` conform? ✅
-  - Do the test-related \`scripts\` in \`package.json\` conform? ✅
-  - Do the typescript-related \`devDependencies\` in \`package.json\` conform? ✅
-  - Do the typescript-related \`scripts\` in \`package.json\` conform? ✅
-  - Does the \`exports\` field in \`package.json\` conform? ✅
-  - Does the \`main\` field in \`package.json\` conform? ✅
-  - Does the \`module\` field in \`package.json\` conform? ✅
-  - Does the \`types\` field in \`package.json\` conform? ✅
-  - Does the \`files\` field in \`package.json\` conform? ✅
-  - Does LavaMoat allow scripts for \`tsup>esbuild\`? ✅
-  - Do the typedoc-related \`devDependencies\` in \`package.json\` conform? ✅
-  - Do the typedoc-related \`scripts\` in \`package.json\` conform? ✅
-  - Do the changelog-related \`devDependencies\` in \`package.json\` conform? ✅
-  - Do the changelog-related \`scripts\` in \`package.json\` conform? ✅
-  - Do the lavamoat-related \`devDependencies\` in \`package.json\` conform? ✅
-  - Does lavamoat lists \`@lavamoat/preinstall-always-fail: false\` in allow scripts? ✅
+- Does the \`packageManager\` field in \`package.json\` conform? ✅
+- Does the \`engines.node\` field in \`package.json\` conform? ✅
+- Do the lint-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the jest-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the test-related \`scripts\` in \`package.json\` conform? ✅
+- Do the typescript-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the typescript-related \`scripts\` in \`package.json\` conform? ✅
+- Does the \`exports\` field in \`package.json\` conform? ✅
+- Does the \`main\` field in \`package.json\` conform? ✅
+- Does the \`module\` field in \`package.json\` conform? ✅
+- Does the \`types\` field in \`package.json\` conform? ✅
+- Does the \`files\` field in \`package.json\` conform? ✅
+- Does LavaMoat allow scripts for \`tsup>esbuild\`? ✅
+- Do the typedoc-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the typedoc-related \`scripts\` in \`package.json\` conform? ✅
+- Do the changelog-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the changelog-related \`scripts\` in \`package.json\` conform? ✅
+- Do the lavamoat-related \`devDependencies\` in \`package.json\` conform? ✅
+- Does lavamoat lists \`@lavamoat/preinstall-always-fail: false\` in allow scripts? ✅
 - Is \`README.md\` present? ✅
-  - Does the README conform by recommending the correct Yarn version to install? ✅
-  - Does the README conform by recommending node install from nodejs.org? ✅
+- Does the README conform by recommending the correct Yarn version to install? ✅
+- Does the README conform by recommending node install from nodejs.org? ✅
 - Are all of the files for Yarn Modern present, and do they conform? ✅
-  - Does the README conform by recommending the correct Yarn version to install? ✅
-  - Does allow scripts conforms to yarn? ✅
-  - Is the allow-scripts Yarn plugin installed? ✅
+- Does the README conform by recommending the correct Yarn version to install? ✅
+- Does allow scripts conforms to yarn? ✅
+- Is the allow-scripts Yarn plugin installed? ✅
 - Does the \`src/\` directory exist? ✅
 - Is \`.nvmrc\` present, and does it conform? ✅
 - Is \`jest.config.js\` present, and does it conform? ✅
@@ -691,7 +691,7 @@ repo-1
 - Is \`tsup.config.ts\` present, and does it conform? ✅
 - Is \`typedoc.json\` present, and does it conform? ✅
 - Is \`CHANGELOG.md\` present? ✅
-  - Is \`CHANGELOG.md\` well-formatted? ✅
+- Is \`CHANGELOG.md\` well-formatted? ✅
 - Is \`.editorconfig\` present, and does it conform? ✅
 - Is \`.gitattributes\` present, and does it conform? ✅
 - Is \`.gitignore\` present, and does it conform? ✅
@@ -705,32 +705,32 @@ repo-2
 
 - Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
 - Does the package have a well-formed manifest (\`package.json\`)? ✅
-  - Does the \`packageManager\` field in \`package.json\` conform? ✅
-  - Does the \`engines.node\` field in \`package.json\` conform? ✅
-  - Do the lint-related \`devDependencies\` in \`package.json\` conform? ✅
-  - Do the jest-related \`devDependencies\` in \`package.json\` conform? ✅
-  - Do the test-related \`scripts\` in \`package.json\` conform? ✅
-  - Do the typescript-related \`devDependencies\` in \`package.json\` conform? ✅
-  - Do the typescript-related \`scripts\` in \`package.json\` conform? ✅
-  - Does the \`exports\` field in \`package.json\` conform? ✅
-  - Does the \`main\` field in \`package.json\` conform? ✅
-  - Does the \`module\` field in \`package.json\` conform? ✅
-  - Does the \`types\` field in \`package.json\` conform? ✅
-  - Does the \`files\` field in \`package.json\` conform? ✅
-  - Does LavaMoat allow scripts for \`tsup>esbuild\`? ✅
-  - Do the typedoc-related \`devDependencies\` in \`package.json\` conform? ✅
-  - Do the typedoc-related \`scripts\` in \`package.json\` conform? ✅
-  - Do the changelog-related \`devDependencies\` in \`package.json\` conform? ✅
-  - Do the changelog-related \`scripts\` in \`package.json\` conform? ✅
-  - Do the lavamoat-related \`devDependencies\` in \`package.json\` conform? ✅
-  - Does lavamoat lists \`@lavamoat/preinstall-always-fail: false\` in allow scripts? ✅
+- Does the \`packageManager\` field in \`package.json\` conform? ✅
+- Does the \`engines.node\` field in \`package.json\` conform? ✅
+- Do the lint-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the jest-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the test-related \`scripts\` in \`package.json\` conform? ✅
+- Do the typescript-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the typescript-related \`scripts\` in \`package.json\` conform? ✅
+- Does the \`exports\` field in \`package.json\` conform? ✅
+- Does the \`main\` field in \`package.json\` conform? ✅
+- Does the \`module\` field in \`package.json\` conform? ✅
+- Does the \`types\` field in \`package.json\` conform? ✅
+- Does the \`files\` field in \`package.json\` conform? ✅
+- Does LavaMoat allow scripts for \`tsup>esbuild\`? ✅
+- Do the typedoc-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the typedoc-related \`scripts\` in \`package.json\` conform? ✅
+- Do the changelog-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the changelog-related \`scripts\` in \`package.json\` conform? ✅
+- Do the lavamoat-related \`devDependencies\` in \`package.json\` conform? ✅
+- Does lavamoat lists \`@lavamoat/preinstall-always-fail: false\` in allow scripts? ✅
 - Is \`README.md\` present? ✅
-  - Does the README conform by recommending the correct Yarn version to install? ✅
-  - Does the README conform by recommending node install from nodejs.org? ✅
+- Does the README conform by recommending the correct Yarn version to install? ✅
+- Does the README conform by recommending node install from nodejs.org? ✅
 - Are all of the files for Yarn Modern present, and do they conform? ✅
-  - Does the README conform by recommending the correct Yarn version to install? ✅
-  - Does allow scripts conforms to yarn? ✅
-  - Is the allow-scripts Yarn plugin installed? ✅
+- Does the README conform by recommending the correct Yarn version to install? ✅
+- Does allow scripts conforms to yarn? ✅
+- Is the allow-scripts Yarn plugin installed? ✅
 - Does the \`src/\` directory exist? ✅
 - Is \`.nvmrc\` present, and does it conform? ✅
 - Is \`jest.config.js\` present, and does it conform? ✅
@@ -739,7 +739,7 @@ repo-2
 - Is \`tsup.config.ts\` present, and does it conform? ✅
 - Is \`typedoc.json\` present, and does it conform? ✅
 - Is \`CHANGELOG.md\` present? ✅
-  - Is \`CHANGELOG.md\` well-formatted? ✅
+- Is \`CHANGELOG.md\` well-formatted? ✅
 - Is \`.editorconfig\` present, and does it conform? ✅
 - Is \`.gitattributes\` present, and does it conform? ✅
 - Is \`.gitignore\` present, and does it conform? ✅
