@@ -162,27 +162,4 @@ describe('Rule: package-allow-scripts-yarn-plugins-conform', () => {
       });
     });
   });
-  it('passes if the project does not have `.yarnrc.yml`', async () => {
-    await withinSandbox(async (sandbox) => {
-      const template = buildMetaMaskRepository({
-        shortname: 'template',
-        directoryPath: path.join(sandbox.directoryPath, 'template'),
-      });
-      const project = buildMetaMaskRepository({
-        shortname: 'project',
-        directoryPath: path.join(sandbox.directoryPath, 'project'),
-      });
-
-      const result = await packageAllowScriptsYarnPluginsConform.execute({
-        template,
-        project,
-        pass,
-        fail,
-      });
-
-      expect(result).toStrictEqual({
-        passed: true,
-      });
-    });
-  });
 });

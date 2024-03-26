@@ -4,7 +4,7 @@ import type fs from 'fs';
 import path from 'path';
 import type { Struct } from 'superstruct';
 import type { ObjectSchema } from 'superstruct/dist/utils';
-import { parse } from 'yaml';
+import { parse as yamlParse } from 'yaml';
 
 import type { DirectoryEntry } from './misc-utils';
 import {
@@ -100,7 +100,7 @@ export class RepositoryFilesystem {
     struct: Struct<Value, Schema>,
   ): Promise<Value> {
     const content = await this.readFile(filePath);
-    const parsedYaml = parse(content);
+    const parsedYaml = yamlParse(content);
     assertJsonMatchesStruct(parsedYaml, struct);
     return parsedYaml;
   }

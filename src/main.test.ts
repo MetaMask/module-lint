@@ -224,6 +224,8 @@ repo-1
   - Does the README conform by recommending node install from nodejs.org? ✅
 - Are all of the files for Yarn Modern present, and do they conform? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
+  - Does allow scripts conforms to yarn? ✅
+  - Is the allow-scripts Yarn plugin installed? ✅
 - Does the \`src/\` directory exist? ✅
 - Is \`.nvmrc\` present, and does it conform? ✅
 - Is \`jest.config.js\` present, and does it conform? ✅
@@ -236,8 +238,6 @@ repo-1
 - Is \`.editorconfig\` present, and does it conform? ✅
 - Is \`.gitattributes\` present, and does it conform? ✅
 - Is \`.gitignore\` present, and does it conform? ✅
-- Does allow scripts conforms to yarn? ✅
-- Does yarn plugins conforms to allow scripts? ✅
 
 Results:       40 passed, 0 failed, 40 total
 Elapsed time:  0 ms
@@ -272,6 +272,8 @@ repo-2
   - Does the README conform by recommending node install from nodejs.org? ✅
 - Are all of the files for Yarn Modern present, and do they conform? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
+  - Does allow scripts conforms to yarn? ✅
+  - Is the allow-scripts Yarn plugin installed? ✅
 - Does the \`src/\` directory exist? ✅
 - Is \`.nvmrc\` present, and does it conform? ✅
 - Is \`jest.config.js\` present, and does it conform? ✅
@@ -284,8 +286,6 @@ repo-2
 - Is \`.editorconfig\` present, and does it conform? ✅
 - Is \`.gitattributes\` present, and does it conform? ✅
 - Is \`.gitignore\` present, and does it conform? ✅
-- Does allow scripts conforms to yarn? ✅
-- Does yarn plugins conforms to allow scripts? ✅
 
 Results:       40 passed, 0 failed, 40 total
 Elapsed time:  0 ms
@@ -314,20 +314,6 @@ Elapsed time:  0 ms
         for (const repository of repositories.slice(1)) {
           await writeFile(path.join(repository.directoryPath, '.yarnrc'), '');
         }
-        for (const repository of repositories) {
-          await writeFile(
-            path.join(repository.directoryPath, '.yarnrc.yml'),
-            stringify({
-              enableScripts: true,
-              plugins: [
-                {
-                  path: '.yarn/plugins/@yarnpkg/plugin-allow-scripts.cjs',
-                  spec: 'https://raw.githubusercontent.com/LavaMoat/LavaMoat/main/packages/yarn-plugin-allow-scripts/bundles/@yarnpkg/plugin-allow-scripts.js',
-                },
-              ],
-            }),
-          );
-        }
         const outputLogger = new FakeOutputLogger();
 
         await main({
@@ -353,6 +339,7 @@ repo-1
 - Is \`README.md\` present? ❌
   - \`README.md\` does not exist in this project.
 - Are all of the files for Yarn Modern present, and do they conform? ❌
+  - \`.yarnrc.yml\` does not exist in this project.
   - \`.yarn/releases/\` does not exist in this project.
   - \`.yarn/plugins/\` does not exist in this project.
 - Does the \`src/\` directory exist? ❌
@@ -377,12 +364,8 @@ repo-1
   - \`.gitattributes\` does not exist in this project.
 - Is \`.gitignore\` present, and does it conform? ❌
   - \`.gitignore\` does not exist in this project.
-- Does allow scripts conforms to yarn? ❌
-  - \`.yarnrc.yml\` should list \`'enableScripts': false\`, but does not.
-- Does yarn plugins conforms to allow scripts? ❌
-  - \`.yarn/plugins/@yarnpkg/plugin-allow-scripts.cjs\` does not exist in this project.
 
-Results:       0 passed, 17 failed, 17 total
+Results:       0 passed, 15 failed, 15 total
 Elapsed time:  0 ms
 
 
@@ -396,6 +379,7 @@ repo-2
 - Is \`README.md\` present? ❌
   - \`README.md\` does not exist in this project.
 - Are all of the files for Yarn Modern present, and do they conform? ❌
+  - \`.yarnrc.yml\` does not exist in this project.
   - \`.yarn/releases/\` does not exist in this project.
   - \`.yarn/plugins/\` does not exist in this project.
 - Does the \`src/\` directory exist? ❌
@@ -420,12 +404,8 @@ repo-2
   - \`.gitattributes\` does not exist in this project.
 - Is \`.gitignore\` present, and does it conform? ❌
   - \`.gitignore\` does not exist in this project.
-- Does allow scripts conforms to yarn? ❌
-  - \`.yarnrc.yml\` should list \`'enableScripts': false\`, but does not.
-- Does yarn plugins conforms to allow scripts? ❌
-  - \`.yarn/plugins/@yarnpkg/plugin-allow-scripts.cjs\` does not exist in this project.
 
-Results:       0 passed, 17 failed, 17 total
+Results:       0 passed, 15 failed, 15 total
 Elapsed time:  0 ms
 
 `,
@@ -508,10 +488,8 @@ repo-2
   - \`.gitattributes\` does not exist in this project.
 - Is \`.gitignore\` present, and does it conform? ❌
   - \`.gitignore\` does not exist in this project.
-- Does allow scripts conforms to yarn? ✅
-- Does yarn plugins conforms to allow scripts? ✅
 
-Results:       3 passed, 14 failed, 17 total
+Results:       1 passed, 14 failed, 15 total
 Elapsed time:  0 ms
 
 `.trimStart(),
@@ -703,6 +681,8 @@ repo-1
   - Does the README conform by recommending node install from nodejs.org? ✅
 - Are all of the files for Yarn Modern present, and do they conform? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
+  - Does allow scripts conforms to yarn? ✅
+  - Is the allow-scripts Yarn plugin installed? ✅
 - Does the \`src/\` directory exist? ✅
 - Is \`.nvmrc\` present, and does it conform? ✅
 - Is \`jest.config.js\` present, and does it conform? ✅
@@ -715,8 +695,6 @@ repo-1
 - Is \`.editorconfig\` present, and does it conform? ✅
 - Is \`.gitattributes\` present, and does it conform? ✅
 - Is \`.gitignore\` present, and does it conform? ✅
-- Does allow scripts conforms to yarn? ✅
-- Does yarn plugins conforms to allow scripts? ✅
 
 Results:       40 passed, 0 failed, 40 total
 Elapsed time:  0 ms
@@ -751,6 +729,8 @@ repo-2
   - Does the README conform by recommending node install from nodejs.org? ✅
 - Are all of the files for Yarn Modern present, and do they conform? ✅
   - Does the README conform by recommending the correct Yarn version to install? ✅
+  - Does allow scripts conforms to yarn? ✅
+  - Is the allow-scripts Yarn plugin installed? ✅
 - Does the \`src/\` directory exist? ✅
 - Is \`.nvmrc\` present, and does it conform? ✅
 - Is \`jest.config.js\` present, and does it conform? ✅
@@ -763,8 +743,6 @@ repo-2
 - Is \`.editorconfig\` present, and does it conform? ✅
 - Is \`.gitattributes\` present, and does it conform? ✅
 - Is \`.gitignore\` present, and does it conform? ✅
-- Does allow scripts conforms to yarn? ✅
-- Does yarn plugins conforms to allow scripts? ✅
 
 Results:       40 passed, 0 failed, 40 total
 Elapsed time:  0 ms
@@ -793,20 +771,6 @@ Elapsed time:  0 ms
         for (const repository of repositories.slice(1)) {
           await writeFile(path.join(repository.directoryPath, '.yarnrc'), '');
         }
-        for (const repository of repositories) {
-          await writeFile(
-            path.join(repository.directoryPath, '.yarnrc.yml'),
-            stringify({
-              enableScripts: true,
-              plugins: [
-                {
-                  path: '.yarn/plugins/@yarnpkg/plugin-allow-scripts.cjs',
-                  spec: 'https://raw.githubusercontent.com/LavaMoat/LavaMoat/main/packages/yarn-plugin-allow-scripts/bundles/@yarnpkg/plugin-allow-scripts.js',
-                },
-              ],
-            }),
-          );
-        }
         const outputLogger = new FakeOutputLogger();
 
         await main({
@@ -832,6 +796,7 @@ repo-1
 - Is \`README.md\` present? ❌
   - \`README.md\` does not exist in this project.
 - Are all of the files for Yarn Modern present, and do they conform? ❌
+  - \`.yarnrc.yml\` does not exist in this project.
   - \`.yarn/releases/\` does not exist in this project.
   - \`.yarn/plugins/\` does not exist in this project.
 - Does the \`src/\` directory exist? ❌
@@ -856,12 +821,8 @@ repo-1
   - \`.gitattributes\` does not exist in this project.
 - Is \`.gitignore\` present, and does it conform? ❌
   - \`.gitignore\` does not exist in this project.
-- Does allow scripts conforms to yarn? ❌
-  - \`.yarnrc.yml\` should list \`'enableScripts': false\`, but does not.
-- Does yarn plugins conforms to allow scripts? ❌
-  - \`.yarn/plugins/@yarnpkg/plugin-allow-scripts.cjs\` does not exist in this project.
 
-Results:       0 passed, 17 failed, 17 total
+Results:       0 passed, 15 failed, 15 total
 Elapsed time:  0 ms
 
 
@@ -875,6 +836,7 @@ repo-2
 - Is \`README.md\` present? ❌
   - \`README.md\` does not exist in this project.
 - Are all of the files for Yarn Modern present, and do they conform? ❌
+  - \`.yarnrc.yml\` does not exist in this project.
   - \`.yarn/releases/\` does not exist in this project.
   - \`.yarn/plugins/\` does not exist in this project.
 - Does the \`src/\` directory exist? ❌
@@ -899,12 +861,8 @@ repo-2
   - \`.gitattributes\` does not exist in this project.
 - Is \`.gitignore\` present, and does it conform? ❌
   - \`.gitignore\` does not exist in this project.
-- Does allow scripts conforms to yarn? ❌
-  - \`.yarnrc.yml\` should list \`'enableScripts': false\`, but does not.
-- Does yarn plugins conforms to allow scripts? ❌
-  - \`.yarn/plugins/@yarnpkg/plugin-allow-scripts.cjs\` does not exist in this project.
 
-Results:       0 passed, 17 failed, 17 total
+Results:       0 passed, 15 failed, 15 total
 Elapsed time:  0 ms
 
 `,
@@ -986,10 +944,8 @@ repo-2
   - \`.gitattributes\` does not exist in this project.
 - Is \`.gitignore\` present, and does it conform? ❌
   - \`.gitignore\` does not exist in this project.
-- Does allow scripts conforms to yarn? ✅
-- Does yarn plugins conforms to allow scripts? ✅
 
-Results:       3 passed, 14 failed, 17 total
+Results:       1 passed, 14 failed, 15 total
 Elapsed time:  0 ms
 
 `,

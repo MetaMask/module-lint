@@ -1,6 +1,6 @@
 import { writeFile } from '@metamask/utils/node';
 import path from 'path';
-import { stringify } from 'yaml';
+import { stringify as yamlStringify } from 'yaml';
 
 import packageAllowScriptsYarnConform from './package-allow-scripts-yarn-conform';
 import { buildMetaMaskRepository, withinSandbox } from '../../tests/helpers';
@@ -19,7 +19,7 @@ describe('Rule: package-allow-scripts-yarn-conform', () => {
       });
       await writeFile(
         path.join(project.directoryPath, '.yarnrc.yml'),
-        stringify({ enableScripts: false, plugins: [] }),
+        yamlStringify({ enableScripts: false, plugins: [] }),
       );
 
       const result = await packageAllowScriptsYarnConform.execute({
@@ -47,7 +47,7 @@ describe('Rule: package-allow-scripts-yarn-conform', () => {
       });
       await writeFile(
         path.join(project.directoryPath, '.yarnrc.yml'),
-        stringify({ enableScripts: true, plugins: [] }),
+        yamlStringify({ enableScripts: true, plugins: [] }),
       );
 
       const result = await packageAllowScriptsYarnConform.execute({
@@ -65,29 +65,6 @@ describe('Rule: package-allow-scripts-yarn-conform', () => {
               "`.yarnrc.yml` should list `'enableScripts': false`, but does not.",
           },
         ],
-      });
-    });
-  });
-  it('passes if the project does not have `.yarnrc.yml`', async () => {
-    await withinSandbox(async (sandbox) => {
-      const template = buildMetaMaskRepository({
-        shortname: 'template',
-        directoryPath: path.join(sandbox.directoryPath, 'template'),
-      });
-      const project = buildMetaMaskRepository({
-        shortname: 'project',
-        directoryPath: path.join(sandbox.directoryPath, 'project'),
-      });
-
-      const result = await packageAllowScriptsYarnConform.execute({
-        template,
-        project,
-        pass,
-        fail,
-      });
-
-      expect(result).toStrictEqual({
-        passed: true,
       });
     });
   });
