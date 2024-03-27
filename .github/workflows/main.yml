@@ -23,6 +23,10 @@ jobs:
     name: Build, lint, and test
     uses: ./.github/workflows/build-lint-test.yml
 
+  module-lint:
+    name: Module Lint
+    uses: ./.github/workflows/module-lint.yml
+
   all-jobs-completed:
     name: All jobs completed
     runs-on: ubuntu-latest
