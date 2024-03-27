@@ -25,6 +25,8 @@ jobs:
     strategy:
       matrix:
         node-version: [16.x, 18.x, 20.x]
+        projects:
+          ['auto-changelog', 'create-release-branch', 'module-lint', 'utils']
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
@@ -33,6 +35,6 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'yarn'
       - run: yarn --immutable --immutable-cache
-      - run: yarn run-tool
+      - run: yarn run-tool ${{ matrix.projects }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
