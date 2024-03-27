@@ -169,6 +169,9 @@ export function buildPackageManifestMock(
     },
     devDependencies: {},
     scripts: {},
+    lavamoat: {
+      allowScripts: {},
+    },
   };
 
   return JSON.stringify({ ...validPackageManifestMock, ...overrides });
