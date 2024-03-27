@@ -6,7 +6,7 @@ import { PackageManifestSchema, RuleName } from './types';
 export default buildRule({
   name: RuleName.PackageLavamoatAllowScriptsConforms,
   description:
-    'Does lavamoat lists `@lavamoat/preinstall-always-fail: false` in allow scripts?',
+    'Are postinstall scripts disabled for `@lavamoat/preinstall-always-fail`?',
   dependencies: [RuleName.RequireValidPackageManifest],
   execute: async (ruleExecutionArguments) => {
     const entryPath = 'package.json';

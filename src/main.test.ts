@@ -218,7 +218,7 @@ repo-1
 - Do the changelog-related \`devDependencies\` in \`package.json\` conform? ✅
 - Do the changelog-related \`scripts\` in \`package.json\` conform? ✅
 - Do the lavamoat-related \`devDependencies\` in \`package.json\` conform? ✅
-- Does lavamoat lists \`@lavamoat/preinstall-always-fail: false\` in allow scripts? ✅
+- Are postinstall scripts disabled for \`@lavamoat/preinstall-always-fail\`? ✅
 - Is \`README.md\` present? ✅
 - Does the README conform by recommending the correct Yarn version to install? ✅
 - Does the README conform by recommending node install from nodejs.org? ✅
@@ -266,7 +266,7 @@ repo-2
 - Do the changelog-related \`devDependencies\` in \`package.json\` conform? ✅
 - Do the changelog-related \`scripts\` in \`package.json\` conform? ✅
 - Do the lavamoat-related \`devDependencies\` in \`package.json\` conform? ✅
-- Does lavamoat lists \`@lavamoat/preinstall-always-fail: false\` in allow scripts? ✅
+- Are postinstall scripts disabled for \`@lavamoat/preinstall-always-fail\`? ✅
 - Is \`README.md\` present? ✅
 - Does the README conform by recommending the correct Yarn version to install? ✅
 - Does the README conform by recommending node install from nodejs.org? ✅
@@ -675,7 +675,7 @@ repo-1
 - Do the changelog-related \`devDependencies\` in \`package.json\` conform? ✅
 - Do the changelog-related \`scripts\` in \`package.json\` conform? ✅
 - Do the lavamoat-related \`devDependencies\` in \`package.json\` conform? ✅
-- Does lavamoat lists \`@lavamoat/preinstall-always-fail: false\` in allow scripts? ✅
+- Are postinstall scripts disabled for \`@lavamoat/preinstall-always-fail\`? ✅
 - Is \`README.md\` present? ✅
 - Does the README conform by recommending the correct Yarn version to install? ✅
 - Does the README conform by recommending node install from nodejs.org? ✅
@@ -723,7 +723,7 @@ repo-2
 - Do the changelog-related \`devDependencies\` in \`package.json\` conform? ✅
 - Do the changelog-related \`scripts\` in \`package.json\` conform? ✅
 - Do the lavamoat-related \`devDependencies\` in \`package.json\` conform? ✅
-- Does lavamoat lists \`@lavamoat/preinstall-always-fail: false\` in allow scripts? ✅
+- Are postinstall scripts disabled for \`@lavamoat/preinstall-always-fail\`? ✅
 - Is \`README.md\` present? ✅
 - Does the README conform by recommending the correct Yarn version to install? ✅
 - Does the README conform by recommending node install from nodejs.org? ✅
