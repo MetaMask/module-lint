@@ -1,4 +1,4 @@
-import { type, string, record, array } from 'superstruct';
+import { type, string, record, array, boolean } from 'superstruct';
 
 /**
  * All of the known rules.
@@ -39,6 +39,10 @@ export enum RuleName {
   RequireEditorConfig = 'require-editorconfig',
   RequireGitAttributes = 'require-gitattributes',
   RequireGitIgnore = 'require-gitignore',
+  PackageLavamoatDependenciesConform = 'package-lavamoat-dependencies-conform',
+  PackageLavamoatAllowScriptsConforms = 'package-lavamoat-allow-scripts-conforms',
+  PackageAllowScriptsYarnConforms = 'package-allow-scripts-yarn-conforms',
+  PackageAllowScriptsYarnPluginsConforms = 'package-allow-scripts-yarn-plugins-conforms',
 }
 
 export const PackageManifestSchema = type({
@@ -60,4 +64,12 @@ export const PackageManifestSchema = type({
   repository: type({
     url: string(),
   }),
+  lavamoat: type({
+    allowScripts: record(string(), boolean()),
+  }),
+});
+
+export const YarnrcSchema = type({
+  enableScripts: boolean(),
+  plugins: array(record(string(), string())),
 });

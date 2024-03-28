@@ -7,6 +7,7 @@ import fs from 'fs';
 import { mock } from 'jest-mock-extended';
 import path from 'path';
 import { integer, object, string } from 'superstruct';
+import { stringify } from 'yaml';
 
 import { RepositoryFilesystem } from './repository-filesystem';
 import { withinSandbox } from '../tests/helpers';
@@ -197,6 +198,57 @@ describe('RepositoryFilesystem', () => {
         await repositoryFilesystem.readJsonFileAs('/some/file', Repo);
 
         expect(utilsMock.readJsonFile).toHaveBeenCalledTimes(1);
+      });
+    });
+  });
+
+  describe('readYamlFileAs', () => {
+    describe('if the file has not already been read', () => {
+      it('returns the content of the file as a JSON value if it conforms to the given Superstruct schema', async () => {
+        await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
+          await writeFile(
+            path.join(sandboxDirectoryPath, 'somefile.yml'),
+            stringify({ name: 'utils', numberOfStars: 294 }),
+          );
+          const Repo = object({
+            name: string(),
+            numberOfStars: integer(),
+          });
+          const repositoryFilesystem = new RepositoryFilesystem(
+            sandboxDirectoryPath,
+          );
+
+          const person = await repositoryFilesystem.readYamlFileAs(
+            'somefile.yml',
+            Repo,
+          );
+
+          expect(person).toStrictEqual({ name: 'utils', numberOfStars: 294 });
+        });
+      });
+
+      it('throws a descriptive error if the content of the file does not conform to the given Superstruct schema', async () => {
+        await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
+          await writeFile(
+            path.join(sandboxDirectoryPath, 'somefile.yml'),
+            stringify({ numberOfStars: 'whatever' }),
+          );
+          const Repo = object({
+            name: string(),
+            numberOfStars: integer(),
+          });
+          const repositoryFilesystem = new RepositoryFilesystem(
+            sandboxDirectoryPath,
+          );
+
+          await expect(
+            repositoryFilesystem.readYamlFileAs('somefile.yml', Repo),
+          ).rejects.toThrow(
+            new Error(
+              'Missing `name`; Invalid `numberOfStars` (Expected an integer, but received: "whatever").',
+            ),
+          );
+        });
       });
     });
   });
