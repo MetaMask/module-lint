@@ -1,14 +1,14 @@
 {
-  "name": "@metamask/module-lint",
+  "name": "@metamask/module-lint-fork",
   "version": "0.0.0",
   "description": "Analyzes one or more repos for divergence from a template repo",
-  "homepage": "https://github.com/MetaMask/module-lint#readme",
+  "homepage": "https://github.com/MetaMask/module-lint-fork#readme",
   "bugs": {
-    "url": "https://github.com/MetaMask/module-lint/issues"
+    "url": "https://github.com/MetaMask/module-lint-fork/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/MetaMask/module-lint.git"
+    "url": "https://github.com/MetaMask/module-lint-fork.git"
   },
   "sideEffects": false,
   "exports": {
