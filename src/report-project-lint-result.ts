@@ -15,6 +15,7 @@ const log = createModuleLogger(projectLogger, 'fetch-or-populate-file-cache');
  * @param args - The arguments to this function.
  * @param args.projectLintResult - The data collected from the lint execution.
  * @param args.outputLogger - Writable streams for output messages.
+ * @returns Passing and Failing numbers.
  */
 export function reportProjectLintResult({
   projectLintResult,
@@ -62,6 +63,8 @@ export function reportProjectLintResult({
     chalk.bold('Elapsed time:'),
     projectLintResult.elapsedTimeIncludingLinting,
   );
+
+  return { numberOfPassing, numberOfFailing };
 }
 
 /**

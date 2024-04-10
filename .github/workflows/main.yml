@@ -23,6 +23,12 @@ jobs:
     name: Build, lint, and test
     uses: ./.github/workflows/build-lint-test.yml
 
+  module-lint:
+    name: Module Lint
+    uses: ./.github/workflows/module-lint.yml
+    secrets:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
   all-jobs-completed:
     name: All jobs completed
     runs-on: ubuntu-latest

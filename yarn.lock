@@ -985,9 +985,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@metamask/module-lint@workspace:.":
+"@metamask/module-lint-fork@workspace:.":
   version: 0.0.0-use.local
-  resolution: "@metamask/module-lint@workspace:."
+  resolution: "@metamask/module-lint-fork@workspace:."
   dependencies:
     "@lavamoat/allow-scripts": ^2.3.1
     "@lavamoat/preinstall-always-fail": ^1.0.0
@@ -1032,7 +1032,7 @@ __metadata:
     typescript: ~4.8.4
     yargs: ^17.7.2
   bin:
-    module-lint: ./dist/cli.js
+    module-lint-fork: ./dist/cli.js
   languageName: unknown
   linkType: soft
 
