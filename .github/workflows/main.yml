@@ -2,7 +2,7 @@ name: Main
 
 on:
   push:
-    branches: [main]
+    branches: [auto-module-lint]
   pull_request:
 
 jobs:
