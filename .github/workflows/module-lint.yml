@@ -51,15 +51,15 @@ jobs:
     name: Post to a slack channel
     steps:
       - name: Send GitHub Action trigger data to Slack workflow
-          id: slack
-          uses: slackapi/slack-github-action@007b2c3c751a190b6f0f040e47ed024deaa72844
-          with:
-            payload: |
-              {
-                "text": "<https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/|→ Click here to review>",
-                "icon_url": "https://raw.githubusercontent.com/MetaMask/action-npm-publish/main/robo.png",
-                "username": "MetaMask bot",
-                "channel": "temp-test-module-lint"
-              }
-          env:
-            SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        id: slack
+        uses: slackapi/slack-github-action@007b2c3c751a190b6f0f040e47ed024deaa72844
+        with:
+        payload: |
+          {
+            "text": "<https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/|→ Click here to review>",
+            "icon_url": "https://raw.githubusercontent.com/MetaMask/action-npm-publish/main/robo.png",
+            "username": "MetaMask bot",
+            "channel": "temp-test-module-lint"
+          }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
