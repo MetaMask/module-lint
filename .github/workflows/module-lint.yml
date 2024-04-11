@@ -47,12 +47,12 @@ jobs:
           fi
       - name: Send GitHub Action trigger data to Slack workflow
         id: slack
-        uses: slackapi/slack-github-action@v1.25.0
+        uses: slackapi/slack-github-action@007b2c3c751a190b6f0f040e47ed024deaa72844
         with:
           payload: |
             {
               "text": "<https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/|→ Click here to review>",
-              "foo": "bar"
+              "channel": "temp-test-module-lint"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
