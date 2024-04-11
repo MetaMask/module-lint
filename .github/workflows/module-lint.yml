@@ -38,17 +38,6 @@ jobs:
       - run: yarn run-tool ${{ matrix.projects }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Send GitHub Action trigger data to Slack workflow
-        id: slack
-        uses: slackapi/slack-github-action@007b2c3c751a190b6f0f040e47ed024deaa72844
-        with:
-          payload: |
-            {
-              "text": "<https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/|→ Click here to review>",
-              "channel": "temp-test-module-lint"
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
       - name: Require clean working directory
         shell: bash
         run: |
@@ -56,3 +45,21 @@ jobs:
             echo "Working tree dirty at end of job"
             exit 1
           fi
+
+  slack_post:
+    runs-on: ubuntu-latest
+    name: Post to a slack channel
+    steps:
+      - name: Send GitHub Action trigger data to Slack workflow
+          id: slack
+          uses: slackapi/slack-github-action@007b2c3c751a190b6f0f040e47ed024deaa72844
+          with:
+            payload: |
+              {
+                "text": "<https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/|→ Click here to review>",
+                "icon_url": "https://raw.githubusercontent.com/MetaMask/action-npm-publish/main/robo.png",
+                "username": "MetaMask bot",
+                "channel": "temp-test-module-lint"
+              }
+          env:
+            SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
