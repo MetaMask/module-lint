@@ -53,13 +53,23 @@ jobs:
     name: Slack Post
     runs-on: ubuntu-latest
     steps:
+      - id: final-text
+        shell: bash
+        run: |
+          DEFAULT_TEXT="<https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/|→ Click here to review>"
+          SUBTEAM_TEXT="${{ inputs.subteam }}"
+          FINAL_TEXT="$DEFAULT_TEXT"
+          if [[ ! "$SUBTEAM_TEXT" == "" ]]; then
+            FINAL_TEXT="<!subteam^$SUBTEAM_TEXT> $DEFAULT_TEXT"
+          fi
+          echo "FINAL_TEXT=$FINAL_TEXT" >> "$GITHUB_OUTPUT"
       - name: Post module lint report to a slack
         id: slack
         uses: slackapi/slack-github-action@007b2c3c751a190b6f0f040e47ed024deaa72844
         with:
           payload: |
             {
-              "text": "<https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/|→ Click here to review>",
+              "text": "${{ steps.final-text.outputs.FINAL_TEXT }}",
               "icon_url": "https://raw.githubusercontent.com/MetaMask/action-npm-publish/main/robo.png",
               "username": "MetaMask bot",
               "channel": "#temp-test-module-lint"
