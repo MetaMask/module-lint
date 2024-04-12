@@ -26,7 +26,7 @@ jobs:
       matrix:
         node-version: [16.x, 18.x, 20.x]
         projects:
-          ['auto-changelog', 'create-release-branch', 'module-lint', 'utils']
+          ['utils']
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
@@ -45,3 +45,22 @@ jobs:
             echo "Working tree dirty at end of job"
             exit 1
           fi
+
+  slack-post:
+    name: Slack Post
+    runs-on: ubuntu-latest
+    steps:
+      - name: Post module lint report to slack
+        id: slack
+        uses: slackapi/slack-github-action@007b2c3c751a190b6f0f040e47ed024deaa72844
+        with:
+          payload: |
+            {
+              "text": "<https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/|→ Click here to review>",
+              "icon_url": "https://raw.githubusercontent.com/MetaMask/action-npm-publish/main/robo.png",
+              "username": "MetaMask bot",
+              "channel": "temp-test-module-lint"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
