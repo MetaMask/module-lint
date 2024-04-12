@@ -1,21 +1,4 @@
 name: Module Lint
-inputs:
-  icon-url:
-    description: 'Url to the avatar used for the bot in Slack'
-    required: false
-    default: 'https://raw.githubusercontent.com/MetaMask/action-npm-publish/main/robo.png'
-  username:
-    description: 'The name of the bot as it appears on Slack'
-    required: false
-    default: 'MetaMask bot'
-  text:
-    description: 'text to post to a slack channel'
-    required: false
-    default: '<https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/|→ Click here to review>'
-  channel:
-    description: 'The Slack channel to post in'
-    required: false
-    default: 'temp-test-module-lint'
 
 on:
   workflow_call:
@@ -77,10 +60,10 @@ jobs:
         with:
           payload: |
             {
-              "text": "${{ inputs.text }}",
-              "icon_url": "${{ inputs.icon-url }}",
-              "username": "${{ inputs.username }}",
-              "channel": "#${{ inputs.channel }}"
+              "text": "<https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/|→ Click here to review>",
+              "icon_url": "https://raw.githubusercontent.com/MetaMask/action-npm-publish/main/robo.png",
+              "username": "MetaMask bot",
+              "channel": "#temp-test-module-lint"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
