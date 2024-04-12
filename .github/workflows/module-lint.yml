@@ -2,6 +2,9 @@ name: Module Lint
 
 on:
   workflow_call:
+    secrets:
+      SLACK_WEBHOOK_URL:
+        required: true
 
 jobs:
   prepare:
@@ -60,7 +63,7 @@ jobs:
               "text": "<https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/|→ Click here to review>",
               "icon_url": "https://raw.githubusercontent.com/MetaMask/action-npm-publish/main/robo.png",
               "username": "MetaMask bot",
-              "channel": "metamask-shared-libraries"
+              "channel": "#temp-test-module-lint"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
