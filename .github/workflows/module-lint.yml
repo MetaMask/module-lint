@@ -1,5 +1,4 @@
 name: Module Lint
-
 inputs:
   icon-url:
     description: 'Url to the avatar used for the bot in Slack'
