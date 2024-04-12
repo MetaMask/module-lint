@@ -50,8 +50,9 @@ jobs:
     name: Slack Post
     runs-on: ubuntu-latest
     steps:
-      - name: Post module lint report to slack
+      - name: Post module lint report to a slack
         id: slack
+        if: secrets.SLACK_WEBHOOK_URL != ''
         uses: slackapi/slack-github-action@007b2c3c751a190b6f0f040e47ed024deaa72844
         with:
           payload: |
@@ -59,7 +60,7 @@ jobs:
               "text": "<https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/|→ Click here to review>",
               "icon_url": "https://raw.githubusercontent.com/MetaMask/action-npm-publish/main/robo.png",
               "username": "MetaMask bot",
-              "channel": "temp-test-module-lint"
+              "channel": "metamask-shared-libraries"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
