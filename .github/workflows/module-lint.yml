@@ -75,7 +75,7 @@ jobs:
         if: secrets.SLACK_WEBHOOK_URL != ''
         run: |
           DEFAULT_TEXT="<https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/|→ Click here to review>"
-          SUBTEAM_TEXT="${{ secrets.subteam }}"
+          SUBTEAM_TEXT="${{ inputs.subteam }}"
           FINAL_TEXT="$DEFAULT_TEXT"
           if [[ ! "$SUBTEAM_TEXT" == "" ]]; then
             FINAL_TEXT="<!subteam^$SUBTEAM_TEXT> $DEFAULT_TEXT"
