@@ -55,7 +55,6 @@ jobs:
     steps:
       - name: Post module lint report to a slack
         id: slack
-        if: secrets.SLACK_WEBHOOK_URL != ''
         uses: slackapi/slack-github-action@007b2c3c751a190b6f0f040e47ed024deaa72844
         with:
           payload: |
