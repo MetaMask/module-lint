@@ -1,5 +1,10 @@
 name: Module Lint
 
+inputs:
+  slack-webhook-url:
+    description: 'Slack Webhook URL'
+    required: true
+
 on:
   workflow_call:
 
@@ -62,5 +67,5 @@ jobs:
               "channel": "#temp-test-module-lint"
             }
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_URL: ${{ inputs.slack-webhook-url }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK

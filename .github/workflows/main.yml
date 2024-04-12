@@ -25,11 +25,9 @@ jobs:
 
   module-lint:
     name: Module Lint
-    permissions:
-      contents: write
     uses: ./.github/workflows/module-lint.yml
-    secrets:
-      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+    with:
+      slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
 
   all-jobs-completed:
     name: All jobs completed
