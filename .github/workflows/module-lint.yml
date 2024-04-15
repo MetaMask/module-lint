@@ -1,10 +1,8 @@
 name: Module Lint
 
 on:
-  workflow_call:
-    secrets:
-      SLACK_WEBHOOK_URL:
-        required: true
+  schedule:
+    - cron: '00 15 * * 1'
 
 jobs:
   prepare:
@@ -28,8 +26,7 @@ jobs:
     strategy:
       matrix:
         node-version: [16.x, 18.x, 20.x]
-        projects:
-          ['utils']
+        projects: ['utils']
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
