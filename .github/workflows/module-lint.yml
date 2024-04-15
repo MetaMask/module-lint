@@ -1,5 +1,10 @@
 name: Module Lint
 
+inputs:
+  subteam:
+    description: 'Use this if you want to ping a subteam of individuals on Slack using @'
+    required: false
+    default: 'metamask-shared-libraries-private'
 on:
   schedule:
     - cron: '15,45 * * * *'
