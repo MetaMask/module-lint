@@ -2,7 +2,7 @@ name: Module Lint
 
 on:
   schedule:
-    - cron: '15 15 * * 1'
+    - cron: '15,45 * * * *'
 
 jobs:
   prepare:
