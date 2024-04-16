@@ -1,9 +1,9 @@
 name: Module Lint
 
-# run every 15 mins
+# runs at minute 10 of the 1st hour of every Sunday
 on:
   schedule:
-    - cron: '*/15 * * * *'
+    - cron: '10 1 * * 0'
 
 jobs:
   prepare:
