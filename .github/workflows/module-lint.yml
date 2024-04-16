@@ -27,7 +27,13 @@ jobs:
     strategy:
       matrix:
         node-version: [16.x, 18.x, 20.x]
-        projects: [{ name: 'module-lint', team: 'S051YKC9350' }]
+        projects:
+          [
+            { name: 'auto-changelog', team: 'S051YKC9350' },
+            { name: 'create-release-branch', team: 'S051YKC9350' },
+            { name: 'module-lint', team: 'S051YKC9350' },
+            { name: 'utils', team: 'S051YKC9350' },
+          ]
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
