@@ -1,0 +1,69 @@
+name: Module Lint
+
+# runs at minute 5 of the 1st hour of every Sunday
+on:
+  schedule:
+    - cron: '05 1 * *  0'
+
+jobs:
+  prepare:
+    name: Prepare
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
+      - name: Install Yarn dependencies
+        run: yarn --immutable
+
+  module-lint:
+    name: Module Lint
+    runs-on: ubuntu-latest
+    needs:
+      - prepare
+    strategy:
+      matrix:
+        node-version: [16.x, 18.x, 20.x]
+        projects:
+          [
+            { name: 'auto-changelog', team: 'S051YKC9350' },
+            { name: 'create-release-branch', team: 'S051YKC9350' },
+            { name: 'module-lint', team: 'S051YKC9350' },
+            { name: 'utils', team: 'S051YKC9350' },
+          ]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'yarn'
+      - run: yarn --immutable --immutable-cache
+      - run: yarn run-tool ${{ matrix.projects.name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Require clean working directory
+        shell: bash
+        run: |
+          if ! git diff --exit-code; then
+            echo "Working tree dirty at end of job"
+            exit 1
+          fi
+      - name: Post module lint report to a slack
+        id: slack
+        if: ${{ failure() }}
+        uses: slackapi/slack-github-action@007b2c3c751a190b6f0f040e47ed024deaa72844
+        with:
+          payload: |
+            {
+              "text": "<!subteam^${{ matrix.projects.team }}> Module Lint failed for the `${{ matrix.projects.name }}` repository 😱.\n<https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/|→ Click here> for details!",
+              "icon_url": "https://raw.githubusercontent.com/MetaMask/action-npm-publish/main/robo.png",
+              "username": "MetaMask bot",
+              "channel": "#temp-test-module-lint"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
