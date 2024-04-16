@@ -53,7 +53,7 @@ jobs:
         with:
           payload: |
             {
-              "text": "<!subteam^C06S195ANA0> ${{ github.repository }} Module Lint failed 😱 <https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/|→ Click here to review>",
+              "text": "<!subteam^C04BLA0LEQZ> ${{ matrix.projects }} Module Lint failed 😱 <https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/|→ Click here to review>",
               "icon_url": "https://raw.githubusercontent.com/MetaMask/action-npm-publish/main/robo.png",
               "username": "MetaMask bot",
               "channel": "#temp-test-module-lint"
