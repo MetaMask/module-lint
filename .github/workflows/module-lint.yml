@@ -39,18 +39,15 @@ jobs:
       - run: yarn run-tool ${{ matrix.projects }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - id: module-lint-run
-        name: Require clean working directory
+      - name: Require clean working directory
         shell: bash
         run: |
           if ! git diff --exit-code; then
             echo "Working tree dirty at end of job"
-            exitcode="$?"
-            echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
             exit 1
           fi
       - id: final-text
-        if: needs.module-lint-run.outputs.exitcode != 0
+        if: ${{ failure() }}
         shell: bash
         run: |
           DEFAULT_TEXT="<https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/|→ Click here to review>"
@@ -62,7 +59,7 @@ jobs:
           echo "FINAL_TEXT=$FINAL_TEXT" >> "$GITHUB_OUTPUT"
       - name: Post module lint report to a slack
         id: slack
-        if: needs.module-lint-run.outputs.exitcode != 0
+        if: ${{ failure() }}
         uses: slackapi/slack-github-action@007b2c3c751a190b6f0f040e47ed024deaa72844
         with:
           payload: |
