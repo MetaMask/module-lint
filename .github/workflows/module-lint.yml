@@ -27,7 +27,7 @@ jobs:
     strategy:
       matrix:
         node-version: [16.x, 18.x, 20.x]
-        projects: ['utils']
+        projects: ['module-lint']
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
@@ -46,18 +46,6 @@ jobs:
             echo "Working tree dirty at end of job"
             exit 1
           fi
-      - id: final-text
-        if: ${{ failure() }}
-        shell: bash
-        run: |
-          DEFAULT_TEXT="<https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/|→ Click here to review>"
-          SUBTEAM_TEXT="@metamask-shared-libraries-private"
-          FINAL_TEXT="$DEFAULT_TEXT"
-          if [[ ! "$SUBTEAM_TEXT" == "" ]]; then
-            FINAL_TEXT="<!subteam^$SUBTEAM_TEXT> $DEFAULT_TEXT"
-          fi
-          echo "FINAL_TEXT=$FINAL_TEXT" >> "$GITHUB_OUTPUT"
-          exit 1
       - name: Post module lint report to a slack
         id: slack
         if: ${{ failure() }}
@@ -65,7 +53,7 @@ jobs:
         with:
           payload: |
             {
-              "text": "${{ steps.final-text.outputs.FINAL_TEXT }}",
+              "text": "<!subteam^C06S195ANA0> ${{ github.repository }} Module Lint failed 😱 <https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/|→ Click here to review>",
               "icon_url": "https://raw.githubusercontent.com/MetaMask/action-npm-publish/main/robo.png",
               "username": "MetaMask bot",
               "channel": "#temp-test-module-lint"
