@@ -1,23 +1,10 @@
 name: Module Lint
 
+# run every 15 mins
 on:
-  workflow_call:
-    secrets:
-      icon-url:
-        description: 'Url to the avatar used for the bot in Slack'
-        required: false
-        default: 'https://raw.githubusercontent.com/MetaMask/action-npm-publish/main/robo.png'
-      username:
-        description: 'The name of the bot as it appears on Slack'
-        required: false
-        default: 'MetaMask bot'
-      subteam:
-        description: 'Use this if you want to ping a subteam of individuals on Slack using @'
-        required: false
-      channel:
-        description: 'The Slack channel to post in'
-        required: false
-        default: 'temp-test-module-lint'
+  schedule:
+    - cron: '*/15 * * * *'
+
 jobs:
   prepare:
     name: Prepare
@@ -40,8 +27,7 @@ jobs:
     strategy:
       matrix:
         node-version: [16.x, 18.x, 20.x]
-        projects:
-          ['auto-changelog', 'create-release-branch', 'module-lint', 'utils']
+        projects: ['utils']
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
@@ -60,28 +46,31 @@ jobs:
             echo "Working tree dirty at end of job"
             exit 1
           fi
+
+  slack-post:
+    name: Slack Post
+    runs-on: ubuntu-latest
+    steps:
       - id: final-text
         shell: bash
-        if: secrets.SLACK_WEBHOOK_URL != ''
         run: |
           DEFAULT_TEXT="<https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/|→ Click here to review>"
-          SUBTEAM_TEXT="${{ secrets.subteam }}"
+          SUBTEAM_TEXT="metamask-shared-libraries-private"
           FINAL_TEXT="$DEFAULT_TEXT"
           if [[ ! "$SUBTEAM_TEXT" == "" ]]; then
             FINAL_TEXT="<!subteam^$SUBTEAM_TEXT> $DEFAULT_TEXT"
           fi
           echo "FINAL_TEXT=$FINAL_TEXT" >> "$GITHUB_OUTPUT"
-      - name: Post to a Slack channel
+      - name: Post module lint report to a slack
         id: slack
-        if: secrets.SLACK_WEBHOOK_URL != ''
         uses: slackapi/slack-github-action@007b2c3c751a190b6f0f040e47ed024deaa72844
         with:
           payload: |
             {
               "text": "${{ steps.final-text.outputs.FINAL_TEXT }}",
-              "icon_url": "${{ secrets.icon-url }}",
-              "username": "${{ secrets.username }}",
-              "channel": "#${{ secrets.channel }}"
+              "icon_url": "https://raw.githubusercontent.com/MetaMask/action-npm-publish/main/robo.png",
+              "username": "MetaMask bot",
+              "channel": "#temp-test-module-lint"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
