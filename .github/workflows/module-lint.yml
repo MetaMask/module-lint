@@ -57,6 +57,7 @@ jobs:
             FINAL_TEXT="<!subteam^$SUBTEAM_TEXT> $DEFAULT_TEXT"
           fi
           echo "FINAL_TEXT=$FINAL_TEXT" >> "$GITHUB_OUTPUT"
+          exit 1
       - name: Post module lint report to a slack
         id: slack
         if: ${{ failure() }}
