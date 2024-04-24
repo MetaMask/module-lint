@@ -38,7 +38,7 @@ export default buildRule({
         error.code === 'ERR_INVALID_JSON_FILE'
       ) {
         throw new Error(
-          `${error.message}\n The package does not have a well-formed manifest. This is not the fault of the changelog, but this rule requires a valid package manifest.`,
+          `Tried to get version from package manifest in order to validate changelog, but manifest is not well-formed (${error.message}).`,
         );
       } else if (error instanceof ChangelogFormattingError) {
         return fail([
