@@ -71,13 +71,18 @@ export async function main({
     outputLogger,
   });
 
-  await lintProjects({
+  const isAllPassed = await lintProjects({
     projectReferences,
     template,
     workingDirectoryPath,
     cachedRepositoriesDirectoryPath,
     outputLogger,
   });
+
+  if (!isAllPassed) {
+    // eslint-disable-next-line require-atomic-updates
+    process.exitCode = 1;
+  }
 }
 
 /**
@@ -226,17 +231,21 @@ async function lintProjects({
     projectLintResultPromiseOutcomes.filter(isPromiseRejectedResult);
 
   outputLogger.logToStdout('');
+  let isAllPassed = true;
   fulfilledProjectLintResultPromiseOutcomes
     .sort((a, b) => {
       return a.value.projectName.localeCompare(b.value.projectName);
     })
     .forEach((fulfilledProjectLintResultPromiseOutcome, index) => {
-      reportProjectLintResult({
+      const { numberOfFailing } = reportProjectLintResult({
         projectLintResult: fulfilledProjectLintResultPromiseOutcome.value,
         outputLogger,
       });
       if (index < fulfilledProjectLintResultPromiseOutcomes.length - 1) {
         outputLogger.logToStdout('\n');
+      }
+      if (numberOfFailing > 0) {
+        isAllPassed = false;
       }
     });
   outputLogger.logToStdout('');
@@ -246,4 +255,6 @@ async function lintProjects({
       outputLogger.logToStderr(rejectedProjectLintResultPromiseOutcome.reason);
     },
   );
+
+  return isAllPassed && rejectedProjectLintResultPromiseOutcomes.length === 0;
 }
