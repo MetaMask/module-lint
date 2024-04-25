@@ -1,11 +1,15 @@
 import allYarnModernFilesConform from './all-yarn-modern-files-conform';
 import classicYarnConfigFileAbsent from './classic-yarn-config-file-absent';
+import packageAllowScriptsYarnConform from './package-allow-scripts-yarn-conform';
+import packageAllowScriptsYarnPluginsConform from './package-allow-scripts-yarn-plugins-conform';
 import packageChangelogDevDependenciesConform from './package-changelog-dev-dependencies-conform';
 import packageChangelogScriptsConform from './package-changelog-scripts-conform';
 import packageEnginesNodeFieldConforms from './package-engines-node-field-conforms';
 import packageExportsFieldConforms from './package-exports-field-conforms';
 import packageFilesFieldConforms from './package-files-field-conforms';
 import packageJestDependenciesConform from './package-jest-dependencies-conform';
+import packageLavamoatAllowScriptsConforms from './package-lavamoat-allow-scripts-conforms';
+import packageLavamoatDevDependenciesConform from './package-lavamoat-dev-dependencies-conform';
 import packageLavamoatTsupConforms from './package-lavamoat-tsup-conforms';
 import packageLintDependenciesConform from './package-lint-dependencies-conform';
 import packageMainFieldConforms from './package-main-field-conforms';
@@ -70,4 +74,8 @@ export const rules = [
   requireEditorconfig,
   requireGitattributes,
   requireGitignore,
+  packageLavamoatDevDependenciesConform,
+  packageLavamoatAllowScriptsConforms,
+  packageAllowScriptsYarnConform,
+  packageAllowScriptsYarnPluginsConform,
 ] as const;
