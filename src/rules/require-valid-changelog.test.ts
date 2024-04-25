@@ -128,7 +128,7 @@ describe('Rule: require-valid-changelog', () => {
           fail,
         }),
       ).rejects.toThrow(
-        'Missing `url`.\n The package does not have a well-formed manifest. This is not the fault of the changelog, but this rule requires a valid package manifest.',
+        'Tried to get version from package manifest in order to validate changelog, but manifest is not well-formed (Missing `url`.)',
       );
     });
   });
