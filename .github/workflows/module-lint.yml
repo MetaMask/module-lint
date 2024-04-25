@@ -3,7 +3,7 @@ name: Module Lint
 # runs at minute 10 of the 1st hour of every Sunday
 on:
   schedule:
-    - cron: '*/15 * * * *'
+    - cron: '10 1 * * 0'
 
 jobs:
   module-lint:
