@@ -114,13 +114,12 @@ describe('Rule: require-valid-changelog', () => {
       });
       await writeFile(
         path.join(project.directoryPath, 'package.json'),
-        JSON.stringify({ foo: 'bar' }),
+        buildPackageManifestMock({ repository: {} }),
       );
       await writeFile(
         path.join(project.directoryPath, 'CHANGELOG.md'),
         invalidChangelog,
       );
-
       await expect(
         validateChangelog.execute({
           template: buildMetaMaskRepository(),
@@ -129,7 +128,7 @@ describe('Rule: require-valid-changelog', () => {
           fail,
         }),
       ).rejects.toThrow(
-        'The package does not have a well-formed manifest. This is not the fault of the changelog, but this rule requires a valid package manifest.',
+        'Tried to get version from package manifest in order to validate changelog, but manifest is not well-formed (Missing `url`.)',
       );
     });
   });
