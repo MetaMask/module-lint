@@ -3,7 +3,7 @@ name: Module Lint
 # runs at minute 10 of the 1st hour of every Sunday
 on:
   schedule:
-    - cron: '10 1 * * 0'
+    - cron: '*/15 * * * *'
 
 jobs:
   module-lint:
@@ -44,7 +44,7 @@ jobs:
         with:
           payload: |
             {
-              "text": "<!subteam^${{ matrix.projects.team }}> Module Lint failed for the `${{ matrix.projects.name }}` repository 😱.\n<https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/|→ Click here> for details!",
+              "text": "<!subteam^${{ matrix.projects.team }}> Module Lint failed for the `${{ matrix.projects.name }}` repository 😱.\n<https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ jobs.module-lint }}|→ Click here> for details!",
               "icon_url": "https://raw.githubusercontent.com/MetaMask/action-npm-publish/main/robo.png",
               "username": "MetaMask bot",
               "channel": "#temp-test-module-lint"
