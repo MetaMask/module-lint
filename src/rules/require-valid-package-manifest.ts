@@ -2,6 +2,7 @@ import { isErrorWithCode, isErrorWithMessage } from '@metamask/utils/node';
 
 import { buildRule } from './build-rule';
 import { PackageManifestSchema, RuleName } from './types';
+import { RuleExecutionStatus } from '../execute-rules';
 import { fileExists } from '../rule-helpers';
 
 export default buildRule({
@@ -16,7 +17,7 @@ export default buildRule({
       entryPath,
       ruleExecutionArguments,
     );
-    if (!fileExistsResult.passed) {
+    if (fileExistsResult.status !== RuleExecutionStatus.Passed) {
       return fileExistsResult;
     }
 

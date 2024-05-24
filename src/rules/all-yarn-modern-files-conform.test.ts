@@ -49,7 +49,7 @@ describe('Rule: all-yarn-modern-files-conform', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: true,
+        status: 'passed',
       });
     });
   });
@@ -93,7 +93,7 @@ describe('Rule: all-yarn-modern-files-conform', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: false,
+        status: 'failed',
         failures: [
           {
             message: '`.yarnrc.yml` does not exist in this project.',
@@ -142,7 +142,7 @@ describe('Rule: all-yarn-modern-files-conform', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: false,
+        status: 'failed',
         failures: [
           {
             message: '`.yarn/releases/` does not exist in this project.',
@@ -195,7 +195,7 @@ describe('Rule: all-yarn-modern-files-conform', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: false,
+        status: 'failed',
         failures: [
           {
             message:
@@ -245,7 +245,7 @@ describe('Rule: all-yarn-modern-files-conform', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: false,
+        status: 'failed',
         failures: [
           {
             message: '`.yarn/plugins/` does not exist in this project.',
@@ -298,7 +298,7 @@ describe('Rule: all-yarn-modern-files-conform', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: false,
+        status: 'failed',
         failures: [
           {
             message:

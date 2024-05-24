@@ -4,11 +4,13 @@ import {
 } from '@metamask/utils/node';
 import path from 'path';
 
+import { RuleExecutionStatus } from './execute-rules';
 import {
   combineRuleExecutionResults,
   dataConform,
   directoryAndContentsConform,
   directoryExists,
+  error,
   fail,
   fileConforms,
   fileExists,
@@ -22,54 +24,88 @@ import {
 } from '../tests/helpers';
 
 describe('pass', () => {
-  it('returns a result that represents a passing rule', () => {
-    expect(pass()).toStrictEqual({ passed: true });
+  it('returns a result that represents a rule that has passed', () => {
+    expect(pass()).toStrictEqual({ status: 'passed' });
   });
 });
 
 describe('fail', () => {
-  it('returns a result that represents a failing rule, with the given failures', () => {
+  it('returns a result that represents a rule that has failed, with the given failures', () => {
     expect(fail([{ message: 'oops' }])).toStrictEqual({
-      passed: false,
+      status: 'failed',
       failures: [{ message: 'oops' }],
     });
   });
 });
 
+describe('error', () => {
+  it('returns a result that represents a rule that has errored, with the given error', () => {
+    const capturedError = new Error('oops');
+    expect(error(capturedError)).toStrictEqual({
+      status: 'errored',
+      error: capturedError,
+    });
+  });
+});
+
 describe('combineRuleExecutionResults', () => {
-  it('returns a single passing result if all of the given results are passing', () => {
+  it('returns a single result with a status of "passed" if all of the given results have this status', () => {
     const result = combineRuleExecutionResults([
       {
-        passed: true,
+        status: RuleExecutionStatus.Passed,
       },
       {
-        passed: true,
+        status: RuleExecutionStatus.Passed,
       },
     ]);
 
-    expect(result).toStrictEqual({ passed: true });
+    expect(result).toStrictEqual({ status: 'passed' });
   });
 
-  it('returns a single failed result, consolidating all failures, if any of the given results are failing', () => {
+  it('returns a single result with a status of "errored", using the first error, if any of the given results have this status', () => {
     const result = combineRuleExecutionResults([
       {
-        passed: true,
+        status: RuleExecutionStatus.Passed,
       },
       {
-        passed: false,
+        status: RuleExecutionStatus.Errored,
+        error: new Error('error 1'),
+      },
+      {
+        status: RuleExecutionStatus.Errored,
+        error: new Error('error 2'),
+      },
+      {
+        status: RuleExecutionStatus.Passed,
+      },
+    ]);
+
+    expect(result).toStrictEqual({
+      status: 'errored',
+      error: new Error('error 1'),
+    });
+  });
+
+  it('returns a single result with a status of "failed", consolidating all failures, if any of the given results have this status', () => {
+    const result = combineRuleExecutionResults([
+      {
+        status: RuleExecutionStatus.Passed,
+      },
+      {
+        status: RuleExecutionStatus.Failed,
         failures: [{ message: 'message 1' }],
       },
       {
-        passed: true,
+        status: RuleExecutionStatus.Passed,
       },
       {
-        passed: false,
+        status: RuleExecutionStatus.Failed,
         failures: [{ message: 'message 2' }, { message: 'message 3' }],
       },
     ]);
 
     expect(result).toStrictEqual({
-      passed: false,
+      status: 'failed',
       failures: [
         { message: 'message 1' },
         { message: 'message 2' },
@@ -81,7 +117,7 @@ describe('combineRuleExecutionResults', () => {
   it('returns a passing result if given nothing to combine', () => {
     const result = combineRuleExecutionResults([]);
 
-    expect(result).toStrictEqual({ passed: true });
+    expect(result).toStrictEqual({ status: 'passed' });
   });
 });
 
@@ -103,7 +139,7 @@ describe('fileExists', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: true,
+        status: 'passed',
       });
     });
   });
@@ -124,7 +160,7 @@ describe('fileExists', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: false,
+        status: 'failed',
         failures: [
           {
             message: `\`${filePath}\` does not exist in this project.`,
@@ -151,7 +187,7 @@ describe('fileExists', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: false,
+        status: 'failed',
         failures: [
           { message: `\`${filePath}\` is not a file when it should be.` },
         ],
@@ -178,7 +214,7 @@ describe('directoryExists', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: true,
+        status: 'passed',
       });
     });
   });
@@ -199,7 +235,7 @@ describe('directoryExists', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: false,
+        status: 'failed',
         failures: [
           {
             message: `\`${directoryPath}/\` does not exist in this project.`,
@@ -226,7 +262,7 @@ describe('directoryExists', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: false,
+        status: 'failed',
         failures: [
           {
             message: `\`${directoryPath}/\` is not a directory when it should be.`,
@@ -264,7 +300,7 @@ describe('fileConforms', () => {
         fail,
       });
 
-      expect(result).toStrictEqual({ passed: true });
+      expect(result).toStrictEqual({ status: 'passed' });
     });
   });
 
@@ -295,7 +331,7 @@ describe('fileConforms', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: false,
+        status: 'failed',
         failures: [
           {
             message:
@@ -329,7 +365,7 @@ describe('fileConforms', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: false,
+        status: 'failed',
         failures: [
           {
             message: '`some.file` does not exist in this project.',
@@ -397,7 +433,7 @@ describe('directoryAndContentsConform', () => {
         fail,
       });
 
-      expect(result).toStrictEqual({ passed: true });
+      expect(result).toStrictEqual({ status: 'passed' });
     });
   });
 
@@ -458,7 +494,7 @@ describe('directoryAndContentsConform', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: false,
+        status: 'failed',
         failures: [
           {
             message:
@@ -516,7 +552,7 @@ describe('directoryAndContentsConform', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: false,
+        status: 'failed',
         failures: [
           {
             message:
@@ -565,7 +601,7 @@ describe('directoryAndContentsConform', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: false,
+        status: 'failed',
         failures: [
           {
             message: '`some-directory/` does not exist in this project.',
@@ -605,7 +641,7 @@ describe('packageManifestPropertiesConform', () => {
         },
       );
 
-      expect(result).toStrictEqual({ passed: true });
+      expect(result).toStrictEqual({ status: 'passed' });
     });
   });
 
@@ -641,7 +677,7 @@ describe('packageManifestPropertiesConform', () => {
         },
       );
 
-      expect(result).toStrictEqual({ passed: true });
+      expect(result).toStrictEqual({ status: 'passed' });
     });
   });
 
@@ -678,7 +714,7 @@ describe('packageManifestPropertiesConform', () => {
       );
 
       expect(result).toStrictEqual({
-        passed: false,
+        status: 'failed',
         failures: [
           {
             message:
@@ -725,7 +761,7 @@ describe('packageManifestPropertiesConform', () => {
       );
 
       expect(result).toStrictEqual({
-        passed: false,
+        status: 'failed',
         failures: [
           {
             message:
@@ -784,8 +820,9 @@ describe('dataConform', () => {
       'test.json',
     );
 
-    expect(result).toStrictEqual({ passed: true });
+    expect(result).toStrictEqual({ status: 'passed' });
   });
+
   it('passes if the reference and target have the same property at a deeper level and its value matches', () => {
     const referenceObject = {
       firstLevel: 'test',
@@ -806,8 +843,9 @@ describe('dataConform', () => {
       'test.json',
     );
 
-    expect(result).toStrictEqual({ passed: true });
+    expect(result).toStrictEqual({ status: 'passed' });
   });
+
   it('passes if the target has same properties as reference with additional properties', () => {
     const referenceObject = {
       firstLevel: 'test',
@@ -829,8 +867,9 @@ describe('dataConform', () => {
       'test.json',
     );
 
-    expect(result).toStrictEqual({ passed: true });
+    expect(result).toStrictEqual({ status: 'passed' });
   });
+
   it('fails if the reference and target does not match at the first level', () => {
     const referenceObject = {
       firstLevel: 'first level',
@@ -853,7 +892,7 @@ describe('dataConform', () => {
     );
 
     expect(result).toStrictEqual({
-      passed: false,
+      status: 'failed',
       failures: [
         {
           message: "`firstLevel` is 'test', when it should be 'first level'.",
@@ -884,7 +923,7 @@ describe('dataConform', () => {
     );
 
     expect(result).toStrictEqual({
-      passed: false,
+      status: 'failed',
       failures: [
         {
           message:
@@ -893,6 +932,7 @@ describe('dataConform', () => {
       ],
     });
   });
+
   it('fails if the target is null', () => {
     const referenceObject = {
       firstLevel: 'first level',
@@ -909,7 +949,7 @@ describe('dataConform', () => {
     );
 
     expect(result).toStrictEqual({
-      passed: false,
+      status: 'failed',
       failures: [
         {
           message:
@@ -940,7 +980,7 @@ describe('dataConform', () => {
     );
 
     expect(result).toStrictEqual({
-      passed: false,
+      status: 'failed',
       failures: [
         {
           message:
@@ -949,6 +989,7 @@ describe('dataConform', () => {
       ],
     });
   });
+
   it('throws error if a propertyPath does not exist in the reference object', () => {
     const referenceObject = {
       deeperLevel: {

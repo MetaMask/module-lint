@@ -37,7 +37,7 @@ describe('Rule: package-lavamoat-allow-scripts-conforms', () => {
         fail,
       });
 
-      expect(result).toStrictEqual({ passed: true });
+      expect(result).toStrictEqual({ status: 'passed' });
     });
   });
 
@@ -69,7 +69,7 @@ describe('Rule: package-lavamoat-allow-scripts-conforms', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: false,
+        status: 'failed',
         failures: [
           {
             message:

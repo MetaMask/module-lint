@@ -33,7 +33,7 @@ describe('Rule: readme-lists-correct-yarn-version', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: true,
+        status: 'passed',
       });
     });
   });
@@ -65,7 +65,7 @@ describe('Rule: readme-lists-correct-yarn-version', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: false,
+        status: 'failed',
         failures: [
           {
             message:

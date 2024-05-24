@@ -41,7 +41,7 @@ describe('Rule: package-manager-field-conforms', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: true,
+        status: 'passed',
       });
     });
   });
@@ -77,7 +77,7 @@ describe('Rule: package-manager-field-conforms', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: false,
+        status: 'failed',
         failures: [
           { message: '`packageManager` is "test", when it should be "yarn".' },
         ],

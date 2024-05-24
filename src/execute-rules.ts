@@ -9,11 +9,21 @@ import { fail, pass } from './rule-helpers';
 const log = createModuleLogger(projectLogger, 'establish-metamask-repository');
 
 /**
+ * The status of a rule's execution. Used to determine how to present that rule
+ * in the ending report.
+ */
+export enum RuleExecutionStatus {
+  Passed = 'passed',
+  Failed = 'failed',
+  Errored = 'errored',
+}
+
+/**
  * Represents a successfully executed rule. ("Partial" because a full result
  * include the name and description of the rule.)
  */
 export type SuccessfulPartialRuleExecutionResult = {
-  passed: true;
+  status: RuleExecutionStatus.Passed;
 };
 
 /**
@@ -24,12 +34,21 @@ export type RuleExecutionFailure = {
 };
 
 /**
- * Represents an unsuccessfully executed rule. ("Partial" because a full result
+ * Represents a rule that returned a failure. ("Partial" because a full result
  * include the name and description of the rule.)
  */
 export type FailedPartialRuleExecutionResult = {
-  passed: false;
   failures: RuleExecutionFailure[];
+  status: RuleExecutionStatus.Failed;
+};
+
+/**
+ * Represents a rule that threw an error while executing. ("Partial" because a
+ * full result include the name and description of the rule.)
+ */
+export type ErroredPartialRuleExecutionResult = {
+  error: unknown;
+  status: RuleExecutionStatus.Errored;
 };
 
 /**
@@ -37,8 +56,9 @@ export type FailedPartialRuleExecutionResult = {
  * include the name and description of the rule.)
  */
 export type PartialRuleExecutionResult =
-  | SuccessfulPartialRuleExecutionResult
-  | FailedPartialRuleExecutionResult;
+  | ErroredPartialRuleExecutionResult
+  | FailedPartialRuleExecutionResult
+  | SuccessfulPartialRuleExecutionResult;
 
 /**
  * All of the information that designates the result of a rule execution.
@@ -194,13 +214,22 @@ async function executeRule({
 }): Promise<RuleExecutionResultNode> {
   log('Running rule', ruleNode.rule.name);
   const startDate = new Date();
+  let partialRuleExecutionResult: PartialRuleExecutionResult;
 
-  const partialRuleExecutionResult = await ruleNode.rule.execute({
-    project,
-    template,
-    pass,
-    fail,
-  });
+  try {
+    partialRuleExecutionResult = await ruleNode.rule.execute({
+      project,
+      template,
+      pass,
+      fail,
+    });
+  } catch (error) {
+    partialRuleExecutionResult = {
+      status: RuleExecutionStatus.Errored,
+      error,
+    };
+  }
+
   const ruleExecutionResult: RuleExecutionResult = {
     ruleName: ruleNode.rule.name,
     ruleDescription: ruleNode.rule.description,
@@ -214,7 +243,8 @@ async function executeRule({
   const endDateBeforeChildren = new Date();
 
   const children: RuleExecutionResultNode[] =
-    ruleExecutionResult.passed && ruleNode.children.length > 0
+    ruleExecutionResult.status === RuleExecutionStatus.Passed &&
+    ruleNode.children.length > 0
       ? await executeRuleNodes({
           ruleNodes: ruleNode.children,
           project,

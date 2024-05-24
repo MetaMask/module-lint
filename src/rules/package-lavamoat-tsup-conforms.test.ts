@@ -48,7 +48,7 @@ describe('Rule: package-lavamoat-tsup-conforms', () => {
         fail,
       });
 
-      expect(result).toStrictEqual({ passed: true });
+      expect(result).toStrictEqual({ status: 'passed' });
     });
   });
 
@@ -91,7 +91,7 @@ describe('Rule: package-lavamoat-tsup-conforms', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: false,
+        status: 'failed',
         failures: [
           {
             message: '`tsup>esbuild` is false, when it should be true.',
@@ -139,7 +139,7 @@ describe('Rule: package-lavamoat-tsup-conforms', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: false,
+        status: 'failed',
         failures: [
           {
             message:
@@ -180,7 +180,7 @@ describe('Rule: package-lavamoat-tsup-conforms', () => {
         pass,
         fail,
       });
-      expect(result).toStrictEqual({ passed: true });
+      expect(result).toStrictEqual({ status: 'passed' });
     });
   });
 });

@@ -1,12 +1,24 @@
+import { getErrorMessage } from '@metamask/utils';
 import chalk from 'chalk';
 
 import type { RuleExecutionResultNode } from './execute-rules';
+import { RuleExecutionStatus } from './execute-rules';
 import type { ProjectLintResult } from './lint-project';
 import { createModuleLogger, projectLogger } from './logging-utils';
 import { repeat, indent } from './misc-utils';
 import type { AbstractOutputLogger } from './output-logger';
 
 const log = createModuleLogger(projectLogger, 'fetch-or-populate-file-cache');
+
+/**
+ * The number of lint rules that were run and that passed, failed, or errored.
+ */
+export type ProjectLintStats = {
+  totalErrored: number;
+  totalFailed: number;
+  totalPassed: number;
+  totalRun: number;
+};
 
 /**
  * Prints a report following linting of a project, including all of the rules
@@ -23,7 +35,7 @@ export function reportProjectLintResult({
 }: {
   projectLintResult: ProjectLintResult;
   outputLogger: AbstractOutputLogger;
-}) {
+}): ProjectLintStats {
   log(
     'elapsedTimeIncludingLinting',
     projectLintResult.elapsedTimeIncludingLinting,
@@ -31,31 +43,33 @@ export function reportProjectLintResult({
     projectLintResult.elapsedTimeExcludingLinting,
   );
 
-  outputLogger.logToStdout(chalk.magenta(projectLintResult.projectName));
+  outputLogger.logToStdout(chalk.blue(projectLintResult.projectName));
   outputLogger.logToStdout(
-    `${chalk.magenta(repeat('-', projectLintResult.projectName.length))}\n`,
+    `${chalk.blue(repeat('-', projectLintResult.projectName.length))}\n`,
   );
 
-  const { numberOfPassing, numberOfFailing } = reportRuleExecutionResultNodes({
-    ruleExecutionResultNodes:
-      projectLintResult.ruleExecutionResultTree.children,
-    outputLogger,
-  });
+  const ruleExecutionResultNodes =
+    projectLintResult.ruleExecutionResultTree.children;
+  const { totalErrored, totalFailed, totalPassed, totalRun } =
+    reportRuleExecutionResultNodes({
+      ruleExecutionResultNodes,
+      outputLogger,
+    });
 
-  outputLogger.logToStdout('');
+  if (ruleExecutionResultNodes.length > 0) {
+    outputLogger.logToStdout('');
+  }
 
-  const numberOfPassingPhrase = `${numberOfPassing} passed`;
-  const numberOfFailingPhrase = `${numberOfFailing} failed`;
+  const totalPassedPhrase = `${totalPassed} passed`;
+  const totalFailedPhrase = `${totalFailed} failed`;
+  const totalErroredPhrase = `${totalErrored} errored`;
   outputLogger.logToStdout(
-    '%s       %s, %s, %s',
+    '%s       %s, %s, %s, %s',
     chalk.bold('Results:'),
-    numberOfPassing > 0
-      ? chalk.green(numberOfPassingPhrase)
-      : numberOfPassingPhrase,
-    numberOfFailing > 0
-      ? chalk.red(numberOfFailingPhrase)
-      : numberOfFailingPhrase,
-    `${numberOfPassing + numberOfFailing} total`,
+    totalPassed > 0 ? chalk.green(totalPassedPhrase) : totalPassedPhrase,
+    totalFailed > 0 ? chalk.red(totalFailedPhrase) : totalFailedPhrase,
+    totalErrored > 0 ? chalk.yellow(totalErroredPhrase) : totalErroredPhrase,
+    `${totalRun} total`,
   );
 
   outputLogger.logToStdout(
@@ -64,7 +78,23 @@ export function reportProjectLintResult({
     projectLintResult.elapsedTimeIncludingLinting,
   );
 
-  return { numberOfPassing, numberOfFailing };
+  return { totalErrored, totalFailed, totalPassed, totalRun };
+}
+
+/**
+ * Determines an appropriate icon for a rule execution result.
+ *
+ * @param ruleExecutionStatus - The status of executing a rule.
+ * @returns The icon as a string.
+ */
+function determineIconFor(ruleExecutionStatus: RuleExecutionStatus) {
+  if (ruleExecutionStatus === RuleExecutionStatus.Failed) {
+    return chalk.white.bgRed(' ✘ ');
+  }
+  if (ruleExecutionStatus === RuleExecutionStatus.Errored) {
+    return chalk.black.bgYellow(' ? ');
+  }
+  return chalk.black.bgGreen(' ✔︎ ');
 }
 
 /**
@@ -82,39 +112,57 @@ function reportRuleExecutionResultNodes({
 }: {
   ruleExecutionResultNodes: RuleExecutionResultNode[];
   outputLogger: AbstractOutputLogger;
-}) {
-  let numberOfPassing = 0;
-  let numberOfFailing = 0;
+}): ProjectLintStats {
+  let totalPassed = 0;
+  let totalFailed = 0;
+  let totalErrored = 0;
 
   for (const ruleExecutionResultNode of ruleExecutionResultNodes) {
     outputLogger.logToStdout(
-      `- ${ruleExecutionResultNode.result.ruleDescription} ${
-        ruleExecutionResultNode.result.passed ? '✅' : '❌'
+      `${determineIconFor(ruleExecutionResultNode.result.status)} ${
+        ruleExecutionResultNode.result.ruleDescription
       }`,
     );
 
-    if (ruleExecutionResultNode.result.passed) {
-      numberOfPassing += 1;
-    } else {
-      numberOfFailing += 1;
+    if (ruleExecutionResultNode.result.status === RuleExecutionStatus.Passed) {
+      totalPassed += 1;
+    } else if (
+      ruleExecutionResultNode.result.status === RuleExecutionStatus.Failed
+    ) {
+      totalFailed += 1;
 
       for (const failure of ruleExecutionResultNode.result.failures) {
-        outputLogger.logToStdout(
-          indent(`- ${chalk.yellow(failure.message)}`, 1),
-        );
+        outputLogger.logToStdout(indent(`- ${chalk.red(failure.message)}`, 2));
       }
+    } else if (
+      ruleExecutionResultNode.result.status === RuleExecutionStatus.Errored
+    ) {
+      totalErrored += 1;
+
+      outputLogger.logToStdout(
+        indent(
+          `- ${chalk.yellow(
+            `ERROR: ${getErrorMessage(ruleExecutionResultNode.result.error)}`,
+          )}`,
+          2,
+        ),
+      );
     }
 
     const {
-      numberOfPassing: numberOfChildrenPassing,
-      numberOfFailing: numberOfChildrenFailing,
+      totalPassed: totalPassedChildren,
+      totalFailed: totalFailedChildren,
+      totalErrored: totalErroredChildren,
     } = reportRuleExecutionResultNodes({
       ruleExecutionResultNodes: ruleExecutionResultNode.children,
       outputLogger,
     });
-    numberOfPassing += numberOfChildrenPassing;
-    numberOfFailing += numberOfChildrenFailing;
+    totalPassed += totalPassedChildren;
+    totalFailed += totalFailedChildren;
+    totalErrored += totalErroredChildren;
   }
 
-  return { numberOfPassing, numberOfFailing };
+  const totalRun = totalPassed + totalFailed + totalErrored;
+
+  return { totalErrored, totalFailed, totalPassed, totalRun };
 }

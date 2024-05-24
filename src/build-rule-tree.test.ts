@@ -2,6 +2,7 @@ import * as dependencyGraphModule from 'dependency-graph';
 
 import { buildRuleTree } from './build-rule-tree';
 import type { Rule } from './execute-rules';
+import { RuleExecutionStatus } from './execute-rules';
 
 jest.mock('dependency-graph', () => {
   return {
@@ -19,7 +20,7 @@ describe('buildRuleTree', () => {
       dependencies: ['rule-2'],
       execute: async () => {
         return {
-          passed: true,
+          status: RuleExecutionStatus.Passed,
         };
       },
     };
@@ -29,7 +30,7 @@ describe('buildRuleTree', () => {
       dependencies: ['rule-3'],
       execute: async () => {
         return {
-          passed: true,
+          status: RuleExecutionStatus.Passed,
         };
       },
     };
@@ -39,7 +40,7 @@ describe('buildRuleTree', () => {
       dependencies: [],
       execute: async () => {
         return {
-          passed: true,
+          status: RuleExecutionStatus.Passed,
         };
       },
     };
@@ -74,7 +75,7 @@ describe('buildRuleTree', () => {
       dependencies: ['rule-2'],
       execute: async () => {
         return {
-          passed: false,
+          status: RuleExecutionStatus.Failed,
           failures: [{ message: 'Oops' }],
         };
       },
@@ -85,7 +86,7 @@ describe('buildRuleTree', () => {
       dependencies: ['rule-3'],
       execute: async () => {
         return {
-          passed: true,
+          status: RuleExecutionStatus.Passed,
         };
       },
     };
@@ -95,7 +96,7 @@ describe('buildRuleTree', () => {
       dependencies: ['rule-1'],
       execute: async () => {
         return {
-          passed: true,
+          status: RuleExecutionStatus.Passed,
         };
       },
     };

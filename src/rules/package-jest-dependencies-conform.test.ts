@@ -41,7 +41,7 @@ describe('Rule: package-jest-dependencies-conform', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: true,
+        status: 'passed',
       });
     });
   });
@@ -77,7 +77,7 @@ describe('Rule: package-jest-dependencies-conform', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: false,
+        status: 'failed',
         failures: [
           { message: '`jest` is "0.0.1", when it should be "1.0.0".' },
         ],
@@ -116,7 +116,7 @@ describe('Rule: package-jest-dependencies-conform', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: false,
+        status: 'failed',
         failures: [
           {
             message:

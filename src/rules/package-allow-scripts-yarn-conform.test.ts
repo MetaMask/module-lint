@@ -30,7 +30,7 @@ describe('Rule: package-allow-scripts-yarn-conform', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: true,
+        status: 'passed',
       });
     });
   });
@@ -58,7 +58,7 @@ describe('Rule: package-allow-scripts-yarn-conform', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: false,
+        status: 'failed',
         failures: [
           {
             message:

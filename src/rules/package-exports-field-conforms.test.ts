@@ -52,7 +52,7 @@ describe('Rule: package-exports-field-conforms', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: true,
+        status: 'passed',
       });
     });
   });
@@ -98,7 +98,7 @@ describe('Rule: package-exports-field-conforms', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: false,
+        status: 'failed',
         failures: [
           {
             message:

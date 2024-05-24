@@ -61,7 +61,7 @@ describe('Rule: require-valid-changelog', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: true,
+        status: 'passed',
       });
     });
   });
@@ -96,7 +96,7 @@ describe('Rule: require-valid-changelog', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: false,
+        status: 'failed',
         failures: [
           {
             message: 'Changelog is not well-formatted.',

@@ -37,7 +37,7 @@ describe('Rule: package-types-field-conforms', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: true,
+        status: 'passed',
       });
     });
   });
@@ -69,7 +69,7 @@ describe('Rule: package-types-field-conforms', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: false,
+        status: 'failed',
         failures: [
           {
             message: "`types` is 'test', when it should be 'test-types'.",
