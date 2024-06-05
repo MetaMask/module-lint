@@ -12,5 +12,6 @@
     "strict": true,
     "target": "es2020"
   },
-  "exclude": ["./dist/**/*"]
+  "include": [".github/scripts/**/*.ts", "./src/**/*.ts"],
+  "exclude": ["./dist"]
 }
