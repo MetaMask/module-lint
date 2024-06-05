@@ -71,13 +71,13 @@ describe('reportProjectLintResult', () => {
 some-project
 ------------
 
- ✔︎  Description for rule 1
- ✘  Description for rule 2
-    - Failure 1
-    - Failure 2
- ✔︎  Description for rule 3
- ?  Description for rule 4
-    - ERROR: oops
+- Description for rule 1 ✅
+- Description for rule 2 ❌
+  - Failure 1
+  - Failure 2
+- Description for rule 3 ✅
+- Description for rule 4 ⚠️
+  - ERROR: oops
 
 Results:       2 passed, 1 failed, 1 errored, 4 total
 Elapsed time:  30 ms

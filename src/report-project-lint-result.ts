@@ -89,12 +89,12 @@ export function reportProjectLintResult({
  */
 function determineIconFor(ruleExecutionStatus: RuleExecutionStatus) {
   if (ruleExecutionStatus === RuleExecutionStatus.Failed) {
-    return chalk.white.bgRed(' ✘ ');
+    return '❌';
   }
   if (ruleExecutionStatus === RuleExecutionStatus.Errored) {
-    return chalk.black.bgYellow(' ? ');
+    return '⚠️';
   }
-  return chalk.black.bgGreen(' ✔︎ ');
+  return '✅';
 }
 
 /**
@@ -119,9 +119,9 @@ function reportRuleExecutionResultNodes({
 
   for (const ruleExecutionResultNode of ruleExecutionResultNodes) {
     outputLogger.logToStdout(
-      `${determineIconFor(ruleExecutionResultNode.result.status)} ${
-        ruleExecutionResultNode.result.ruleDescription
-      }`,
+      `- ${ruleExecutionResultNode.result.ruleDescription} ${determineIconFor(
+        ruleExecutionResultNode.result.status,
+      )}`,
     );
 
     if (ruleExecutionResultNode.result.status === RuleExecutionStatus.Passed) {
@@ -132,7 +132,7 @@ function reportRuleExecutionResultNodes({
       totalFailed += 1;
 
       for (const failure of ruleExecutionResultNode.result.failures) {
-        outputLogger.logToStdout(indent(`- ${chalk.red(failure.message)}`, 2));
+        outputLogger.logToStdout(indent(`- ${chalk.red(failure.message)}`, 1));
       }
     } else if (
       ruleExecutionResultNode.result.status === RuleExecutionStatus.Errored
@@ -144,7 +144,7 @@ function reportRuleExecutionResultNodes({
           `- ${chalk.yellow(
             `ERROR: ${getErrorMessage(ruleExecutionResultNode.result.error)}`,
           )}`,
-          2,
+          1,
         ),
       );
     }

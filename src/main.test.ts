@@ -198,46 +198,46 @@ describe('main', () => {
 repo-1
 ------
 
- ✔︎  Is the classic Yarn config file (\`.yarnrc\`) absent?
- ✔︎  Does the package have a well-formed manifest (\`package.json\`)?
- ✔︎  Does the \`packageManager\` field in \`package.json\` conform?
- ✔︎  Does the \`engines.node\` field in \`package.json\` conform?
- ✔︎  Do the lint-related \`devDependencies\` in \`package.json\` conform?
- ✔︎  Do the jest-related \`devDependencies\` in \`package.json\` conform?
- ✔︎  Do the test-related \`scripts\` in \`package.json\` conform?
- ✔︎  Do the typescript-related \`devDependencies\` in \`package.json\` conform?
- ✔︎  Do the typescript-related \`scripts\` in \`package.json\` conform?
- ✔︎  Does the \`exports\` field in \`package.json\` conform?
- ✔︎  Does the \`main\` field in \`package.json\` conform?
- ✔︎  Does the \`module\` field in \`package.json\` conform?
- ✔︎  Does the \`types\` field in \`package.json\` conform?
- ✔︎  Does the \`files\` field in \`package.json\` conform?
- ✔︎  Does LavaMoat allow scripts for \`tsup>esbuild\`?
- ✔︎  Do the typedoc-related \`devDependencies\` in \`package.json\` conform?
- ✔︎  Do the typedoc-related \`scripts\` in \`package.json\` conform?
- ✔︎  Do the changelog-related \`devDependencies\` in \`package.json\` conform?
- ✔︎  Do the changelog-related \`scripts\` in \`package.json\` conform?
- ✔︎  Do the lavamoat-related \`devDependencies\` in \`package.json\` conform?
- ✔︎  Are postinstall scripts disabled for \`@lavamoat/preinstall-always-fail\`?
- ✔︎  Is \`README.md\` present?
- ✔︎  Does the README conform by recommending the correct Yarn version to install?
- ✔︎  Does the README conform by recommending node install from nodejs.org?
- ✔︎  Are all of the files for Yarn Modern present, and do they conform?
- ✔︎  Does the README conform by recommending the correct Yarn version to install?
- ✔︎  Does allow scripts conforms to yarn?
- ✔︎  Is the allow-scripts Yarn plugin installed?
- ✔︎  Does the \`src/\` directory exist?
- ✔︎  Is \`.nvmrc\` present, and does it conform?
- ✔︎  Is \`jest.config.js\` present, and does it conform?
- ✔︎  Is \`tsconfig.json\` present, and does it conform?
- ✔︎  Is \`tsconfig.build.json\` present, and does it conform?
- ✔︎  Is \`tsup.config.ts\` present, and does it conform?
- ✔︎  Is \`typedoc.json\` present, and does it conform?
- ✔︎  Is \`CHANGELOG.md\` present?
- ✔︎  Is \`CHANGELOG.md\` well-formatted?
- ✔︎  Is \`.editorconfig\` present, and does it conform?
- ✔︎  Is \`.gitattributes\` present, and does it conform?
- ✔︎  Is \`.gitignore\` present, and does it conform?
+- Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
+- Does the package have a well-formed manifest (\`package.json\`)? ✅
+- Does the \`packageManager\` field in \`package.json\` conform? ✅
+- Does the \`engines.node\` field in \`package.json\` conform? ✅
+- Do the lint-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the jest-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the test-related \`scripts\` in \`package.json\` conform? ✅
+- Do the typescript-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the typescript-related \`scripts\` in \`package.json\` conform? ✅
+- Does the \`exports\` field in \`package.json\` conform? ✅
+- Does the \`main\` field in \`package.json\` conform? ✅
+- Does the \`module\` field in \`package.json\` conform? ✅
+- Does the \`types\` field in \`package.json\` conform? ✅
+- Does the \`files\` field in \`package.json\` conform? ✅
+- Does LavaMoat allow scripts for \`tsup>esbuild\`? ✅
+- Do the typedoc-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the typedoc-related \`scripts\` in \`package.json\` conform? ✅
+- Do the changelog-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the changelog-related \`scripts\` in \`package.json\` conform? ✅
+- Do the lavamoat-related \`devDependencies\` in \`package.json\` conform? ✅
+- Are postinstall scripts disabled for \`@lavamoat/preinstall-always-fail\`? ✅
+- Is \`README.md\` present? ✅
+- Does the README conform by recommending the correct Yarn version to install? ✅
+- Does the README conform by recommending node install from nodejs.org? ✅
+- Are all of the files for Yarn Modern present, and do they conform? ✅
+- Does the README conform by recommending the correct Yarn version to install? ✅
+- Does allow scripts conforms to yarn? ✅
+- Is the allow-scripts Yarn plugin installed? ✅
+- Does the \`src/\` directory exist? ✅
+- Is \`.nvmrc\` present, and does it conform? ✅
+- Is \`jest.config.js\` present, and does it conform? ✅
+- Is \`tsconfig.json\` present, and does it conform? ✅
+- Is \`tsconfig.build.json\` present, and does it conform? ✅
+- Is \`tsup.config.ts\` present, and does it conform? ✅
+- Is \`typedoc.json\` present, and does it conform? ✅
+- Is \`CHANGELOG.md\` present? ✅
+- Is \`CHANGELOG.md\` well-formatted? ✅
+- Is \`.editorconfig\` present, and does it conform? ✅
+- Is \`.gitattributes\` present, and does it conform? ✅
+- Is \`.gitignore\` present, and does it conform? ✅
 
 Results:       40 passed, 0 failed, 0 errored, 40 total
 Elapsed time:  0 ms
@@ -246,46 +246,46 @@ Elapsed time:  0 ms
 repo-2
 ------
 
- ✔︎  Is the classic Yarn config file (\`.yarnrc\`) absent?
- ✔︎  Does the package have a well-formed manifest (\`package.json\`)?
- ✔︎  Does the \`packageManager\` field in \`package.json\` conform?
- ✔︎  Does the \`engines.node\` field in \`package.json\` conform?
- ✔︎  Do the lint-related \`devDependencies\` in \`package.json\` conform?
- ✔︎  Do the jest-related \`devDependencies\` in \`package.json\` conform?
- ✔︎  Do the test-related \`scripts\` in \`package.json\` conform?
- ✔︎  Do the typescript-related \`devDependencies\` in \`package.json\` conform?
- ✔︎  Do the typescript-related \`scripts\` in \`package.json\` conform?
- ✔︎  Does the \`exports\` field in \`package.json\` conform?
- ✔︎  Does the \`main\` field in \`package.json\` conform?
- ✔︎  Does the \`module\` field in \`package.json\` conform?
- ✔︎  Does the \`types\` field in \`package.json\` conform?
- ✔︎  Does the \`files\` field in \`package.json\` conform?
- ✔︎  Does LavaMoat allow scripts for \`tsup>esbuild\`?
- ✔︎  Do the typedoc-related \`devDependencies\` in \`package.json\` conform?
- ✔︎  Do the typedoc-related \`scripts\` in \`package.json\` conform?
- ✔︎  Do the changelog-related \`devDependencies\` in \`package.json\` conform?
- ✔︎  Do the changelog-related \`scripts\` in \`package.json\` conform?
- ✔︎  Do the lavamoat-related \`devDependencies\` in \`package.json\` conform?
- ✔︎  Are postinstall scripts disabled for \`@lavamoat/preinstall-always-fail\`?
- ✔︎  Is \`README.md\` present?
- ✔︎  Does the README conform by recommending the correct Yarn version to install?
- ✔︎  Does the README conform by recommending node install from nodejs.org?
- ✔︎  Are all of the files for Yarn Modern present, and do they conform?
- ✔︎  Does the README conform by recommending the correct Yarn version to install?
- ✔︎  Does allow scripts conforms to yarn?
- ✔︎  Is the allow-scripts Yarn plugin installed?
- ✔︎  Does the \`src/\` directory exist?
- ✔︎  Is \`.nvmrc\` present, and does it conform?
- ✔︎  Is \`jest.config.js\` present, and does it conform?
- ✔︎  Is \`tsconfig.json\` present, and does it conform?
- ✔︎  Is \`tsconfig.build.json\` present, and does it conform?
- ✔︎  Is \`tsup.config.ts\` present, and does it conform?
- ✔︎  Is \`typedoc.json\` present, and does it conform?
- ✔︎  Is \`CHANGELOG.md\` present?
- ✔︎  Is \`CHANGELOG.md\` well-formatted?
- ✔︎  Is \`.editorconfig\` present, and does it conform?
- ✔︎  Is \`.gitattributes\` present, and does it conform?
- ✔︎  Is \`.gitignore\` present, and does it conform?
+- Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
+- Does the package have a well-formed manifest (\`package.json\`)? ✅
+- Does the \`packageManager\` field in \`package.json\` conform? ✅
+- Does the \`engines.node\` field in \`package.json\` conform? ✅
+- Do the lint-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the jest-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the test-related \`scripts\` in \`package.json\` conform? ✅
+- Do the typescript-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the typescript-related \`scripts\` in \`package.json\` conform? ✅
+- Does the \`exports\` field in \`package.json\` conform? ✅
+- Does the \`main\` field in \`package.json\` conform? ✅
+- Does the \`module\` field in \`package.json\` conform? ✅
+- Does the \`types\` field in \`package.json\` conform? ✅
+- Does the \`files\` field in \`package.json\` conform? ✅
+- Does LavaMoat allow scripts for \`tsup>esbuild\`? ✅
+- Do the typedoc-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the typedoc-related \`scripts\` in \`package.json\` conform? ✅
+- Do the changelog-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the changelog-related \`scripts\` in \`package.json\` conform? ✅
+- Do the lavamoat-related \`devDependencies\` in \`package.json\` conform? ✅
+- Are postinstall scripts disabled for \`@lavamoat/preinstall-always-fail\`? ✅
+- Is \`README.md\` present? ✅
+- Does the README conform by recommending the correct Yarn version to install? ✅
+- Does the README conform by recommending node install from nodejs.org? ✅
+- Are all of the files for Yarn Modern present, and do they conform? ✅
+- Does the README conform by recommending the correct Yarn version to install? ✅
+- Does allow scripts conforms to yarn? ✅
+- Is the allow-scripts Yarn plugin installed? ✅
+- Does the \`src/\` directory exist? ✅
+- Is \`.nvmrc\` present, and does it conform? ✅
+- Is \`jest.config.js\` present, and does it conform? ✅
+- Is \`tsconfig.json\` present, and does it conform? ✅
+- Is \`tsconfig.build.json\` present, and does it conform? ✅
+- Is \`tsup.config.ts\` present, and does it conform? ✅
+- Is \`typedoc.json\` present, and does it conform? ✅
+- Is \`CHANGELOG.md\` present? ✅
+- Is \`CHANGELOG.md\` well-formatted? ✅
+- Is \`.editorconfig\` present, and does it conform? ✅
+- Is \`.gitattributes\` present, and does it conform? ✅
+- Is \`.gitignore\` present, and does it conform? ✅
 
 Results:       40 passed, 0 failed, 0 errored, 40 total
 Elapsed time:  0 ms
@@ -333,38 +333,38 @@ Elapsed time:  0 ms
 repo-1
 ------
 
- ✘  Is the classic Yarn config file (\`.yarnrc\`) absent?
-    - The config file for Yarn Classic, \`.yarnrc\`, is present. Please upgrade this project to Yarn Modern.
- ✘  Does the package have a well-formed manifest (\`package.json\`)?
-    - \`package.json\` does not exist in this project.
- ✘  Is \`README.md\` present?
-    - \`README.md\` does not exist in this project.
- ✘  Are all of the files for Yarn Modern present, and do they conform?
-    - \`.yarnrc.yml\` does not exist in this project.
-    - \`.yarn/releases/\` does not exist in this project.
-    - \`.yarn/plugins/\` does not exist in this project.
- ✘  Does the \`src/\` directory exist?
-    - \`src/\` does not exist in this project.
- ✘  Is \`.nvmrc\` present, and does it conform?
-    - \`.nvmrc\` does not exist in this project.
- ✘  Is \`jest.config.js\` present, and does it conform?
-    - \`jest.config.js\` does not exist in this project.
- ✘  Is \`tsconfig.json\` present, and does it conform?
-    - \`tsconfig.json\` does not exist in this project.
- ✘  Is \`tsconfig.build.json\` present, and does it conform?
-    - \`tsconfig.build.json\` does not exist in this project.
- ✘  Is \`tsup.config.ts\` present, and does it conform?
-    - \`tsup.config.ts\` does not exist in this project.
- ✘  Is \`typedoc.json\` present, and does it conform?
-    - \`typedoc.json\` does not exist in this project.
- ✘  Is \`CHANGELOG.md\` present?
-    - \`CHANGELOG.md\` does not exist in this project.
- ✘  Is \`.editorconfig\` present, and does it conform?
-    - \`.editorconfig\` does not exist in this project.
- ✘  Is \`.gitattributes\` present, and does it conform?
-    - \`.gitattributes\` does not exist in this project.
- ✘  Is \`.gitignore\` present, and does it conform?
-    - \`.gitignore\` does not exist in this project.
+- Is the classic Yarn config file (\`.yarnrc\`) absent? ❌
+  - The config file for Yarn Classic, \`.yarnrc\`, is present. Please upgrade this project to Yarn Modern.
+- Does the package have a well-formed manifest (\`package.json\`)? ❌
+  - \`package.json\` does not exist in this project.
+- Is \`README.md\` present? ❌
+  - \`README.md\` does not exist in this project.
+- Are all of the files for Yarn Modern present, and do they conform? ❌
+  - \`.yarnrc.yml\` does not exist in this project.
+  - \`.yarn/releases/\` does not exist in this project.
+  - \`.yarn/plugins/\` does not exist in this project.
+- Does the \`src/\` directory exist? ❌
+  - \`src/\` does not exist in this project.
+- Is \`.nvmrc\` present, and does it conform? ❌
+  - \`.nvmrc\` does not exist in this project.
+- Is \`jest.config.js\` present, and does it conform? ❌
+  - \`jest.config.js\` does not exist in this project.
+- Is \`tsconfig.json\` present, and does it conform? ❌
+  - \`tsconfig.json\` does not exist in this project.
+- Is \`tsconfig.build.json\` present, and does it conform? ❌
+  - \`tsconfig.build.json\` does not exist in this project.
+- Is \`tsup.config.ts\` present, and does it conform? ❌
+  - \`tsup.config.ts\` does not exist in this project.
+- Is \`typedoc.json\` present, and does it conform? ❌
+  - \`typedoc.json\` does not exist in this project.
+- Is \`CHANGELOG.md\` present? ❌
+  - \`CHANGELOG.md\` does not exist in this project.
+- Is \`.editorconfig\` present, and does it conform? ❌
+  - \`.editorconfig\` does not exist in this project.
+- Is \`.gitattributes\` present, and does it conform? ❌
+  - \`.gitattributes\` does not exist in this project.
+- Is \`.gitignore\` present, and does it conform? ❌
+  - \`.gitignore\` does not exist in this project.
 
 Results:       0 passed, 15 failed, 0 errored, 15 total
 Elapsed time:  0 ms
@@ -373,38 +373,38 @@ Elapsed time:  0 ms
 repo-2
 ------
 
- ✘  Is the classic Yarn config file (\`.yarnrc\`) absent?
-    - The config file for Yarn Classic, \`.yarnrc\`, is present. Please upgrade this project to Yarn Modern.
- ✘  Does the package have a well-formed manifest (\`package.json\`)?
-    - \`package.json\` does not exist in this project.
- ✘  Is \`README.md\` present?
-    - \`README.md\` does not exist in this project.
- ✘  Are all of the files for Yarn Modern present, and do they conform?
-    - \`.yarnrc.yml\` does not exist in this project.
-    - \`.yarn/releases/\` does not exist in this project.
-    - \`.yarn/plugins/\` does not exist in this project.
- ✘  Does the \`src/\` directory exist?
-    - \`src/\` does not exist in this project.
- ✘  Is \`.nvmrc\` present, and does it conform?
-    - \`.nvmrc\` does not exist in this project.
- ✘  Is \`jest.config.js\` present, and does it conform?
-    - \`jest.config.js\` does not exist in this project.
- ✘  Is \`tsconfig.json\` present, and does it conform?
-    - \`tsconfig.json\` does not exist in this project.
- ✘  Is \`tsconfig.build.json\` present, and does it conform?
-    - \`tsconfig.build.json\` does not exist in this project.
- ✘  Is \`tsup.config.ts\` present, and does it conform?
-    - \`tsup.config.ts\` does not exist in this project.
- ✘  Is \`typedoc.json\` present, and does it conform?
-    - \`typedoc.json\` does not exist in this project.
- ✘  Is \`CHANGELOG.md\` present?
-    - \`CHANGELOG.md\` does not exist in this project.
- ✘  Is \`.editorconfig\` present, and does it conform?
-    - \`.editorconfig\` does not exist in this project.
- ✘  Is \`.gitattributes\` present, and does it conform?
-    - \`.gitattributes\` does not exist in this project.
- ✘  Is \`.gitignore\` present, and does it conform?
-    - \`.gitignore\` does not exist in this project.
+- Is the classic Yarn config file (\`.yarnrc\`) absent? ❌
+  - The config file for Yarn Classic, \`.yarnrc\`, is present. Please upgrade this project to Yarn Modern.
+- Does the package have a well-formed manifest (\`package.json\`)? ❌
+  - \`package.json\` does not exist in this project.
+- Is \`README.md\` present? ❌
+  - \`README.md\` does not exist in this project.
+- Are all of the files for Yarn Modern present, and do they conform? ❌
+  - \`.yarnrc.yml\` does not exist in this project.
+  - \`.yarn/releases/\` does not exist in this project.
+  - \`.yarn/plugins/\` does not exist in this project.
+- Does the \`src/\` directory exist? ❌
+  - \`src/\` does not exist in this project.
+- Is \`.nvmrc\` present, and does it conform? ❌
+  - \`.nvmrc\` does not exist in this project.
+- Is \`jest.config.js\` present, and does it conform? ❌
+  - \`jest.config.js\` does not exist in this project.
+- Is \`tsconfig.json\` present, and does it conform? ❌
+  - \`tsconfig.json\` does not exist in this project.
+- Is \`tsconfig.build.json\` present, and does it conform? ❌
+  - \`tsconfig.build.json\` does not exist in this project.
+- Is \`tsup.config.ts\` present, and does it conform? ❌
+  - \`tsup.config.ts\` does not exist in this project.
+- Is \`typedoc.json\` present, and does it conform? ❌
+  - \`typedoc.json\` does not exist in this project.
+- Is \`CHANGELOG.md\` present? ❌
+  - \`CHANGELOG.md\` does not exist in this project.
+- Is \`.editorconfig\` present, and does it conform? ❌
+  - \`.editorconfig\` does not exist in this project.
+- Is \`.gitattributes\` present, and does it conform? ❌
+  - \`.gitattributes\` does not exist in this project.
+- Is \`.gitignore\` present, and does it conform? ❌
+  - \`.gitignore\` does not exist in this project.
 
 Results:       0 passed, 15 failed, 0 errored, 15 total
 Elapsed time:  0 ms
@@ -455,38 +455,38 @@ Elapsed time:  0 ms
 repo-1
 ------
 
- ✔︎  Is the classic Yarn config file (\`.yarnrc\`) absent?
- ✘  Does the package have a well-formed manifest (\`package.json\`)?
-    - \`package.json\` does not exist in this project.
- ✘  Is \`README.md\` present?
-    - \`README.md\` does not exist in this project.
- ✘  Are all of the files for Yarn Modern present, and do they conform?
-    - \`.yarnrc.yml\` does not exist in this project.
-    - \`.yarn/releases/\` does not exist in this project.
-    - \`.yarn/plugins/\` does not exist in this project.
- ✘  Does the \`src/\` directory exist?
-    - \`src/\` does not exist in this project.
- ✘  Is \`.nvmrc\` present, and does it conform?
-    - \`.nvmrc\` does not exist in this project.
- ✘  Is \`jest.config.js\` present, and does it conform?
-    - \`jest.config.js\` does not exist in this project.
- ✘  Is \`tsconfig.json\` present, and does it conform?
-    - \`tsconfig.json\` does not exist in this project.
- ✘  Is \`tsconfig.build.json\` present, and does it conform?
-    - \`tsconfig.build.json\` does not exist in this project.
- ✘  Is \`tsup.config.ts\` present, and does it conform?
-    - \`tsup.config.ts\` does not exist in this project.
- ✘  Is \`typedoc.json\` present, and does it conform?
-    - \`typedoc.json\` does not exist in this project.
- ✔︎  Is \`CHANGELOG.md\` present?
- ?  Is \`CHANGELOG.md\` well-formatted?
-    - ERROR: Encountered an error validating the changelog: Could not read JSON file '${sandboxDirectoryPath}/repositories/repo-1/package.json'.
- ✘  Is \`.editorconfig\` present, and does it conform?
-    - \`.editorconfig\` does not exist in this project.
- ✘  Is \`.gitattributes\` present, and does it conform?
-    - \`.gitattributes\` does not exist in this project.
- ✘  Is \`.gitignore\` present, and does it conform?
-    - \`.gitignore\` does not exist in this project.
+- Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
+- Does the package have a well-formed manifest (\`package.json\`)? ❌
+  - \`package.json\` does not exist in this project.
+- Is \`README.md\` present? ❌
+  - \`README.md\` does not exist in this project.
+- Are all of the files for Yarn Modern present, and do they conform? ❌
+  - \`.yarnrc.yml\` does not exist in this project.
+  - \`.yarn/releases/\` does not exist in this project.
+  - \`.yarn/plugins/\` does not exist in this project.
+- Does the \`src/\` directory exist? ❌
+  - \`src/\` does not exist in this project.
+- Is \`.nvmrc\` present, and does it conform? ❌
+  - \`.nvmrc\` does not exist in this project.
+- Is \`jest.config.js\` present, and does it conform? ❌
+  - \`jest.config.js\` does not exist in this project.
+- Is \`tsconfig.json\` present, and does it conform? ❌
+  - \`tsconfig.json\` does not exist in this project.
+- Is \`tsconfig.build.json\` present, and does it conform? ❌
+  - \`tsconfig.build.json\` does not exist in this project.
+- Is \`tsup.config.ts\` present, and does it conform? ❌
+  - \`tsup.config.ts\` does not exist in this project.
+- Is \`typedoc.json\` present, and does it conform? ❌
+  - \`typedoc.json\` does not exist in this project.
+- Is \`CHANGELOG.md\` present? ✅
+- Is \`CHANGELOG.md\` well-formatted? ⚠️
+  - ERROR: Encountered an error validating the changelog: Could not read JSON file '${sandboxDirectoryPath}/repositories/repo-1/package.json'.
+- Is \`.editorconfig\` present, and does it conform? ❌
+  - \`.editorconfig\` does not exist in this project.
+- Is \`.gitattributes\` present, and does it conform? ❌
+  - \`.gitattributes\` does not exist in this project.
+- Is \`.gitignore\` present, and does it conform? ❌
+  - \`.gitignore\` does not exist in this project.
 
 Results:       2 passed, 13 failed, 1 errored, 16 total
 Elapsed time:  0 ms
@@ -495,38 +495,38 @@ Elapsed time:  0 ms
 repo-2
 ------
 
- ✔︎  Is the classic Yarn config file (\`.yarnrc\`) absent?
- ✘  Does the package have a well-formed manifest (\`package.json\`)?
-    - \`package.json\` does not exist in this project.
- ✘  Is \`README.md\` present?
-    - \`README.md\` does not exist in this project.
- ✘  Are all of the files for Yarn Modern present, and do they conform?
-    - \`.yarnrc.yml\` does not exist in this project.
-    - \`.yarn/releases/\` does not exist in this project.
-    - \`.yarn/plugins/\` does not exist in this project.
- ✘  Does the \`src/\` directory exist?
-    - \`src/\` does not exist in this project.
- ✘  Is \`.nvmrc\` present, and does it conform?
-    - \`.nvmrc\` does not exist in this project.
- ✘  Is \`jest.config.js\` present, and does it conform?
-    - \`jest.config.js\` does not exist in this project.
- ✘  Is \`tsconfig.json\` present, and does it conform?
-    - \`tsconfig.json\` does not exist in this project.
- ✘  Is \`tsconfig.build.json\` present, and does it conform?
-    - \`tsconfig.build.json\` does not exist in this project.
- ✘  Is \`tsup.config.ts\` present, and does it conform?
-    - \`tsup.config.ts\` does not exist in this project.
- ✘  Is \`typedoc.json\` present, and does it conform?
-    - \`typedoc.json\` does not exist in this project.
- ✔︎  Is \`CHANGELOG.md\` present?
- ?  Is \`CHANGELOG.md\` well-formatted?
-    - ERROR: Encountered an error validating the changelog: Could not read JSON file '${sandboxDirectoryPath}/repositories/repo-2/package.json'.
- ✘  Is \`.editorconfig\` present, and does it conform?
-    - \`.editorconfig\` does not exist in this project.
- ✘  Is \`.gitattributes\` present, and does it conform?
-    - \`.gitattributes\` does not exist in this project.
- ✘  Is \`.gitignore\` present, and does it conform?
-    - \`.gitignore\` does not exist in this project.
+- Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
+- Does the package have a well-formed manifest (\`package.json\`)? ❌
+  - \`package.json\` does not exist in this project.
+- Is \`README.md\` present? ❌
+  - \`README.md\` does not exist in this project.
+- Are all of the files for Yarn Modern present, and do they conform? ❌
+  - \`.yarnrc.yml\` does not exist in this project.
+  - \`.yarn/releases/\` does not exist in this project.
+  - \`.yarn/plugins/\` does not exist in this project.
+- Does the \`src/\` directory exist? ❌
+  - \`src/\` does not exist in this project.
+- Is \`.nvmrc\` present, and does it conform? ❌
+  - \`.nvmrc\` does not exist in this project.
+- Is \`jest.config.js\` present, and does it conform? ❌
+  - \`jest.config.js\` does not exist in this project.
+- Is \`tsconfig.json\` present, and does it conform? ❌
+  - \`tsconfig.json\` does not exist in this project.
+- Is \`tsconfig.build.json\` present, and does it conform? ❌
+  - \`tsconfig.build.json\` does not exist in this project.
+- Is \`tsup.config.ts\` present, and does it conform? ❌
+  - \`tsup.config.ts\` does not exist in this project.
+- Is \`typedoc.json\` present, and does it conform? ❌
+  - \`typedoc.json\` does not exist in this project.
+- Is \`CHANGELOG.md\` present? ✅
+- Is \`CHANGELOG.md\` well-formatted? ⚠️
+  - ERROR: Encountered an error validating the changelog: Could not read JSON file '${sandboxDirectoryPath}/repositories/repo-2/package.json'.
+- Is \`.editorconfig\` present, and does it conform? ❌
+  - \`.editorconfig\` does not exist in this project.
+- Is \`.gitattributes\` present, and does it conform? ❌
+  - \`.gitattributes\` does not exist in this project.
+- Is \`.gitignore\` present, and does it conform? ❌
+  - \`.gitignore\` does not exist in this project.
 
 Results:       2 passed, 13 failed, 1 errored, 16 total
 Elapsed time:  0 ms
@@ -581,37 +581,37 @@ Cloning repository MetaMask/repo-2, please wait...
 repo-2
 ------
 
- ✔︎  Is the classic Yarn config file (\`.yarnrc\`) absent?
- ✘  Does the package have a well-formed manifest (\`package.json\`)?
-    - \`package.json\` does not exist in this project.
- ✘  Is \`README.md\` present?
-    - \`README.md\` does not exist in this project.
- ✘  Are all of the files for Yarn Modern present, and do they conform?
-    - \`.yarnrc.yml\` does not exist in this project.
-    - \`.yarn/releases/\` does not exist in this project.
-    - \`.yarn/plugins/\` does not exist in this project.
- ✘  Does the \`src/\` directory exist?
-    - \`src/\` does not exist in this project.
- ✘  Is \`.nvmrc\` present, and does it conform?
-    - \`.nvmrc\` does not exist in this project.
- ✘  Is \`jest.config.js\` present, and does it conform?
-    - \`jest.config.js\` does not exist in this project.
- ✘  Is \`tsconfig.json\` present, and does it conform?
-    - \`tsconfig.json\` does not exist in this project.
- ✘  Is \`tsconfig.build.json\` present, and does it conform?
-    - \`tsconfig.build.json\` does not exist in this project.
- ✘  Is \`tsup.config.ts\` present, and does it conform?
-    - \`tsup.config.ts\` does not exist in this project.
- ✘  Is \`typedoc.json\` present, and does it conform?
-    - \`typedoc.json\` does not exist in this project.
- ✘  Is \`CHANGELOG.md\` present?
-    - \`CHANGELOG.md\` does not exist in this project.
- ✘  Is \`.editorconfig\` present, and does it conform?
-    - \`.editorconfig\` does not exist in this project.
- ✘  Is \`.gitattributes\` present, and does it conform?
-    - \`.gitattributes\` does not exist in this project.
- ✘  Is \`.gitignore\` present, and does it conform?
-    - \`.gitignore\` does not exist in this project.
+- Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
+- Does the package have a well-formed manifest (\`package.json\`)? ❌
+  - \`package.json\` does not exist in this project.
+- Is \`README.md\` present? ❌
+  - \`README.md\` does not exist in this project.
+- Are all of the files for Yarn Modern present, and do they conform? ❌
+  - \`.yarnrc.yml\` does not exist in this project.
+  - \`.yarn/releases/\` does not exist in this project.
+  - \`.yarn/plugins/\` does not exist in this project.
+- Does the \`src/\` directory exist? ❌
+  - \`src/\` does not exist in this project.
+- Is \`.nvmrc\` present, and does it conform? ❌
+  - \`.nvmrc\` does not exist in this project.
+- Is \`jest.config.js\` present, and does it conform? ❌
+  - \`jest.config.js\` does not exist in this project.
+- Is \`tsconfig.json\` present, and does it conform? ❌
+  - \`tsconfig.json\` does not exist in this project.
+- Is \`tsconfig.build.json\` present, and does it conform? ❌
+  - \`tsconfig.build.json\` does not exist in this project.
+- Is \`tsup.config.ts\` present, and does it conform? ❌
+  - \`tsup.config.ts\` does not exist in this project.
+- Is \`typedoc.json\` present, and does it conform? ❌
+  - \`typedoc.json\` does not exist in this project.
+- Is \`CHANGELOG.md\` present? ❌
+  - \`CHANGELOG.md\` does not exist in this project.
+- Is \`.editorconfig\` present, and does it conform? ❌
+  - \`.editorconfig\` does not exist in this project.
+- Is \`.gitattributes\` present, and does it conform? ❌
+  - \`.gitattributes\` does not exist in this project.
+- Is \`.gitignore\` present, and does it conform? ❌
+  - \`.gitignore\` does not exist in this project.
 
 Results:       1 passed, 14 failed, 0 errored, 15 total
 Elapsed time:  0 ms
@@ -780,46 +780,46 @@ Elapsed time:  0 ms
 repo-1
 ------
 
- ✔︎  Is the classic Yarn config file (\`.yarnrc\`) absent?
- ✔︎  Does the package have a well-formed manifest (\`package.json\`)?
- ✔︎  Does the \`packageManager\` field in \`package.json\` conform?
- ✔︎  Does the \`engines.node\` field in \`package.json\` conform?
- ✔︎  Do the lint-related \`devDependencies\` in \`package.json\` conform?
- ✔︎  Do the jest-related \`devDependencies\` in \`package.json\` conform?
- ✔︎  Do the test-related \`scripts\` in \`package.json\` conform?
- ✔︎  Do the typescript-related \`devDependencies\` in \`package.json\` conform?
- ✔︎  Do the typescript-related \`scripts\` in \`package.json\` conform?
- ✔︎  Does the \`exports\` field in \`package.json\` conform?
- ✔︎  Does the \`main\` field in \`package.json\` conform?
- ✔︎  Does the \`module\` field in \`package.json\` conform?
- ✔︎  Does the \`types\` field in \`package.json\` conform?
- ✔︎  Does the \`files\` field in \`package.json\` conform?
- ✔︎  Does LavaMoat allow scripts for \`tsup>esbuild\`?
- ✔︎  Do the typedoc-related \`devDependencies\` in \`package.json\` conform?
- ✔︎  Do the typedoc-related \`scripts\` in \`package.json\` conform?
- ✔︎  Do the changelog-related \`devDependencies\` in \`package.json\` conform?
- ✔︎  Do the changelog-related \`scripts\` in \`package.json\` conform?
- ✔︎  Do the lavamoat-related \`devDependencies\` in \`package.json\` conform?
- ✔︎  Are postinstall scripts disabled for \`@lavamoat/preinstall-always-fail\`?
- ✔︎  Is \`README.md\` present?
- ✔︎  Does the README conform by recommending the correct Yarn version to install?
- ✔︎  Does the README conform by recommending node install from nodejs.org?
- ✔︎  Are all of the files for Yarn Modern present, and do they conform?
- ✔︎  Does the README conform by recommending the correct Yarn version to install?
- ✔︎  Does allow scripts conforms to yarn?
- ✔︎  Is the allow-scripts Yarn plugin installed?
- ✔︎  Does the \`src/\` directory exist?
- ✔︎  Is \`.nvmrc\` present, and does it conform?
- ✔︎  Is \`jest.config.js\` present, and does it conform?
- ✔︎  Is \`tsconfig.json\` present, and does it conform?
- ✔︎  Is \`tsconfig.build.json\` present, and does it conform?
- ✔︎  Is \`tsup.config.ts\` present, and does it conform?
- ✔︎  Is \`typedoc.json\` present, and does it conform?
- ✔︎  Is \`CHANGELOG.md\` present?
- ✔︎  Is \`CHANGELOG.md\` well-formatted?
- ✔︎  Is \`.editorconfig\` present, and does it conform?
- ✔︎  Is \`.gitattributes\` present, and does it conform?
- ✔︎  Is \`.gitignore\` present, and does it conform?
+- Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
+- Does the package have a well-formed manifest (\`package.json\`)? ✅
+- Does the \`packageManager\` field in \`package.json\` conform? ✅
+- Does the \`engines.node\` field in \`package.json\` conform? ✅
+- Do the lint-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the jest-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the test-related \`scripts\` in \`package.json\` conform? ✅
+- Do the typescript-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the typescript-related \`scripts\` in \`package.json\` conform? ✅
+- Does the \`exports\` field in \`package.json\` conform? ✅
+- Does the \`main\` field in \`package.json\` conform? ✅
+- Does the \`module\` field in \`package.json\` conform? ✅
+- Does the \`types\` field in \`package.json\` conform? ✅
+- Does the \`files\` field in \`package.json\` conform? ✅
+- Does LavaMoat allow scripts for \`tsup>esbuild\`? ✅
+- Do the typedoc-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the typedoc-related \`scripts\` in \`package.json\` conform? ✅
+- Do the changelog-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the changelog-related \`scripts\` in \`package.json\` conform? ✅
+- Do the lavamoat-related \`devDependencies\` in \`package.json\` conform? ✅
+- Are postinstall scripts disabled for \`@lavamoat/preinstall-always-fail\`? ✅
+- Is \`README.md\` present? ✅
+- Does the README conform by recommending the correct Yarn version to install? ✅
+- Does the README conform by recommending node install from nodejs.org? ✅
+- Are all of the files for Yarn Modern present, and do they conform? ✅
+- Does the README conform by recommending the correct Yarn version to install? ✅
+- Does allow scripts conforms to yarn? ✅
+- Is the allow-scripts Yarn plugin installed? ✅
+- Does the \`src/\` directory exist? ✅
+- Is \`.nvmrc\` present, and does it conform? ✅
+- Is \`jest.config.js\` present, and does it conform? ✅
+- Is \`tsconfig.json\` present, and does it conform? ✅
+- Is \`tsconfig.build.json\` present, and does it conform? ✅
+- Is \`tsup.config.ts\` present, and does it conform? ✅
+- Is \`typedoc.json\` present, and does it conform? ✅
+- Is \`CHANGELOG.md\` present? ✅
+- Is \`CHANGELOG.md\` well-formatted? ✅
+- Is \`.editorconfig\` present, and does it conform? ✅
+- Is \`.gitattributes\` present, and does it conform? ✅
+- Is \`.gitignore\` present, and does it conform? ✅
 
 Results:       40 passed, 0 failed, 0 errored, 40 total
 Elapsed time:  0 ms
@@ -828,46 +828,46 @@ Elapsed time:  0 ms
 repo-2
 ------
 
- ✔︎  Is the classic Yarn config file (\`.yarnrc\`) absent?
- ✔︎  Does the package have a well-formed manifest (\`package.json\`)?
- ✔︎  Does the \`packageManager\` field in \`package.json\` conform?
- ✔︎  Does the \`engines.node\` field in \`package.json\` conform?
- ✔︎  Do the lint-related \`devDependencies\` in \`package.json\` conform?
- ✔︎  Do the jest-related \`devDependencies\` in \`package.json\` conform?
- ✔︎  Do the test-related \`scripts\` in \`package.json\` conform?
- ✔︎  Do the typescript-related \`devDependencies\` in \`package.json\` conform?
- ✔︎  Do the typescript-related \`scripts\` in \`package.json\` conform?
- ✔︎  Does the \`exports\` field in \`package.json\` conform?
- ✔︎  Does the \`main\` field in \`package.json\` conform?
- ✔︎  Does the \`module\` field in \`package.json\` conform?
- ✔︎  Does the \`types\` field in \`package.json\` conform?
- ✔︎  Does the \`files\` field in \`package.json\` conform?
- ✔︎  Does LavaMoat allow scripts for \`tsup>esbuild\`?
- ✔︎  Do the typedoc-related \`devDependencies\` in \`package.json\` conform?
- ✔︎  Do the typedoc-related \`scripts\` in \`package.json\` conform?
- ✔︎  Do the changelog-related \`devDependencies\` in \`package.json\` conform?
- ✔︎  Do the changelog-related \`scripts\` in \`package.json\` conform?
- ✔︎  Do the lavamoat-related \`devDependencies\` in \`package.json\` conform?
- ✔︎  Are postinstall scripts disabled for \`@lavamoat/preinstall-always-fail\`?
- ✔︎  Is \`README.md\` present?
- ✔︎  Does the README conform by recommending the correct Yarn version to install?
- ✔︎  Does the README conform by recommending node install from nodejs.org?
- ✔︎  Are all of the files for Yarn Modern present, and do they conform?
- ✔︎  Does the README conform by recommending the correct Yarn version to install?
- ✔︎  Does allow scripts conforms to yarn?
- ✔︎  Is the allow-scripts Yarn plugin installed?
- ✔︎  Does the \`src/\` directory exist?
- ✔︎  Is \`.nvmrc\` present, and does it conform?
- ✔︎  Is \`jest.config.js\` present, and does it conform?
- ✔︎  Is \`tsconfig.json\` present, and does it conform?
- ✔︎  Is \`tsconfig.build.json\` present, and does it conform?
- ✔︎  Is \`tsup.config.ts\` present, and does it conform?
- ✔︎  Is \`typedoc.json\` present, and does it conform?
- ✔︎  Is \`CHANGELOG.md\` present?
- ✔︎  Is \`CHANGELOG.md\` well-formatted?
- ✔︎  Is \`.editorconfig\` present, and does it conform?
- ✔︎  Is \`.gitattributes\` present, and does it conform?
- ✔︎  Is \`.gitignore\` present, and does it conform?
+- Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
+- Does the package have a well-formed manifest (\`package.json\`)? ✅
+- Does the \`packageManager\` field in \`package.json\` conform? ✅
+- Does the \`engines.node\` field in \`package.json\` conform? ✅
+- Do the lint-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the jest-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the test-related \`scripts\` in \`package.json\` conform? ✅
+- Do the typescript-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the typescript-related \`scripts\` in \`package.json\` conform? ✅
+- Does the \`exports\` field in \`package.json\` conform? ✅
+- Does the \`main\` field in \`package.json\` conform? ✅
+- Does the \`module\` field in \`package.json\` conform? ✅
+- Does the \`types\` field in \`package.json\` conform? ✅
+- Does the \`files\` field in \`package.json\` conform? ✅
+- Does LavaMoat allow scripts for \`tsup>esbuild\`? ✅
+- Do the typedoc-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the typedoc-related \`scripts\` in \`package.json\` conform? ✅
+- Do the changelog-related \`devDependencies\` in \`package.json\` conform? ✅
+- Do the changelog-related \`scripts\` in \`package.json\` conform? ✅
+- Do the lavamoat-related \`devDependencies\` in \`package.json\` conform? ✅
+- Are postinstall scripts disabled for \`@lavamoat/preinstall-always-fail\`? ✅
+- Is \`README.md\` present? ✅
+- Does the README conform by recommending the correct Yarn version to install? ✅
+- Does the README conform by recommending node install from nodejs.org? ✅
+- Are all of the files for Yarn Modern present, and do they conform? ✅
+- Does the README conform by recommending the correct Yarn version to install? ✅
+- Does allow scripts conforms to yarn? ✅
+- Is the allow-scripts Yarn plugin installed? ✅
+- Does the \`src/\` directory exist? ✅
+- Is \`.nvmrc\` present, and does it conform? ✅
+- Is \`jest.config.js\` present, and does it conform? ✅
+- Is \`tsconfig.json\` present, and does it conform? ✅
+- Is \`tsconfig.build.json\` present, and does it conform? ✅
+- Is \`tsup.config.ts\` present, and does it conform? ✅
+- Is \`typedoc.json\` present, and does it conform? ✅
+- Is \`CHANGELOG.md\` present? ✅
+- Is \`CHANGELOG.md\` well-formatted? ✅
+- Is \`.editorconfig\` present, and does it conform? ✅
+- Is \`.gitattributes\` present, and does it conform? ✅
+- Is \`.gitignore\` present, and does it conform? ✅
 
 Results:       40 passed, 0 failed, 0 errored, 40 total
 Elapsed time:  0 ms
@@ -915,38 +915,38 @@ Elapsed time:  0 ms
 repo-1
 ------
 
- ✘  Is the classic Yarn config file (\`.yarnrc\`) absent?
-    - The config file for Yarn Classic, \`.yarnrc\`, is present. Please upgrade this project to Yarn Modern.
- ✘  Does the package have a well-formed manifest (\`package.json\`)?
-    - \`package.json\` does not exist in this project.
- ✘  Is \`README.md\` present?
-    - \`README.md\` does not exist in this project.
- ✘  Are all of the files for Yarn Modern present, and do they conform?
-    - \`.yarnrc.yml\` does not exist in this project.
-    - \`.yarn/releases/\` does not exist in this project.
-    - \`.yarn/plugins/\` does not exist in this project.
- ✘  Does the \`src/\` directory exist?
-    - \`src/\` does not exist in this project.
- ✘  Is \`.nvmrc\` present, and does it conform?
-    - \`.nvmrc\` does not exist in this project.
- ✘  Is \`jest.config.js\` present, and does it conform?
-    - \`jest.config.js\` does not exist in this project.
- ✘  Is \`tsconfig.json\` present, and does it conform?
-    - \`tsconfig.json\` does not exist in this project.
- ✘  Is \`tsconfig.build.json\` present, and does it conform?
-    - \`tsconfig.build.json\` does not exist in this project.
- ✘  Is \`tsup.config.ts\` present, and does it conform?
-    - \`tsup.config.ts\` does not exist in this project.
- ✘  Is \`typedoc.json\` present, and does it conform?
-    - \`typedoc.json\` does not exist in this project.
- ✘  Is \`CHANGELOG.md\` present?
-    - \`CHANGELOG.md\` does not exist in this project.
- ✘  Is \`.editorconfig\` present, and does it conform?
-    - \`.editorconfig\` does not exist in this project.
- ✘  Is \`.gitattributes\` present, and does it conform?
-    - \`.gitattributes\` does not exist in this project.
- ✘  Is \`.gitignore\` present, and does it conform?
-    - \`.gitignore\` does not exist in this project.
+- Is the classic Yarn config file (\`.yarnrc\`) absent? ❌
+  - The config file for Yarn Classic, \`.yarnrc\`, is present. Please upgrade this project to Yarn Modern.
+- Does the package have a well-formed manifest (\`package.json\`)? ❌
+  - \`package.json\` does not exist in this project.
+- Is \`README.md\` present? ❌
+  - \`README.md\` does not exist in this project.
+- Are all of the files for Yarn Modern present, and do they conform? ❌
+  - \`.yarnrc.yml\` does not exist in this project.
+  - \`.yarn/releases/\` does not exist in this project.
+  - \`.yarn/plugins/\` does not exist in this project.
+- Does the \`src/\` directory exist? ❌
+  - \`src/\` does not exist in this project.
+- Is \`.nvmrc\` present, and does it conform? ❌
+  - \`.nvmrc\` does not exist in this project.
+- Is \`jest.config.js\` present, and does it conform? ❌
+  - \`jest.config.js\` does not exist in this project.
+- Is \`tsconfig.json\` present, and does it conform? ❌
+  - \`tsconfig.json\` does not exist in this project.
+- Is \`tsconfig.build.json\` present, and does it conform? ❌
+  - \`tsconfig.build.json\` does not exist in this project.
+- Is \`tsup.config.ts\` present, and does it conform? ❌
+  - \`tsup.config.ts\` does not exist in this project.
+- Is \`typedoc.json\` present, and does it conform? ❌
+  - \`typedoc.json\` does not exist in this project.
+- Is \`CHANGELOG.md\` present? ❌
+  - \`CHANGELOG.md\` does not exist in this project.
+- Is \`.editorconfig\` present, and does it conform? ❌
+  - \`.editorconfig\` does not exist in this project.
+- Is \`.gitattributes\` present, and does it conform? ❌
+  - \`.gitattributes\` does not exist in this project.
+- Is \`.gitignore\` present, and does it conform? ❌
+  - \`.gitignore\` does not exist in this project.
 
 Results:       0 passed, 15 failed, 0 errored, 15 total
 Elapsed time:  0 ms
@@ -955,38 +955,38 @@ Elapsed time:  0 ms
 repo-2
 ------
 
- ✘  Is the classic Yarn config file (\`.yarnrc\`) absent?
-    - The config file for Yarn Classic, \`.yarnrc\`, is present. Please upgrade this project to Yarn Modern.
- ✘  Does the package have a well-formed manifest (\`package.json\`)?
-    - \`package.json\` does not exist in this project.
- ✘  Is \`README.md\` present?
-    - \`README.md\` does not exist in this project.
- ✘  Are all of the files for Yarn Modern present, and do they conform?
-    - \`.yarnrc.yml\` does not exist in this project.
-    - \`.yarn/releases/\` does not exist in this project.
-    - \`.yarn/plugins/\` does not exist in this project.
- ✘  Does the \`src/\` directory exist?
-    - \`src/\` does not exist in this project.
- ✘  Is \`.nvmrc\` present, and does it conform?
-    - \`.nvmrc\` does not exist in this project.
- ✘  Is \`jest.config.js\` present, and does it conform?
-    - \`jest.config.js\` does not exist in this project.
- ✘  Is \`tsconfig.json\` present, and does it conform?
-    - \`tsconfig.json\` does not exist in this project.
- ✘  Is \`tsconfig.build.json\` present, and does it conform?
-    - \`tsconfig.build.json\` does not exist in this project.
- ✘  Is \`tsup.config.ts\` present, and does it conform?
-    - \`tsup.config.ts\` does not exist in this project.
- ✘  Is \`typedoc.json\` present, and does it conform?
-    - \`typedoc.json\` does not exist in this project.
- ✘  Is \`CHANGELOG.md\` present?
-    - \`CHANGELOG.md\` does not exist in this project.
- ✘  Is \`.editorconfig\` present, and does it conform?
-    - \`.editorconfig\` does not exist in this project.
- ✘  Is \`.gitattributes\` present, and does it conform?
-    - \`.gitattributes\` does not exist in this project.
- ✘  Is \`.gitignore\` present, and does it conform?
-    - \`.gitignore\` does not exist in this project.
+- Is the classic Yarn config file (\`.yarnrc\`) absent? ❌
+  - The config file for Yarn Classic, \`.yarnrc\`, is present. Please upgrade this project to Yarn Modern.
+- Does the package have a well-formed manifest (\`package.json\`)? ❌
+  - \`package.json\` does not exist in this project.
+- Is \`README.md\` present? ❌
+  - \`README.md\` does not exist in this project.
+- Are all of the files for Yarn Modern present, and do they conform? ❌
+  - \`.yarnrc.yml\` does not exist in this project.
+  - \`.yarn/releases/\` does not exist in this project.
+  - \`.yarn/plugins/\` does not exist in this project.
+- Does the \`src/\` directory exist? ❌
+  - \`src/\` does not exist in this project.
+- Is \`.nvmrc\` present, and does it conform? ❌
+  - \`.nvmrc\` does not exist in this project.
+- Is \`jest.config.js\` present, and does it conform? ❌
+  - \`jest.config.js\` does not exist in this project.
+- Is \`tsconfig.json\` present, and does it conform? ❌
+  - \`tsconfig.json\` does not exist in this project.
+- Is \`tsconfig.build.json\` present, and does it conform? ❌
+  - \`tsconfig.build.json\` does not exist in this project.
+- Is \`tsup.config.ts\` present, and does it conform? ❌
+  - \`tsup.config.ts\` does not exist in this project.
+- Is \`typedoc.json\` present, and does it conform? ❌
+  - \`typedoc.json\` does not exist in this project.
+- Is \`CHANGELOG.md\` present? ❌
+  - \`CHANGELOG.md\` does not exist in this project.
+- Is \`.editorconfig\` present, and does it conform? ❌
+  - \`.editorconfig\` does not exist in this project.
+- Is \`.gitattributes\` present, and does it conform? ❌
+  - \`.gitattributes\` does not exist in this project.
+- Is \`.gitignore\` present, and does it conform? ❌
+  - \`.gitignore\` does not exist in this project.
 
 Results:       0 passed, 15 failed, 0 errored, 15 total
 Elapsed time:  0 ms
@@ -1037,38 +1037,38 @@ Elapsed time:  0 ms
 repo-1
 ------
 
- ✔︎  Is the classic Yarn config file (\`.yarnrc\`) absent?
- ✘  Does the package have a well-formed manifest (\`package.json\`)?
-    - \`package.json\` does not exist in this project.
- ✘  Is \`README.md\` present?
-    - \`README.md\` does not exist in this project.
- ✘  Are all of the files for Yarn Modern present, and do they conform?
-    - \`.yarnrc.yml\` does not exist in this project.
-    - \`.yarn/releases/\` does not exist in this project.
-    - \`.yarn/plugins/\` does not exist in this project.
- ✘  Does the \`src/\` directory exist?
-    - \`src/\` does not exist in this project.
- ✘  Is \`.nvmrc\` present, and does it conform?
-    - \`.nvmrc\` does not exist in this project.
- ✘  Is \`jest.config.js\` present, and does it conform?
-    - \`jest.config.js\` does not exist in this project.
- ✘  Is \`tsconfig.json\` present, and does it conform?
-    - \`tsconfig.json\` does not exist in this project.
- ✘  Is \`tsconfig.build.json\` present, and does it conform?
-    - \`tsconfig.build.json\` does not exist in this project.
- ✘  Is \`tsup.config.ts\` present, and does it conform?
-    - \`tsup.config.ts\` does not exist in this project.
- ✘  Is \`typedoc.json\` present, and does it conform?
-    - \`typedoc.json\` does not exist in this project.
- ✔︎  Is \`CHANGELOG.md\` present?
- ?  Is \`CHANGELOG.md\` well-formatted?
-    - ERROR: Encountered an error validating the changelog: Could not read JSON file '${sandboxDirectoryPath}/repositories/repo-1/package.json'.
- ✘  Is \`.editorconfig\` present, and does it conform?
-    - \`.editorconfig\` does not exist in this project.
- ✘  Is \`.gitattributes\` present, and does it conform?
-    - \`.gitattributes\` does not exist in this project.
- ✘  Is \`.gitignore\` present, and does it conform?
-    - \`.gitignore\` does not exist in this project.
+- Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
+- Does the package have a well-formed manifest (\`package.json\`)? ❌
+  - \`package.json\` does not exist in this project.
+- Is \`README.md\` present? ❌
+  - \`README.md\` does not exist in this project.
+- Are all of the files for Yarn Modern present, and do they conform? ❌
+  - \`.yarnrc.yml\` does not exist in this project.
+  - \`.yarn/releases/\` does not exist in this project.
+  - \`.yarn/plugins/\` does not exist in this project.
+- Does the \`src/\` directory exist? ❌
+  - \`src/\` does not exist in this project.
+- Is \`.nvmrc\` present, and does it conform? ❌
+  - \`.nvmrc\` does not exist in this project.
+- Is \`jest.config.js\` present, and does it conform? ❌
+  - \`jest.config.js\` does not exist in this project.
+- Is \`tsconfig.json\` present, and does it conform? ❌
+  - \`tsconfig.json\` does not exist in this project.
+- Is \`tsconfig.build.json\` present, and does it conform? ❌
+  - \`tsconfig.build.json\` does not exist in this project.
+- Is \`tsup.config.ts\` present, and does it conform? ❌
+  - \`tsup.config.ts\` does not exist in this project.
+- Is \`typedoc.json\` present, and does it conform? ❌
+  - \`typedoc.json\` does not exist in this project.
+- Is \`CHANGELOG.md\` present? ✅
+- Is \`CHANGELOG.md\` well-formatted? ⚠️
+  - ERROR: Encountered an error validating the changelog: Could not read JSON file '${sandboxDirectoryPath}/repositories/repo-1/package.json'.
+- Is \`.editorconfig\` present, and does it conform? ❌
+  - \`.editorconfig\` does not exist in this project.
+- Is \`.gitattributes\` present, and does it conform? ❌
+  - \`.gitattributes\` does not exist in this project.
+- Is \`.gitignore\` present, and does it conform? ❌
+  - \`.gitignore\` does not exist in this project.
 
 Results:       2 passed, 13 failed, 1 errored, 16 total
 Elapsed time:  0 ms
@@ -1077,38 +1077,38 @@ Elapsed time:  0 ms
 repo-2
 ------
 
- ✔︎  Is the classic Yarn config file (\`.yarnrc\`) absent?
- ✘  Does the package have a well-formed manifest (\`package.json\`)?
-    - \`package.json\` does not exist in this project.
- ✘  Is \`README.md\` present?
-    - \`README.md\` does not exist in this project.
- ✘  Are all of the files for Yarn Modern present, and do they conform?
-    - \`.yarnrc.yml\` does not exist in this project.
-    - \`.yarn/releases/\` does not exist in this project.
-    - \`.yarn/plugins/\` does not exist in this project.
- ✘  Does the \`src/\` directory exist?
-    - \`src/\` does not exist in this project.
- ✘  Is \`.nvmrc\` present, and does it conform?
-    - \`.nvmrc\` does not exist in this project.
- ✘  Is \`jest.config.js\` present, and does it conform?
-    - \`jest.config.js\` does not exist in this project.
- ✘  Is \`tsconfig.json\` present, and does it conform?
-    - \`tsconfig.json\` does not exist in this project.
- ✘  Is \`tsconfig.build.json\` present, and does it conform?
-    - \`tsconfig.build.json\` does not exist in this project.
- ✘  Is \`tsup.config.ts\` present, and does it conform?
-    - \`tsup.config.ts\` does not exist in this project.
- ✘  Is \`typedoc.json\` present, and does it conform?
-    - \`typedoc.json\` does not exist in this project.
- ✔︎  Is \`CHANGELOG.md\` present?
- ?  Is \`CHANGELOG.md\` well-formatted?
-    - ERROR: Encountered an error validating the changelog: Could not read JSON file '${sandboxDirectoryPath}/repositories/repo-2/package.json'.
- ✘  Is \`.editorconfig\` present, and does it conform?
-    - \`.editorconfig\` does not exist in this project.
- ✘  Is \`.gitattributes\` present, and does it conform?
-    - \`.gitattributes\` does not exist in this project.
- ✘  Is \`.gitignore\` present, and does it conform?
-    - \`.gitignore\` does not exist in this project.
+- Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
+- Does the package have a well-formed manifest (\`package.json\`)? ❌
+  - \`package.json\` does not exist in this project.
+- Is \`README.md\` present? ❌
+  - \`README.md\` does not exist in this project.
+- Are all of the files for Yarn Modern present, and do they conform? ❌
+  - \`.yarnrc.yml\` does not exist in this project.
+  - \`.yarn/releases/\` does not exist in this project.
+  - \`.yarn/plugins/\` does not exist in this project.
+- Does the \`src/\` directory exist? ❌
+  - \`src/\` does not exist in this project.
+- Is \`.nvmrc\` present, and does it conform? ❌
+  - \`.nvmrc\` does not exist in this project.
+- Is \`jest.config.js\` present, and does it conform? ❌
+  - \`jest.config.js\` does not exist in this project.
+- Is \`tsconfig.json\` present, and does it conform? ❌
+  - \`tsconfig.json\` does not exist in this project.
+- Is \`tsconfig.build.json\` present, and does it conform? ❌
+  - \`tsconfig.build.json\` does not exist in this project.
+- Is \`tsup.config.ts\` present, and does it conform? ❌
+  - \`tsup.config.ts\` does not exist in this project.
+- Is \`typedoc.json\` present, and does it conform? ❌
+  - \`typedoc.json\` does not exist in this project.
+- Is \`CHANGELOG.md\` present? ✅
+- Is \`CHANGELOG.md\` well-formatted? ⚠️
+  - ERROR: Encountered an error validating the changelog: Could not read JSON file '${sandboxDirectoryPath}/repositories/repo-2/package.json'.
+- Is \`.editorconfig\` present, and does it conform? ❌
+  - \`.editorconfig\` does not exist in this project.
+- Is \`.gitattributes\` present, and does it conform? ❌
+  - \`.gitattributes\` does not exist in this project.
+- Is \`.gitignore\` present, and does it conform? ❌
+  - \`.gitignore\` does not exist in this project.
 
 Results:       2 passed, 13 failed, 1 errored, 16 total
 Elapsed time:  0 ms
@@ -1162,37 +1162,37 @@ Elapsed time:  0 ms
 repo-2
 ------
 
- ✔︎  Is the classic Yarn config file (\`.yarnrc\`) absent?
- ✘  Does the package have a well-formed manifest (\`package.json\`)?
-    - \`package.json\` does not exist in this project.
- ✘  Is \`README.md\` present?
-    - \`README.md\` does not exist in this project.
- ✘  Are all of the files for Yarn Modern present, and do they conform?
-    - \`.yarnrc.yml\` does not exist in this project.
-    - \`.yarn/releases/\` does not exist in this project.
-    - \`.yarn/plugins/\` does not exist in this project.
- ✘  Does the \`src/\` directory exist?
-    - \`src/\` does not exist in this project.
- ✘  Is \`.nvmrc\` present, and does it conform?
-    - \`.nvmrc\` does not exist in this project.
- ✘  Is \`jest.config.js\` present, and does it conform?
-    - \`jest.config.js\` does not exist in this project.
- ✘  Is \`tsconfig.json\` present, and does it conform?
-    - \`tsconfig.json\` does not exist in this project.
- ✘  Is \`tsconfig.build.json\` present, and does it conform?
-    - \`tsconfig.build.json\` does not exist in this project.
- ✘  Is \`tsup.config.ts\` present, and does it conform?
-    - \`tsup.config.ts\` does not exist in this project.
- ✘  Is \`typedoc.json\` present, and does it conform?
-    - \`typedoc.json\` does not exist in this project.
- ✘  Is \`CHANGELOG.md\` present?
-    - \`CHANGELOG.md\` does not exist in this project.
- ✘  Is \`.editorconfig\` present, and does it conform?
-    - \`.editorconfig\` does not exist in this project.
- ✘  Is \`.gitattributes\` present, and does it conform?
-    - \`.gitattributes\` does not exist in this project.
- ✘  Is \`.gitignore\` present, and does it conform?
-    - \`.gitignore\` does not exist in this project.
+- Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
+- Does the package have a well-formed manifest (\`package.json\`)? ❌
+  - \`package.json\` does not exist in this project.
+- Is \`README.md\` present? ❌
+  - \`README.md\` does not exist in this project.
+- Are all of the files for Yarn Modern present, and do they conform? ❌
+  - \`.yarnrc.yml\` does not exist in this project.
+  - \`.yarn/releases/\` does not exist in this project.
+  - \`.yarn/plugins/\` does not exist in this project.
+- Does the \`src/\` directory exist? ❌
+  - \`src/\` does not exist in this project.
+- Is \`.nvmrc\` present, and does it conform? ❌
+  - \`.nvmrc\` does not exist in this project.
+- Is \`jest.config.js\` present, and does it conform? ❌
+  - \`jest.config.js\` does not exist in this project.
+- Is \`tsconfig.json\` present, and does it conform? ❌
+  - \`tsconfig.json\` does not exist in this project.
+- Is \`tsconfig.build.json\` present, and does it conform? ❌
+  - \`tsconfig.build.json\` does not exist in this project.
+- Is \`tsup.config.ts\` present, and does it conform? ❌
+  - \`tsup.config.ts\` does not exist in this project.
+- Is \`typedoc.json\` present, and does it conform? ❌
+  - \`typedoc.json\` does not exist in this project.
+- Is \`CHANGELOG.md\` present? ❌
+  - \`CHANGELOG.md\` does not exist in this project.
+- Is \`.editorconfig\` present, and does it conform? ❌
+  - \`.editorconfig\` does not exist in this project.
+- Is \`.gitattributes\` present, and does it conform? ❌
+  - \`.gitattributes\` does not exist in this project.
+- Is \`.gitignore\` present, and does it conform? ❌
+  - \`.gitignore\` does not exist in this project.
 
 Results:       1 passed, 14 failed, 0 errored, 15 total
 Elapsed time:  0 ms
