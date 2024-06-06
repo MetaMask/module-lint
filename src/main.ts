@@ -226,7 +226,7 @@ async function lintProjects({
 
   outputLogger.logToStdout('');
 
-  let allPassed = true;
+  let isAllPassed = true;
   fulfilledProjectLintResultPromiseOutcomes
     .sort((a, b) => {
       return a.value.projectName.localeCompare(b.value.projectName);
@@ -240,7 +240,7 @@ async function lintProjects({
         outputLogger.logToStdout('\n');
       }
       if (totalFailed > 0 || totalErrored > 0) {
-        allPassed = false;
+        isAllPassed = false;
       }
     });
 
