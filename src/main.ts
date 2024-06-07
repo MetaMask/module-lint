@@ -252,5 +252,5 @@ async function lintProjects({
     },
   );
 
-  return allPassed && rejectedProjectLintResultPromiseOutcomes.length === 0;
+  return isAllPassed && rejectedProjectLintResultPromiseOutcomes.length === 0;
 }
