@@ -1,4 +1,4 @@
-import { type, string, record, array, boolean } from 'superstruct';
+import { type, string, record, array, boolean } from '@metamask/superstruct';
 
 /**
  * All of the known rules.

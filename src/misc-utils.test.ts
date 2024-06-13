@@ -1,7 +1,7 @@
+import * as superstruct from '@metamask/superstruct';
 import { writeFile } from '@metamask/utils/node';
 import fs from 'fs';
 import path from 'path';
-import * as superstruct from 'superstruct';
 
 import {
   assertJsonMatchesStruct,
@@ -16,9 +16,9 @@ import {
 import { withinSandbox } from '../tests/helpers';
 
 // Clone the superstruct module so we can spy on its exports
-jest.mock('superstruct', () => {
+jest.mock('@metamask/superstruct', () => {
   return {
-    ...jest.requireActual('superstruct'),
+    ...jest.requireActual('@metamask/superstruct'),
     // eslint-disable-next-line @typescript-eslint/naming-convention
     __esModule: true,
   };
