@@ -1,3 +1,5 @@
+import { StructError, assert } from '@metamask/superstruct';
+import type { Struct, ObjectSchema } from '@metamask/superstruct';
 import {
   isErrorWithCode,
   wrapError as originalWrapError,
@@ -5,9 +7,6 @@ import {
 import type { Json } from '@metamask/utils/node';
 import fs from 'fs';
 import path from 'path';
-import { StructError, assert } from 'superstruct';
-import type { Struct } from 'superstruct';
-import type { ObjectSchema } from 'superstruct/dist/utils';
 
 /**
  * Represents a directory entry. Like fs.Dirent, but includes two additional
