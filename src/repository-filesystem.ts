@@ -1,9 +1,8 @@
+import type { Struct, ObjectSchema } from '@metamask/superstruct';
 import type { Json } from '@metamask/utils/node';
 import { readFile, readJsonFile } from '@metamask/utils/node';
 import type fs from 'fs';
 import path from 'path';
-import type { Struct } from 'superstruct';
-import type { ObjectSchema } from 'superstruct/dist/utils';
 import { parse as yamlParse } from 'yaml';
 
 import type { DirectoryEntry } from './misc-utils';

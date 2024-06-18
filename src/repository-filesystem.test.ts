@@ -1,3 +1,4 @@
+import { integer, object, string } from '@metamask/superstruct';
 import * as utils from '@metamask/utils/node';
 import {
   ensureDirectoryStructureExists,
@@ -6,7 +7,6 @@ import {
 import fs from 'fs';
 import { mock } from 'jest-mock-extended';
 import path from 'path';
-import { integer, object, string } from 'superstruct';
 import { stringify } from 'yaml';
 
 import { RepositoryFilesystem } from './repository-filesystem';
