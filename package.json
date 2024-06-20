@@ -45,7 +45,7 @@
     "lint:fix": "yarn lint:eslint --fix && yarn lint:constraints --fix && yarn lint:misc --write && yarn lint:dependencies && yarn lint:changelog",
     "lint:misc": "prettier '**/*.json' '**/*.md' '!CHANGELOG.md' '**/*.yml' '!.yarnrc.yml' --ignore-path .gitignore --no-error-on-unmatched-pattern",
     "prepack": "./scripts/prepack.sh",
-    "run-tool": "ts-node --swc src/cli.ts",
+    "run-tool": "tsx src/cli.ts",
     "test": "jest && jest-it-up",
     "test:watch": "jest --watch"
   },
@@ -92,7 +92,7 @@
     "stdio-mock": "^1.2.0",
     "strip-ansi": "^6.0.0",
     "ts-jest": "^28.0.7",
-    "ts-node": "^10.7.0",
+    "tsx": "^4.15.6",
     "typedoc": "^0.23.15",
     "typescript": "~4.8.4"
   },
@@ -107,7 +107,8 @@
   "lavamoat": {
     "allowScripts": {
       "@lavamoat/preinstall-always-fail": false,
-      "@swc/core": true
+      "@swc/core": true,
+      "tsx>esbuild": true
     }
   }
 }
