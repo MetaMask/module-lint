@@ -14,7 +14,13 @@ main({
     cachedRepositoriesDirectoryPath: DEFAULT_CACHED_REPOSITORIES_DIRECTORY_PATH,
     defaultProjectNames: DEFAULT_PROJECT_NAMES,
   },
-}).catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+})
+  .then((isSuccessful) => {
+    if (!isSuccessful) {
+      process.exitCode = 1;
+    }
+  })
+  .catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
+  });

@@ -27,7 +27,7 @@ describe('Rule: require-source-directory', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: true,
+        status: 'passed',
       });
     });
   });
@@ -47,7 +47,7 @@ describe('Rule: require-source-directory', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: false,
+        status: 'failed',
         failures: [
           {
             message: '`src/` does not exist in this project.',
@@ -73,7 +73,7 @@ describe('Rule: require-source-directory', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: false,
+        status: 'failed',
         failures: [
           {
             message: '`src/` is not a directory when it should be.',

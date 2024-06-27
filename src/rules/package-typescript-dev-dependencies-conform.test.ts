@@ -49,7 +49,7 @@ describe('Rule: package-typescript-dev-dependencies-conform', () => {
         fail,
       });
 
-      expect(result).toStrictEqual({ passed: true });
+      expect(result).toStrictEqual({ status: 'passed' });
     });
   });
 
@@ -93,7 +93,7 @@ describe('Rule: package-typescript-dev-dependencies-conform', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: false,
+        status: 'failed',
         failures: [
           {
             message:
@@ -143,7 +143,7 @@ describe('Rule: package-typescript-dev-dependencies-conform', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: false,
+        status: 'failed',
         failures: [
           {
             message:

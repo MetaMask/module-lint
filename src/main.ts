@@ -51,16 +51,13 @@ export async function main({
     cachedRepositoriesDirectoryPath: string;
     defaultProjectNames: string[];
   };
-}) {
+}): Promise<boolean> {
   const outputLogger = new OutputLogger({ stdout, stderr });
   const workingDirectoryPath = process.cwd();
 
   const inputs = await parseInputs({ argv, outputLogger, defaultProjectNames });
   if (!inputs) {
-    // Even if `process` changes, it's okay.
-    // eslint-disable-next-line require-atomic-updates
-    process.exitCode = 1;
-    return;
+    return false;
   }
   const { templateRepositoryName, projectReferences } = inputs;
 
@@ -71,7 +68,7 @@ export async function main({
     outputLogger,
   });
 
-  const isAllPassed = await lintProjects({
+  const allLintingSuccessful = await lintProjects({
     projectReferences,
     template,
     workingDirectoryPath,
@@ -79,10 +76,7 @@ export async function main({
     outputLogger,
   });
 
-  if (!isAllPassed) {
-    // eslint-disable-next-line require-atomic-updates
-    process.exitCode = 1;
-  }
+  return allLintingSuccessful;
 }
 
 /**
@@ -231,23 +225,25 @@ async function lintProjects({
     projectLintResultPromiseOutcomes.filter(isPromiseRejectedResult);
 
   outputLogger.logToStdout('');
+
   let isAllPassed = true;
   fulfilledProjectLintResultPromiseOutcomes
     .sort((a, b) => {
       return a.value.projectName.localeCompare(b.value.projectName);
     })
     .forEach((fulfilledProjectLintResultPromiseOutcome, index) => {
-      const { numberOfFailing } = reportProjectLintResult({
+      const { totalFailed, totalErrored } = reportProjectLintResult({
         projectLintResult: fulfilledProjectLintResultPromiseOutcome.value,
         outputLogger,
       });
       if (index < fulfilledProjectLintResultPromiseOutcomes.length - 1) {
         outputLogger.logToStdout('\n');
       }
-      if (numberOfFailing > 0) {
+      if (totalFailed > 0 || totalErrored > 0) {
         isAllPassed = false;
       }
     });
+
   outputLogger.logToStdout('');
 
   rejectedProjectLintResultPromiseOutcomes.forEach(

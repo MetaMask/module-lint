@@ -43,7 +43,7 @@ describe('main', () => {
   });
 
   describe('given a list of project references', () => {
-    it('produces a fully passing report if all rules executed against the given projects pass', async () => {
+    it('produces a fully passing report, returning true, if all rules executed against the given projects pass', async () => {
       await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
         const projectNames = ['repo-1', 'repo-2'];
         const { cachedRepositoriesDirectoryPath, repositories } =
@@ -182,7 +182,7 @@ describe('main', () => {
         }
         const outputLogger = new FakeOutputLogger();
 
-        await main({
+        const isSuccessful = await main({
           argv: ['node', 'module-lint', ...projectNames],
           stdout: outputLogger.stdout,
           stderr: outputLogger.stderr,
@@ -239,7 +239,7 @@ repo-1
 - Is \`.gitattributes\` present, and does it conform? ✅
 - Is \`.gitignore\` present, and does it conform? ✅
 
-Results:       40 passed, 0 failed, 40 total
+Results:       40 passed, 0 failed, 0 errored, 40 total
 Elapsed time:  0 ms
 
 
@@ -287,15 +287,16 @@ repo-2
 - Is \`.gitattributes\` present, and does it conform? ✅
 - Is \`.gitignore\` present, and does it conform? ✅
 
-Results:       40 passed, 0 failed, 40 total
+Results:       40 passed, 0 failed, 0 errored, 40 total
 Elapsed time:  0 ms
 
 `,
         );
+        expect(isSuccessful).toBe(true);
       });
     });
 
-    it('produces a fully failing report if all rules executed against the given projects fail, listing reasons for failure', async () => {
+    it('produces a fully failing report, listing reasons for failure and returning false, if all rules executed against the given projects fail', async () => {
       await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
         const projectNames = ['repo-1', 'repo-2'];
         const { cachedRepositoriesDirectoryPath, repositories } =
@@ -316,7 +317,7 @@ Elapsed time:  0 ms
         }
         const outputLogger = new FakeOutputLogger();
 
-        await main({
+        const isSuccessful = await main({
           argv: ['node', 'module-lint', ...projectNames],
           stdout: outputLogger.stdout,
           stderr: outputLogger.stderr,
@@ -365,7 +366,7 @@ repo-1
 - Is \`.gitignore\` present, and does it conform? ❌
   - \`.gitignore\` does not exist in this project.
 
-Results:       0 passed, 15 failed, 15 total
+Results:       0 passed, 15 failed, 0 errored, 15 total
 Elapsed time:  0 ms
 
 
@@ -405,15 +406,138 @@ repo-2
 - Is \`.gitignore\` present, and does it conform? ❌
   - \`.gitignore\` does not exist in this project.
 
-Results:       0 passed, 15 failed, 15 total
+Results:       0 passed, 15 failed, 0 errored, 15 total
 Elapsed time:  0 ms
 
 `,
         );
+        expect(isSuccessful).toBe(false);
       });
     });
 
-    it('does not exit immediately if a project errors during linting, but shows the error and continues', async () => {
+    it('does not abort linting of a project if a lint rule throws, but shows the error and continues to the next line rule, returning false', async () => {
+      await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
+        const projectNames = ['repo-1', 'repo-2'];
+        const { cachedRepositoriesDirectoryPath, repositories } =
+          await setupToolWithMockRepositories({
+            execaMock,
+            sandboxDirectoryPath,
+            repositories: [
+              { name: 'metamask-module-template', create: true },
+              ...projectNames.map((projectName) => ({
+                name: projectName,
+                create: true,
+              })),
+            ],
+          });
+        // Skip first repo since it's the module template
+        for (const repository of repositories.slice(1)) {
+          await writeFile(
+            path.join(repository.directoryPath, 'CHANGELOG.md'),
+            '',
+          );
+        }
+        const outputLogger = new FakeOutputLogger();
+
+        const isSuccessful = await main({
+          argv: ['node', 'module-lint', ...projectNames],
+          stdout: outputLogger.stdout,
+          stderr: outputLogger.stderr,
+          config: {
+            cachedRepositoriesDirectoryPath,
+            defaultProjectNames: [],
+          },
+        });
+
+        expect(outputLogger.getStderr()).toBe('');
+        expect(outputLogger.getStdout()).toBe(
+          `
+repo-1
+------
+
+- Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
+- Does the package have a well-formed manifest (\`package.json\`)? ❌
+  - \`package.json\` does not exist in this project.
+- Is \`README.md\` present? ❌
+  - \`README.md\` does not exist in this project.
+- Are all of the files for Yarn Modern present, and do they conform? ❌
+  - \`.yarnrc.yml\` does not exist in this project.
+  - \`.yarn/releases/\` does not exist in this project.
+  - \`.yarn/plugins/\` does not exist in this project.
+- Does the \`src/\` directory exist? ❌
+  - \`src/\` does not exist in this project.
+- Is \`.nvmrc\` present, and does it conform? ❌
+  - \`.nvmrc\` does not exist in this project.
+- Is \`jest.config.js\` present, and does it conform? ❌
+  - \`jest.config.js\` does not exist in this project.
+- Is \`tsconfig.json\` present, and does it conform? ❌
+  - \`tsconfig.json\` does not exist in this project.
+- Is \`tsconfig.build.json\` present, and does it conform? ❌
+  - \`tsconfig.build.json\` does not exist in this project.
+- Is \`tsup.config.ts\` present, and does it conform? ❌
+  - \`tsup.config.ts\` does not exist in this project.
+- Is \`typedoc.json\` present, and does it conform? ❌
+  - \`typedoc.json\` does not exist in this project.
+- Is \`CHANGELOG.md\` present? ✅
+- Is \`CHANGELOG.md\` well-formatted? ⚠️
+  - ERROR: Encountered an error validating the changelog: Could not read JSON file '${sandboxDirectoryPath}/repositories/repo-1/package.json'.
+- Is \`.editorconfig\` present, and does it conform? ❌
+  - \`.editorconfig\` does not exist in this project.
+- Is \`.gitattributes\` present, and does it conform? ❌
+  - \`.gitattributes\` does not exist in this project.
+- Is \`.gitignore\` present, and does it conform? ❌
+  - \`.gitignore\` does not exist in this project.
+
+Results:       2 passed, 13 failed, 1 errored, 16 total
+Elapsed time:  0 ms
+
+
+repo-2
+------
+
+- Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
+- Does the package have a well-formed manifest (\`package.json\`)? ❌
+  - \`package.json\` does not exist in this project.
+- Is \`README.md\` present? ❌
+  - \`README.md\` does not exist in this project.
+- Are all of the files for Yarn Modern present, and do they conform? ❌
+  - \`.yarnrc.yml\` does not exist in this project.
+  - \`.yarn/releases/\` does not exist in this project.
+  - \`.yarn/plugins/\` does not exist in this project.
+- Does the \`src/\` directory exist? ❌
+  - \`src/\` does not exist in this project.
+- Is \`.nvmrc\` present, and does it conform? ❌
+  - \`.nvmrc\` does not exist in this project.
+- Is \`jest.config.js\` present, and does it conform? ❌
+  - \`jest.config.js\` does not exist in this project.
+- Is \`tsconfig.json\` present, and does it conform? ❌
+  - \`tsconfig.json\` does not exist in this project.
+- Is \`tsconfig.build.json\` present, and does it conform? ❌
+  - \`tsconfig.build.json\` does not exist in this project.
+- Is \`tsup.config.ts\` present, and does it conform? ❌
+  - \`tsup.config.ts\` does not exist in this project.
+- Is \`typedoc.json\` present, and does it conform? ❌
+  - \`typedoc.json\` does not exist in this project.
+- Is \`CHANGELOG.md\` present? ✅
+- Is \`CHANGELOG.md\` well-formatted? ⚠️
+  - ERROR: Encountered an error validating the changelog: Could not read JSON file '${sandboxDirectoryPath}/repositories/repo-2/package.json'.
+- Is \`.editorconfig\` present, and does it conform? ❌
+  - \`.editorconfig\` does not exist in this project.
+- Is \`.gitattributes\` present, and does it conform? ❌
+  - \`.gitattributes\` does not exist in this project.
+- Is \`.gitignore\` present, and does it conform? ❌
+  - \`.gitignore\` does not exist in this project.
+
+Results:       2 passed, 13 failed, 1 errored, 16 total
+Elapsed time:  0 ms
+
+`,
+        );
+        expect(isSuccessful).toBe(false);
+      });
+    });
+
+    it('does not exit immediately if an unknown error is thrown while linting a project, but shows the error and continues, returning false', async () => {
       await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
         const projectNames = ['repo-1', 'repo-2'];
         const { cachedRepositoriesDirectoryPath } =
@@ -437,7 +561,7 @@ Elapsed time:  0 ms
           });
         const outputLogger = new FakeOutputLogger();
 
-        await main({
+        const isSuccessful = await main({
           argv: ['node', 'module-lint', ...projectNames],
           stdout: outputLogger.stdout,
           stderr: outputLogger.stderr,
@@ -489,17 +613,18 @@ repo-2
 - Is \`.gitignore\` present, and does it conform? ❌
   - \`.gitignore\` does not exist in this project.
 
-Results:       1 passed, 14 failed, 15 total
+Results:       1 passed, 14 failed, 0 errored, 15 total
 Elapsed time:  0 ms
 
 `.trimStart(),
         );
+        expect(isSuccessful).toBe(false);
       });
     });
   });
 
   describe('given no project references', () => {
-    it('produces a fully passing report if all rules executed against the default projects pass', async () => {
+    it('produces a fully passing report, returning true, if all rules executed against the default projects pass', async () => {
       await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
         const projectNames = ['repo-1', 'repo-2'];
         const { cachedRepositoriesDirectoryPath, repositories } =
@@ -639,7 +764,7 @@ Elapsed time:  0 ms
         }
         const outputLogger = new FakeOutputLogger();
 
-        await main({
+        const isSuccessful = await main({
           argv: ['node', 'module-lint'],
           stdout: outputLogger.stdout,
           stderr: outputLogger.stderr,
@@ -696,7 +821,7 @@ repo-1
 - Is \`.gitattributes\` present, and does it conform? ✅
 - Is \`.gitignore\` present, and does it conform? ✅
 
-Results:       40 passed, 0 failed, 40 total
+Results:       40 passed, 0 failed, 0 errored, 40 total
 Elapsed time:  0 ms
 
 
@@ -744,15 +869,16 @@ repo-2
 - Is \`.gitattributes\` present, and does it conform? ✅
 - Is \`.gitignore\` present, and does it conform? ✅
 
-Results:       40 passed, 0 failed, 40 total
+Results:       40 passed, 0 failed, 0 errored, 40 total
 Elapsed time:  0 ms
 
 `,
         );
+        expect(isSuccessful).toBe(true);
       });
     });
 
-    it('produces a fully failing report if all rules executed against the default projects fail, listing reasons for failure', async () => {
+    it('produces a fully failing report, listing reasons for failure and returning false, if all rules executed against the default projects fail', async () => {
       await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
         const projectNames = ['repo-1', 'repo-2'];
         const { cachedRepositoriesDirectoryPath, repositories } =
@@ -773,7 +899,7 @@ Elapsed time:  0 ms
         }
         const outputLogger = new FakeOutputLogger();
 
-        await main({
+        const isSuccessful = await main({
           argv: ['node', 'module-lint'],
           stdout: outputLogger.stdout,
           stderr: outputLogger.stderr,
@@ -822,7 +948,7 @@ repo-1
 - Is \`.gitignore\` present, and does it conform? ❌
   - \`.gitignore\` does not exist in this project.
 
-Results:       0 passed, 15 failed, 15 total
+Results:       0 passed, 15 failed, 0 errored, 15 total
 Elapsed time:  0 ms
 
 
@@ -862,15 +988,138 @@ repo-2
 - Is \`.gitignore\` present, and does it conform? ❌
   - \`.gitignore\` does not exist in this project.
 
-Results:       0 passed, 15 failed, 15 total
+Results:       0 passed, 15 failed, 0 errored, 15 total
 Elapsed time:  0 ms
 
 `,
         );
+        expect(isSuccessful).toBe(false);
       });
     });
 
-    it('does not exit immediately if a project errors during linting, but shows the error and continues', async () => {
+    it('does not abort linting of a project if a lint rule throws, but shows the error and continues to the next line rule, returning false', async () => {
+      await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
+        const projectNames = ['repo-1', 'repo-2'];
+        const { cachedRepositoriesDirectoryPath, repositories } =
+          await setupToolWithMockRepositories({
+            execaMock,
+            sandboxDirectoryPath,
+            repositories: [
+              { name: 'metamask-module-template', create: true },
+              ...projectNames.map((projectName) => ({
+                name: projectName,
+                create: true,
+              })),
+            ],
+          });
+        // Skip first repo since it's the module template
+        for (const repository of repositories.slice(1)) {
+          await writeFile(
+            path.join(repository.directoryPath, 'CHANGELOG.md'),
+            '',
+          );
+        }
+        const outputLogger = new FakeOutputLogger();
+
+        const isSuccessful = await main({
+          argv: ['node', 'module-lint'],
+          stdout: outputLogger.stdout,
+          stderr: outputLogger.stderr,
+          config: {
+            cachedRepositoriesDirectoryPath,
+            defaultProjectNames: projectNames,
+          },
+        });
+
+        expect(outputLogger.getStderr()).toBe('');
+        expect(outputLogger.getStdout()).toBe(
+          `
+repo-1
+------
+
+- Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
+- Does the package have a well-formed manifest (\`package.json\`)? ❌
+  - \`package.json\` does not exist in this project.
+- Is \`README.md\` present? ❌
+  - \`README.md\` does not exist in this project.
+- Are all of the files for Yarn Modern present, and do they conform? ❌
+  - \`.yarnrc.yml\` does not exist in this project.
+  - \`.yarn/releases/\` does not exist in this project.
+  - \`.yarn/plugins/\` does not exist in this project.
+- Does the \`src/\` directory exist? ❌
+  - \`src/\` does not exist in this project.
+- Is \`.nvmrc\` present, and does it conform? ❌
+  - \`.nvmrc\` does not exist in this project.
+- Is \`jest.config.js\` present, and does it conform? ❌
+  - \`jest.config.js\` does not exist in this project.
+- Is \`tsconfig.json\` present, and does it conform? ❌
+  - \`tsconfig.json\` does not exist in this project.
+- Is \`tsconfig.build.json\` present, and does it conform? ❌
+  - \`tsconfig.build.json\` does not exist in this project.
+- Is \`tsup.config.ts\` present, and does it conform? ❌
+  - \`tsup.config.ts\` does not exist in this project.
+- Is \`typedoc.json\` present, and does it conform? ❌
+  - \`typedoc.json\` does not exist in this project.
+- Is \`CHANGELOG.md\` present? ✅
+- Is \`CHANGELOG.md\` well-formatted? ⚠️
+  - ERROR: Encountered an error validating the changelog: Could not read JSON file '${sandboxDirectoryPath}/repositories/repo-1/package.json'.
+- Is \`.editorconfig\` present, and does it conform? ❌
+  - \`.editorconfig\` does not exist in this project.
+- Is \`.gitattributes\` present, and does it conform? ❌
+  - \`.gitattributes\` does not exist in this project.
+- Is \`.gitignore\` present, and does it conform? ❌
+  - \`.gitignore\` does not exist in this project.
+
+Results:       2 passed, 13 failed, 1 errored, 16 total
+Elapsed time:  0 ms
+
+
+repo-2
+------
+
+- Is the classic Yarn config file (\`.yarnrc\`) absent? ✅
+- Does the package have a well-formed manifest (\`package.json\`)? ❌
+  - \`package.json\` does not exist in this project.
+- Is \`README.md\` present? ❌
+  - \`README.md\` does not exist in this project.
+- Are all of the files for Yarn Modern present, and do they conform? ❌
+  - \`.yarnrc.yml\` does not exist in this project.
+  - \`.yarn/releases/\` does not exist in this project.
+  - \`.yarn/plugins/\` does not exist in this project.
+- Does the \`src/\` directory exist? ❌
+  - \`src/\` does not exist in this project.
+- Is \`.nvmrc\` present, and does it conform? ❌
+  - \`.nvmrc\` does not exist in this project.
+- Is \`jest.config.js\` present, and does it conform? ❌
+  - \`jest.config.js\` does not exist in this project.
+- Is \`tsconfig.json\` present, and does it conform? ❌
+  - \`tsconfig.json\` does not exist in this project.
+- Is \`tsconfig.build.json\` present, and does it conform? ❌
+  - \`tsconfig.build.json\` does not exist in this project.
+- Is \`tsup.config.ts\` present, and does it conform? ❌
+  - \`tsup.config.ts\` does not exist in this project.
+- Is \`typedoc.json\` present, and does it conform? ❌
+  - \`typedoc.json\` does not exist in this project.
+- Is \`CHANGELOG.md\` present? ✅
+- Is \`CHANGELOG.md\` well-formatted? ⚠️
+  - ERROR: Encountered an error validating the changelog: Could not read JSON file '${sandboxDirectoryPath}/repositories/repo-2/package.json'.
+- Is \`.editorconfig\` present, and does it conform? ❌
+  - \`.editorconfig\` does not exist in this project.
+- Is \`.gitattributes\` present, and does it conform? ❌
+  - \`.gitattributes\` does not exist in this project.
+- Is \`.gitignore\` present, and does it conform? ❌
+  - \`.gitignore\` does not exist in this project.
+
+Results:       2 passed, 13 failed, 1 errored, 16 total
+Elapsed time:  0 ms
+
+`,
+        );
+        expect(isSuccessful).toBe(false);
+      });
+    });
+
+    it('does not exit immediately if an unknown error is thrown while linting a project, but shows the error and continues, returning false', async () => {
       await withinSandbox(async ({ directoryPath: sandboxDirectoryPath }) => {
         const projectNames = ['repo-1', 'repo-2'];
         const { cachedRepositoriesDirectoryPath } =
@@ -894,7 +1143,7 @@ Elapsed time:  0 ms
           });
         const outputLogger = new FakeOutputLogger();
 
-        await main({
+        const isSuccessful = await main({
           argv: ['node', 'module-lint'],
           stdout: outputLogger.stdout,
           stderr: outputLogger.stderr,
@@ -945,11 +1194,12 @@ repo-2
 - Is \`.gitignore\` present, and does it conform? ❌
   - \`.gitignore\` does not exist in this project.
 
-Results:       1 passed, 14 failed, 15 total
+Results:       1 passed, 14 failed, 0 errored, 15 total
 Elapsed time:  0 ms
 
 `,
         );
+        expect(isSuccessful).toBe(false);
       });
     });
   });

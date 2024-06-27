@@ -3,6 +3,7 @@ import { mockDeep } from 'jest-mock-extended';
 
 import type { MetaMaskRepository } from './establish-metamask-repository';
 import type { Rule } from './execute-rules';
+import { RuleExecutionStatus } from './execute-rules';
 import { lintProject } from './lint-project';
 import { FakeOutputLogger } from '../tests/fake-output-logger';
 import { fakeDateOnly, withinSandbox } from '../tests/helpers';
@@ -45,7 +46,7 @@ describe('lintProject', () => {
           execute: async () => {
             jest.setSystemTime(new Date('2023-01-01T00:00:02Z'));
             return {
-              passed: false,
+              status: RuleExecutionStatus.Failed,
               failures: [{ message: 'Oops' }],
             };
           },
@@ -57,7 +58,7 @@ describe('lintProject', () => {
           execute: async () => {
             jest.setSystemTime(new Date('2023-01-01T00:00:01Z'));
             return {
-              passed: true,
+              status: RuleExecutionStatus.Passed,
             };
           },
         },
@@ -83,14 +84,14 @@ describe('lintProject', () => {
               result: {
                 ruleName: 'rule-2',
                 ruleDescription: 'Description for rule 2',
-                passed: true,
+                status: 'passed',
               },
               children: [
                 expect.objectContaining({
                   result: {
                     ruleName: 'rule-1',
                     ruleDescription: 'Description for rule 1',
-                    passed: false,
+                    status: 'failed',
                     failures: [{ message: 'Oops' }],
                   },
                   children: [],

@@ -48,14 +48,14 @@ describe('executeRules', () => {
           result: {
             ruleName: 'rule-2',
             ruleDescription: 'Description for rule 2',
-            passed: true,
+            status: 'passed',
           },
           children: [
             expect.objectContaining({
               result: {
                 ruleName: 'rule-1',
                 ruleDescription: 'Description for rule 1',
-                passed: false,
+                status: 'failed',
                 failures: [{ message: 'Oops' }],
               },
               children: [],
@@ -100,8 +100,75 @@ describe('executeRules', () => {
           result: {
             ruleName: 'rule-2',
             ruleDescription: 'Description for rule 2',
-            passed: false,
+            status: 'failed',
             failures: [{ message: 'Oops' }],
+          },
+          children: [],
+        }),
+      ],
+    });
+  });
+
+  it('does not prevent other rules from running if a rule throws', async () => {
+    const rules: Rule[] = [
+      {
+        name: 'rule-1',
+        description: 'Description for rule 1',
+        dependencies: [],
+        execute: async ({ pass: locallyPass }) => {
+          return locallyPass();
+        },
+      },
+      {
+        name: 'rule-2',
+        description: 'Description for rule 2',
+        dependencies: [],
+        execute: async () => {
+          throw new Error('oops');
+        },
+      },
+      {
+        name: 'rule-3',
+        description: 'Description for rule 3',
+        dependencies: [],
+        execute: async ({ pass: locallyPass }) => {
+          return locallyPass();
+        },
+      },
+    ];
+    const project = mockDeep<MetaMaskRepository>();
+    const template = mockDeep<MetaMaskRepository>();
+
+    const ruleExecutionResultTree = await executeRules({
+      rules,
+      project,
+      template,
+    });
+
+    expect(ruleExecutionResultTree).toMatchObject({
+      children: [
+        expect.objectContaining({
+          result: {
+            ruleName: 'rule-1',
+            ruleDescription: 'Description for rule 1',
+            status: 'passed',
+          },
+          children: [],
+        }),
+        expect.objectContaining({
+          result: {
+            ruleName: 'rule-2',
+            ruleDescription: 'Description for rule 2',
+            status: 'errored',
+            error: new Error('oops'),
+          },
+          children: [],
+        }),
+        expect.objectContaining({
+          result: {
+            ruleName: 'rule-3',
+            ruleDescription: 'Description for rule 3',
+            status: 'passed',
           },
           children: [],
         }),

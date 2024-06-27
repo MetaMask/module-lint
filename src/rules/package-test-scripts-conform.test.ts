@@ -41,7 +41,7 @@ describe('Rule: package-test-scripts-conform', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: true,
+        status: 'passed',
       });
     });
   });
@@ -77,7 +77,7 @@ describe('Rule: package-test-scripts-conform', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: false,
+        status: 'failed',
         failures: [
           {
             message:
@@ -119,7 +119,7 @@ describe('Rule: package-test-scripts-conform', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: false,
+        status: 'failed',
         failures: [
           {
             message:

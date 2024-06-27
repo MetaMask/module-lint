@@ -21,7 +21,7 @@ describe('Rule: classic-yarn-config-file-absent', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: true,
+        status: 'passed',
       });
     });
   });
@@ -45,7 +45,7 @@ describe('Rule: classic-yarn-config-file-absent', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: false,
+        status: 'failed',
         failures: [
           {
             message:

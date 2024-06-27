@@ -33,7 +33,7 @@ describe('Rule: require-tsconfig-build', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: true,
+        status: 'passed',
       });
     });
   });
@@ -61,7 +61,7 @@ describe('Rule: require-tsconfig-build', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: false,
+        status: 'failed',
         failures: [
           {
             message: '`tsconfig.build.json` does not exist in this project.',

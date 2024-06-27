@@ -33,7 +33,7 @@ describe('Rule: require-typedoc', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: true,
+        status: 'passed',
       });
     });
   });
@@ -61,7 +61,7 @@ describe('Rule: require-typedoc', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: false,
+        status: 'failed',
         failures: [
           {
             message: '`typedoc.json` does not exist in this project.',

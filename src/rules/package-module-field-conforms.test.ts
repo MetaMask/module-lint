@@ -41,7 +41,7 @@ describe('Rule: package-module-field-conforms', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: true,
+        status: 'passed',
       });
     });
   });
@@ -77,7 +77,7 @@ describe('Rule: package-module-field-conforms', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: false,
+        status: 'failed',
         failures: [
           {
             message: "`module` is 'test', when it should be 'test-module'.",

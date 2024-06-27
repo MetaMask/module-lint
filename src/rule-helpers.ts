@@ -7,25 +7,25 @@ import type {
   PartialRuleExecutionResult,
   RuleExecutionArguments,
   RuleExecutionFailure,
+  ErroredPartialRuleExecutionResult,
 } from './execute-rules';
+import { RuleExecutionStatus } from './execute-rules';
 import { PackageManifestSchema } from './rules/types';
 
 /**
- * A utility for a rule which is intended to end its execution by marking it as
- * passing.
+ * A utility for a rule which ends its execution by marking it as passing.
  *
  * @returns Part of a successful rule execution result (the rest will be filled
  * in automatically).
  */
 export function pass(): SuccessfulPartialRuleExecutionResult {
   return {
-    passed: true,
+    status: RuleExecutionStatus.Passed,
   };
 }
 
 /**
- * A utility for a rule which is intended to end its execution by marking it as
- * failing.
+ * A utility for a rule which ends its execution by marking it as failing.
  *
  * @param failures - The list of associated failures.
  * @returns Part of a failed rule execution result (the rest will be filled
@@ -34,14 +34,35 @@ export function pass(): SuccessfulPartialRuleExecutionResult {
 export function fail(
   failures: FailedPartialRuleExecutionResult['failures'],
 ): FailedPartialRuleExecutionResult {
-  return { passed: false, failures };
+  return {
+    status: RuleExecutionStatus.Failed,
+    failures,
+  };
 }
 
 /**
- * A utility which encapsulates multiple rule execution results into one. If all
- * of the results are passing, then the combined result will be passing;
- * otherwise, the combined result will be failing, and messages from failing
- * results will be consolidated into a single array.
+ * A utility for a rule which ends its execution by marking it as having
+ * errored.
+ *
+ * @param capturedError - The error to include in the execution result object.
+ * @returns Part of an errored rule execution result (the rest will be filled
+ * in automatically).
+ */
+export function error(
+  capturedError: unknown,
+): ErroredPartialRuleExecutionResult {
+  return {
+    status: RuleExecutionStatus.Errored,
+    error: capturedError,
+  };
+}
+
+/**
+ * A utility which encapsulates multiple rule execution results into one. If any
+ * of the results have errored, then the combined result will have errored, and
+ * the first error wins; if any of the results have failed, the combined result
+ * will have failed, and failures will be consolidated; otherwise the combined
+ * result will have passed.
  *
  * @param results - The rule execution results.
  * @returns The combined rule execution result.
@@ -49,15 +70,25 @@ export function fail(
 export function combineRuleExecutionResults(
   results: PartialRuleExecutionResult[],
 ): PartialRuleExecutionResult {
+  let caughtError: unknown;
   const failures: FailedPartialRuleExecutionResult['failures'] = [];
 
   for (const result of results) {
-    if (!result.passed) {
+    if (result.status === RuleExecutionStatus.Errored) {
+      if (caughtError === undefined) {
+        caughtError = result.error;
+      }
+    } else if (result.status === RuleExecutionStatus.Failed) {
       failures.push(...result.failures);
     }
   }
 
-  return failures.length > 0 ? fail(failures) : pass();
+  if (caughtError) {
+    return error(caughtError);
+  } else if (failures.length > 0) {
+    return fail(failures);
+  }
+  return pass();
 }
 
 /**
@@ -142,7 +173,7 @@ export async function fileConforms(
 ): Promise<PartialRuleExecutionResult> {
   const { template, project } = ruleExecutionArguments;
   const fileExistsResult = await fileExists(filePath, ruleExecutionArguments);
-  if (!fileExistsResult.passed) {
+  if (fileExistsResult.status !== RuleExecutionStatus.Passed) {
     return fileExistsResult;
   }
 
@@ -181,7 +212,7 @@ export async function directoryAndContentsConform(
     directoryPath,
     ruleExecutionArguments,
   );
-  if (!directoryExistsResult.passed) {
+  if (directoryExistsResult.status !== RuleExecutionStatus.Passed) {
     return directoryExistsResult;
   }
 

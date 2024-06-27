@@ -25,7 +25,7 @@ describe('Rule: require-changelog', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: true,
+        status: 'passed',
       });
     });
   });
@@ -45,7 +45,7 @@ describe('Rule: require-changelog', () => {
       });
 
       expect(result).toStrictEqual({
-        passed: false,
+        status: 'failed',
         failures: [
           {
             message: '`CHANGELOG.md` does not exist in this project.',
