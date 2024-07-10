@@ -84,17 +84,30 @@ export function reportProjectLintResult({
 /**
  * Determines an appropriate icon for a rule execution result.
  *
+ * Note that we include `[` and `]` around the icon in the output, but we set
+ * them to use the same foreground color as the background, so that they're
+ * hidden when using colors but visible when not. This way we can reuse this
+ * output for Slack messages.
+ *
  * @param ruleExecutionStatus - The status of executing a rule.
  * @returns The icon as a string.
  */
 function determineIconFor(ruleExecutionStatus: RuleExecutionStatus) {
   if (ruleExecutionStatus === RuleExecutionStatus.Failed) {
-    return '❌';
+    return chalk.red.bgRed('[') + chalk.white.bgRed('✘') + chalk.red.bgRed(']');
   }
   if (ruleExecutionStatus === RuleExecutionStatus.Errored) {
-    return '⚠️';
+    return (
+      chalk.yellow.bgYellow('[') +
+      chalk.black.bgYellow('?') +
+      chalk.yellow.bgYellow(']')
+    );
   }
-  return '✅';
+  return (
+    chalk.green.bgGreen('[') +
+    chalk.black.bgGreen('✔︎') +
+    chalk.green.bgGreen(']')
+  );
 }
 
 /**
@@ -119,9 +132,9 @@ function reportRuleExecutionResultNodes({
 
   for (const ruleExecutionResultNode of ruleExecutionResultNodes) {
     outputLogger.logToStdout(
-      `- ${ruleExecutionResultNode.result.ruleDescription} ${determineIconFor(
-        ruleExecutionResultNode.result.status,
-      )}`,
+      `${determineIconFor(ruleExecutionResultNode.result.status)} ${
+        ruleExecutionResultNode.result.ruleDescription
+      }`,
     );
 
     if (ruleExecutionResultNode.result.status === RuleExecutionStatus.Passed) {
@@ -132,7 +145,7 @@ function reportRuleExecutionResultNodes({
       totalFailed += 1;
 
       for (const failure of ruleExecutionResultNode.result.failures) {
-        outputLogger.logToStdout(indent(`- ${chalk.red(failure.message)}`, 1));
+        outputLogger.logToStdout(indent(`- ${chalk.red(failure.message)}`, 2));
       }
     } else if (
       ruleExecutionResultNode.result.status === RuleExecutionStatus.Errored
@@ -144,7 +157,7 @@ function reportRuleExecutionResultNodes({
           `- ${chalk.yellow(
             `ERROR: ${getErrorMessage(ruleExecutionResultNode.result.error)}`,
           )}`,
-          1,
+          2,
         ),
       );
     }
