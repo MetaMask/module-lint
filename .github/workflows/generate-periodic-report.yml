@@ -64,7 +64,7 @@ jobs:
         run: yarn tsx ./.github/scripts/determine-initial-slack-payload.ts
         env:
           MODULE_LINT_RUNS_DIRECTORY: /tmp/module-lint-runs
-          SLACK_CHANNEL_ID: C06S195ANA0 # Channel: #temp-test-module-lint
+          SLACK_CHANNEL_ID: C074PNYH0R4 # Channel: #wallet-framework-automations
       - name: Post to Slack
         id: initial-slack-message
         uses: slackapi/slack-github-action@007b2c3c751a190b6f0f040e47ed024deaa72844
@@ -108,7 +108,7 @@ jobs:
         env:
           PROJECT_NAME: ${{ matrix.project }}
           MODULE_LINT_RUNS_DIRECTORY: ${{ steps.load-report.outputs.download-path }}
-          SLACK_CHANNEL_ID: C06S195ANA0 # Channel: #temp-test-module-lint
+          SLACK_CHANNEL_ID: C074PNYH0R4 # Channel: #wallet-framework-automations
           SLACK_THREAD_TS: ${{ needs.post-initial-message-to-slack.outputs.slack-thread-ts }}
       - name: Post to Slack
         uses: slackapi/slack-github-action@007b2c3c751a190b6f0f040e47ed024deaa72844
