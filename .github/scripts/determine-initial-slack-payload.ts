@@ -62,8 +62,14 @@ async function readModuleLintExitCodeFiles(moduleLintRunsDirectory: string) {
   );
   return Promise.all(
     exitCodeFileNames.map(async (exitCodeFileName) => {
-      const content = await fs.promises.readFile(exitCodeFileName, 'utf8');
-      return Number(content.trim());
+      const content = (
+        await fs.promises.readFile(exitCodeFileName, 'utf8')
+      ).trim();
+      const exitCode = Number(content);
+      if (Number.isNaN(exitCode)) {
+        throw new Error(`Could not parse '${content}' as exit code`);
+      }
+      return exitCode;
     }),
   );
 }
