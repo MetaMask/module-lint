@@ -137,7 +137,7 @@ function constructSlackPayloadBlocksForSuccessfulRun() {
  * Generates the Slack message that will appear when some `module-lint` runs are
  * unsuccessful.
  *
- * @param inputs
+ * @param inputs - The inputs to this script.
  * @returns The Slack payload blocks.
  */
 function constructSlackPayloadBlocksForUnSuccessfulRun(inputs: Inputs) {
