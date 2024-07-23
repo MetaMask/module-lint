@@ -75,22 +75,13 @@ async function readModuleLintExitCodeFiles(moduleLintRunsDirectory: string) {
 }
 
 /**
- * Constructs the payload that will be used to post a message in Slack
- * containing information about previous `module-lint` runs.
+ * Generates the Slack message that will appear when all `module-lint` runs are
+ * successful.
  *
- * @param inputs - The inputs to this script.
- * @param allModuleLintRunsSuccessful - Whether all of the previously linted projects passed
- * lint.
- * @returns The Slack payload.
+ * @returns The Slack payload blocks.
  */
-function constructSlackPayload(
-  inputs: Inputs,
-  allModuleLintRunsSuccessful: boolean,
-) {
-  const text =
-    'A new package standardization report is available. Open this thread to view more details.';
-
-  const successfulVersion = [
+function constructSlackPayloadBlocksForSuccessfulRun() {
+  return [
     {
       type: 'rich_text',
       elements: [
@@ -140,8 +131,17 @@ function constructSlackPayload(
       ],
     },
   ];
+}
 
-  const unsuccessfulVersion = [
+/**
+ * Generates the Slack message that will appear when some `module-lint` runs are
+ * unsuccessful.
+ *
+ * @param inputs
+ * @returns The Slack payload blocks.
+ */
+function constructSlackPayloadBlocksForUnSuccessfulRun(inputs: Inputs) {
+  return [
     {
       type: 'rich_text',
       elements: [
@@ -196,10 +196,27 @@ function constructSlackPayload(
       ],
     },
   ];
+}
+
+/**
+ * Constructs the payload that will be used to post a message in Slack
+ * containing information about previous `module-lint` runs.
+ *
+ * @param inputs - The inputs to this script.
+ * @param allModuleLintRunsSuccessful - Whether all of the previously linted projects passed
+ * lint.
+ * @returns The Slack payload.
+ */
+function constructSlackPayload(
+  inputs: Inputs,
+  allModuleLintRunsSuccessful: boolean,
+) {
+  const text =
+    'A new package standardization report is available. Open this thread to view more details.';
 
   const blocks = allModuleLintRunsSuccessful
-    ? successfulVersion
-    : unsuccessfulVersion;
+    ? constructSlackPayloadBlocksForSuccessfulRun()
+    : constructSlackPayloadBlocksForUnSuccessfulRun(inputs);
 
   if (inputs.isRunningOnCi) {
     return {
