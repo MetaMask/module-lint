@@ -134,18 +134,22 @@ function constructSlackPayload(inputs: Inputs, moduleLintOutput: string) {
 
   const blocks = [
     {
-      type: 'header',
-      text: {
-        type: 'plain_text',
-        text: `MetaMask/${inputs.projectName}`,
-      },
-    },
-    {
       type: 'rich_text',
       elements: [
         {
           type: 'rich_text_section',
           elements: [
+            {
+              type: 'text',
+              text: `Results for MetaMask/${inputs.projectName}:`,
+              style: {
+                bold: true,
+              },
+            },
+            {
+              type: 'text',
+              text: '\n\n',
+            },
             {
               type: 'emoji',
               name: passed === total ? 'white_check_mark' : 'x',
@@ -153,9 +157,6 @@ function constructSlackPayload(inputs: Inputs, moduleLintOutput: string) {
             {
               type: 'text',
               text: ` ${passed}/${total} rules passed (${percentage}% alignment with template).\n\n`,
-              style: {
-                bold: true,
-              },
             },
           ],
         },
