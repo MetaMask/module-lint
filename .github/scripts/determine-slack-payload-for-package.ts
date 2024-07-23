@@ -48,7 +48,7 @@ function getInputs(): Inputs {
 function requireEnvironmentVariable(variableName: string): string {
   const value = process.env[variableName];
 
-  if (value === undefined) {
+  if (value === undefined || value === '') {
     throw new Error(`Missing environment variable ${variableName}.`);
   }
 
