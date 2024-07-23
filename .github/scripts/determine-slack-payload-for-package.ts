@@ -5,8 +5,6 @@ import fs from 'fs';
 import path from 'path';
 
 type Inputs = {
-  githubRepository: string;
-  githubRunId: string;
   projectName: string;
   moduleLintRunsDirectory: string;
   channelId: string;
@@ -30,8 +28,6 @@ type ParsedModuleLintOutput = {
  */
 function getInputs(): Inputs {
   return {
-    githubRepository: requireEnvironmentVariable('GITHUB_REPOSITORY'),
-    githubRunId: requireEnvironmentVariable('GITHUB_RUN_ID'),
     projectName: requireEnvironmentVariable('PROJECT_NAME'),
     moduleLintRunsDirectory: requireEnvironmentVariable(
       'MODULE_LINT_RUNS_DIRECTORY',
@@ -160,15 +156,6 @@ function constructSlackPayload(inputs: Inputs, moduleLintOutput: string) {
               style: {
                 bold: true,
               },
-            },
-          ],
-        },
-        {
-          type: 'rich_text_preformatted',
-          elements: [
-            {
-              type: 'text',
-              text: moduleLintOutput,
             },
           ],
         },
