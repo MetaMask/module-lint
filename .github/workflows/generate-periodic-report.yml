@@ -1,0 +1,119 @@
+name: Periodically run module-lint and report results
+
+# Runs at minute 10 of the 1st hour of every Sunday
+on:
+  schedule:
+    - cron: '10 1 * * 0'
+  workflow_dispatch:
+
+jobs:
+  run-module-lint:
+    name: Run module-lint
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project:
+          - auto-changelog
+          - create-release-branch
+          - module-lint
+          - utils
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
+      - name: Install dependencies
+        run: yarn --immutable
+      - name: Run module-lint
+        id: module-lint
+        run: .github/scripts/run-module-lint.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PROJECT_NAME: ${{ matrix.project }}
+          MODULE_LINT_RUNS_DIRECTORY: /tmp/module-lint-runs
+      - name: Save report
+        uses: actions/upload-artifact@v4
+        with:
+          name: module-lint-report--${{ matrix.project }}
+          path: /tmp/module-lint-runs
+  post-initial-message-to-slack:
+    name: Post initial message to Slack
+    needs: run-module-lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
+      - name: Install dependencies
+        run: yarn --immutable
+      - name: Load results for previous module-lint runs
+        uses: actions/download-artifact@v4
+        with:
+          path: /tmp/module-lint-runs
+          pattern: module-lint-report--*
+          merge-multiple: true
+      - name: Determine Slack payload
+        id: slack-payload
+        run: yarn tsx ./.github/scripts/determine-initial-slack-payload.ts
+        env:
+          MODULE_LINT_RUNS_DIRECTORY: /tmp/module-lint-runs
+          SLACK_CHANNEL_ID: C074PNYH0R4 # Channel: #wallet-framework-automations
+      - name: Post to Slack
+        id: initial-slack-message
+        uses: slackapi/slack-github-action@007b2c3c751a190b6f0f040e47ed024deaa72844
+        with:
+          channel-id: C074PNYH0R4 # Channel: #wallet-framework-automations
+          payload: ${{ steps.slack-payload.outputs.SLACK_PAYLOAD }}
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+    outputs:
+      slack-thread-ts: ${{ steps.initial-slack-message.outputs.ts }}
+  post-threaded-message-to-slack:
+    name: Post threaded message to Slack
+    needs: post-initial-message-to-slack
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project:
+          - auto-changelog
+          - create-release-branch
+          - module-lint
+          - utils
+    steps:
+      - name: Load report for previous module-lint-run
+        id: load-report
+        uses: actions/download-artifact@v4
+        with:
+          name: module-lint-report--${{ matrix.project }}
+          path: /tmp/module-lint-runs
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
+      - name: Install dependencies
+        run: yarn --immutable
+      - name: Determine Slack payload
+        id: slack-payload
+        run: yarn tsx ./.github/scripts/determine-slack-payload-for-package.ts
+        env:
+          PROJECT_NAME: ${{ matrix.project }}
+          MODULE_LINT_RUNS_DIRECTORY: ${{ steps.load-report.outputs.download-path }}
+          SLACK_CHANNEL_ID: C074PNYH0R4 # Channel: #wallet-framework-automations
+          SLACK_THREAD_TS: ${{ needs.post-initial-message-to-slack.outputs.slack-thread-ts }}
+      - name: Post to Slack
+        uses: slackapi/slack-github-action@007b2c3c751a190b6f0f040e47ed024deaa72844
+        with:
+          channel-id: C074PNYH0R4 # Channel: #wallet-framework-automations
+          payload: ${{ steps.slack-payload.outputs.SLACK_PAYLOAD }}
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}

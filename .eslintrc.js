@@ -29,20 +29,30 @@ module.exports = {
     },
 
     {
-      files: ['src/cli.ts'],
+      files: ['src/cli.ts', '.github/scripts/**/*.ts'],
       parserOptions: {
         sourceType: 'script',
       },
       rules: {
-        // It's okay if this file has a shebang; it's meant to be executed
-        // directly.
+        // These are scripts and are meant to have shebangs.
         'n/shebang': 'off',
+      },
+    },
+
+    {
+      files: ['.github/scripts/**/*.ts'],
+      parserOptions: {
+        sourceType: 'script',
+      },
+      rules: {
+        'n/no-process-env': 'off',
       },
     },
   ],
 
   ignorePatterns: [
     '!.eslintrc.js',
+    '!.github/',
     '!.prettierrc.js',
     '.yarn/',
     'dist/',
