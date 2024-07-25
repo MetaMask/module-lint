@@ -1,24 +1,44 @@
 # @metamask/module-lint
 
-This repo provides a tool which can be used to analyze one or more repos, running defined checks that measure divergence from a template repo, and outputs a report of the results.
+This repo provides a tool which can be used to analyze one or more repos for divergence from a template repo and suggest changes.
 
 At the moment, this tool only processes MetaMask repositories using the [MetaMask module template](https://github.com/MetaMask/metamask-module-template) as a basis, and all of the checks are predefined and cannot be customized.
 
 ## Installation
 
-This tool is designed to be used globally and does not need to be installed within an individual project.
+This tool is still under development and is not published to NPM, so there are no installation steps needed.
 
 ## Usage
 
-To use the tool, run:
+Although this project includes an executable, it is only usable within the context of this repo. Before you can use this tool, you will need to [clone this repo and set it up](../README.md#setup).
 
-```
-# Yarn
-yarn dlx @metamask/module-lint
+From here, there are two ways to run the executable:
 
-# NPM
-npx @metamask/module-lint
+### Linting specific projects
+
+Run:
+
+```bash
+yarn run-tool <PROJECT> [<PROJECT> ...]
 ```
+
+Here, `<PROJECT>` is the short name of a MetaMask repo, minus the `MetaMask/` scope. For instance, to lint `https://github.com/MetaMask/utils` and `https://github.com/MetaMask/create-release-branch`:
+
+```bash
+yarn run-tool utils create-release-branch
+```
+
+This will clone all repos and lint all of them in parallel.
+
+### Linting all projects
+
+Run:
+
+```bash
+yarn run-tool
+```
+
+This will clone a predefined set of repos and lint all of them in parallel.
 
 ## Contributing
 
