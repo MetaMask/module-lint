@@ -18,13 +18,13 @@ From here, there are two ways to run the executable:
 
 Run:
 
-``` bash
+```bash
 yarn run-tool <PROJECT> [<PROJECT> ...]
 ```
 
 Here, `<PROJECT>` is the short name of a MetaMask repo, minus the `MetaMask/` scope. For instance, to lint `https://github.com/MetaMask/utils` and `https://github.com/MetaMask/create-release-branch`:
 
-``` bash
+```bash
 yarn run-tool utils create-release-branch
 ```
 
@@ -34,7 +34,7 @@ This will clone all repos and lint all of them in parallel.
 
 Run:
 
-``` bash
+```bash
 yarn run-tool
 ```
 
