@@ -1,6 +1,7 @@
 .DS_Store
 dist/
 coverage/
+docs/
 
 # Logs
 logs
@@ -75,6 +76,3 @@ node_modules/
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
-
-# Repositories that this tool clones, and other temporary data
-tmp
