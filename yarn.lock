@@ -1093,8 +1093,8 @@ __metadata:
   linkType: hard
 
 "@metamask/auto-changelog@npm:^3.1.0":
-  version: 3.4.2
-  resolution: "@metamask/auto-changelog@npm:3.4.2"
+  version: 3.4.4
+  resolution: "@metamask/auto-changelog@npm:3.4.4"
   dependencies:
     diff: ^5.0.0
     execa: ^5.1.1
@@ -1103,7 +1103,7 @@ __metadata:
     yargs: ^17.0.1
   bin:
     auto-changelog: dist/cli.js
-  checksum: b922db20b3ff8a1957b71128d481c08fdf5ae465a89a03bccacf31cba227e56e48f6b1654ff4c78150cc0cfd3ae57a615d3ab5ab6760f7437e0b9e8aa6aec390
+  checksum: 4876ab3ec98f6d0c00a0679f9e44e1ee79d335ae97e18336a638ac19484cac30d2f3750e6875121ee07b0da128f8609490bed0e195c8153c2b74866f34e405ed
   languageName: node
   linkType: hard
 
